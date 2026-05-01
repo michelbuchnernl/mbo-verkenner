@@ -5,10 +5,16 @@ const path = require('path');
 const vm = require('vm');
 
 const repoRoot = path.resolve(__dirname, '..');
-const htmlPath = path.join(repoRoot, 'index.html');
-const outputDir = path.join(__dirname, 'output');
-const outputPath = path.join(outputDir, 'riasoc_model_audit.md');
-const simulationCsvPath = path.join(outputDir, 'riasoc_50_simulaties.csv');
+const htmlPath = process.env.RIASOC_HTML_PATH
+  ? path.resolve(process.env.RIASOC_HTML_PATH)
+  : path.join(repoRoot, 'index.html');
+const outputDir = process.env.RIASOC_OUTPUT_DIR
+  ? path.resolve(process.env.RIASOC_OUTPUT_DIR)
+  : path.join(__dirname, 'output');
+const outputPrefix = process.env.RIASOC_OUTPUT_PREFIX ? `${process.env.RIASOC_OUTPUT_PREFIX}_` : '';
+const outputPath = path.join(outputDir, `${outputPrefix}riasoc_model_audit.md`);
+const simulationCsvPath = path.join(outputDir, `${outputPrefix}riasoc_50_simulaties.csv`);
+const classificationCsvPath = path.join(outputDir, `${outputPrefix}riasoc_classificatie_dump.csv`);
 
 function loadModel() {
   const html = fs.readFileSync(htmlPath, 'utf8');
@@ -70,12 +76,19 @@ function loadModel() {
   context.window = context.window;
 
   const exportScript = `
+    const __fallbackMatchPct = typeof matchPct === 'function'
+      ? matchPct
+      : (m) => Math.round((m.sim || 0) * 100);
     window.__RIASOC_AUDIT__ = {
-      IMG, QS, D, META, CAREER_IDEAS, MBO, MBO_CORRECTIONS,
+      IMG, QS, D, META, CAREER_IDEAS, MBO,
+      MBO_CORRECTIONS: typeof MBO_CORRECTIONS !== 'undefined' ? MBO_CORRECTIONS : {},
       maxSc, norm, topCodeMeta, topCode, validateQuestions,
       validateNiveauMatchCases, extractNiveaus, niveauMatch,
-      selectedProvider, selectSuggestions, mboDomainForSelection, matchPct,
-      sectorFamily, opleidingStam, dominantLetters, dedupeScored,
+      selectedProvider, selectSuggestions, mboDomainForSelection, matchPct: __fallbackMatchPct,
+      sectorFamily: typeof sectorFamily === 'function' ? sectorFamily : null,
+      opleidingStam: typeof opleidingStam === 'function' ? opleidingStam : null,
+      dominantLetters: typeof dominantLetters === 'function' ? dominantLetters : null,
+      dedupeScored: typeof dedupeScored === 'function' ? dedupeScored : null,
       setAllowedLevels(levels){ S.allowedLevels = levels.slice(); },
       getAllowedLevels(){ return S.allowedLevels.slice(); }
     };
@@ -83,6 +96,58 @@ function loadModel() {
 
   vm.runInNewContext(`${scripts[0]}\n${exportScript}`, context, { filename: htmlPath });
   return context.window.__RIASOC_AUDIT__;
+}
+
+function decodeText(value) {
+  return String(value || '')
+    .replace(/&#8211;/g, '-')
+    .replace(/&#232;/g, 'e')
+    .replace(/&#246;/g, 'o')
+    .replace(/&amp;/g, '&');
+}
+
+function fallbackSectorFamily(m) {
+  const text = decodeText(`${m.o} ${(m.b || []).join(' ')} ${m.s}`).toLowerCase();
+  if (/dier|paraveterinair|groen|hovenier|natuur|water|voeding|vapro|agrar/.test(text)) return 'Voeding, natuur & dier';
+  if (/verpleeg|verzorg|dokters|apotheek|apothekers|pedagog|onderwijsassistent|kinderopvang|sociaal werker|maatschappelijke zorg|begeleider|zorg en welzijn|helpende/.test(text)) return 'Zorg & welzijn';
+  if (/sport|bewegings|buurtsport|leefstijlcoach|onderwijs/.test(text)) return 'Onderwijs & sport';
+  if (/bouw|infra|asfalt|autoschade|timmer|metsel|install|elektro|metaal|monteur|technicus elektrotechn|technicus gas|technicus elektric|engineering|mechatronica|voertuig|fiets|hout|meubel|schilder|stukadoor|juwelier|goudsmid|uurwerk|piano|keuken|smart building|productietechniek/.test(text)) return 'Techniek & maken';
+  if (/schoonheid|kapper|barbier|hairstylist|beauty|fashion|tailor/.test(text)) return 'Uiterlijke verzorging';
+  if (/software|developer|applicatie|ict|cyber|system engineer|support technician|beheerder|data/.test(text)) return 'ICT & data';
+  if (/media|mediavorm|mediamaker|redactie|fotografie|av-|podium|sign|immersive|interieuradviseur|styling|vormgeving|ruimtemaker|decor|muziek|dance|musical|creatief/.test(text)) return 'Creatief & media';
+  if (/hospitality|toerisme|tourism|hotel|gastheer|gastvrouw|leisure|event|evenement|bar|kok|food|bakker|boulanger|patissier|horeca/.test(text)) return 'Horeca & toerisme';
+  if (/commerc|account|sales|marketing|retail|intercedent|ondernemer|manager|leidinggevende|transport en logistiek/.test(text)) return 'Commercieel & ondernemend';
+  if (/administr|jurid|business services|office|finance|hr|control|secretar/.test(text)) return 'Administratie & juridisch';
+  if (/logistiek|transport|chauffeur|warehouse|voorraad/.test(text)) return 'Logistiek & transport';
+  if (/veilig|beveil|handhaver|militair|veva|defensie/.test(text)) return 'Veiligheid & defensie';
+  if (/labor|analist|onderzoek|research|instrumentmaker/.test(text)) return 'Laboratorium & onderzoek';
+  return 'Overig';
+}
+
+function familyFor(model, m) {
+  return model.sectorFamily ? model.sectorFamily(m) : fallbackSectorFamily(m);
+}
+
+function stemFor(model, m) {
+  if (model.opleidingStam) return model.opleidingStam(m);
+  return decodeText(m.o)
+    .toLowerCase()
+    .normalize('NFD').replace(/[\u0300-\u036f]/g, '')
+    .replace(/\([^)]*\)/g, ' ')
+    .replace(/\b(010|allround|junior|senior|eerste|zelfstandig|leidinggevende|versneld|verkort|kopjaar|praktijkroute|structuurklas|niveau|bbl|bol|nt2|veva|defensie|i\.s\.m\.|ism)\b/g, ' ')
+    .replace(/[^a-z0-9]+/g, ' ')
+    .trim()
+    .split(' ')
+    .filter(Boolean)
+    .slice(0, 4)
+    .join(' ');
+}
+
+function dominantLettersFor(model, m) {
+  if (model.dominantLetters) return model.dominantLetters(m);
+  return model.D.slice()
+    .sort((a, b) => (m.sc[b] || 0) - (m.sc[a] || 0) || model.D.indexOf(a) - model.D.indexOf(b))
+    .slice(0, 2);
 }
 
 function emptyScores(D) {
@@ -159,13 +224,14 @@ function analyzeScenario(model, scenario, allowedLevels = [2, 3, 4]) {
       dim: m.dim,
       opleiding: m.o,
       crebo: m.c,
-      family: model.sectorFamily(m),
+      family: familyFor(model, m),
       school: provider.school,
       locatie: provider.location,
       niveau: provider.level,
       leerweg: provider.learning,
       url: provider.url || m.url || '',
-      match: model.matchPct(m)
+      match: model.matchPct(m),
+      sim: m.sim || 0
     };
   });
 
@@ -231,6 +297,15 @@ function randomAudit(model, count = 1000) {
   const top1Counts = Object.fromEntries(model.D.map(d => [d, 0]));
   const tinyGapCases = [];
   const suggestionSets = {};
+  const positionMatchSums = Array(6).fill(0);
+  const positionCounts = Array(6).fill(0);
+  let pos6RatioSum = 0;
+  let pos6RatioCount = 0;
+  let pos6Below65Count = 0;
+  let sTop2Count = 0;
+  let sTop2CareCount = 0;
+  let sTop2EducationSportCount = 0;
+  let sTop2EitherCount = 0;
   const random = seededRandom(20260501);
 
   for (let i = 0; i < count; i++) {
@@ -249,6 +324,26 @@ function randomAudit(model, count = 1000) {
     }
     const suggestionKey = analysis.suggestions.map(s => `${s.opleiding}|${s.school}`).join(' / ');
     suggestionSets[suggestionKey] = (suggestionSets[suggestionKey] || 0) + 1;
+
+    analysis.suggestions.forEach((s, index) => {
+      positionMatchSums[index] += s.match;
+      positionCounts[index] += 1;
+    });
+    const firstMatch = analysis.suggestions[0]?.match || 0;
+    const sixthMatch = analysis.suggestions[5]?.match || 0;
+    if (firstMatch > 0 && sixthMatch > 0) {
+      const ratio = sixthMatch / firstMatch;
+      pos6RatioSum += ratio;
+      pos6RatioCount += 1;
+      if (ratio < 0.65) pos6Below65Count += 1;
+    }
+    if (analysis.normalized.S >= 60 && analysis.ordered.slice(0, 2).includes('S')) {
+      sTop2Count += 1;
+      const families = new Set(analysis.suggestions.map(s => s.family));
+      if (families.has('Zorg & welzijn')) sTop2CareCount += 1;
+      if (families.has('Onderwijs & sport')) sTop2EducationSportCount += 1;
+      if (families.has('Zorg & welzijn') || families.has('Onderwijs & sport')) sTop2EitherCount += 1;
+    }
   }
 
   return {
@@ -259,6 +354,15 @@ function randomAudit(model, count = 1000) {
     tinyGapCount: tinyGapCases.length,
     tinyGapExamples: tinyGapCases.slice(0, 8),
     uniqueSuggestionSets: Object.keys(suggestionSets).length,
+    averageMatchByPosition: positionMatchSums.map((sum, index) => positionCounts[index] ? Math.round((sum / positionCounts[index]) * 10) / 10 : 0),
+    averagePos6ToPos1Ratio: pos6RatioCount ? Math.round((pos6RatioSum / pos6RatioCount) * 1000) / 1000 : 0,
+    pos6Below65Count,
+    sTop2Coverage: {
+      cases: sTop2Count,
+      zorgWelzijn: sTop2CareCount,
+      onderwijsSport: sTop2EducationSportCount,
+      either: sTop2EitherCount
+    },
     mostCommonSuggestionSets: Object.entries(suggestionSets)
       .sort((a, b) => b[1] - a[1])
       .slice(0, 5)
@@ -289,7 +393,7 @@ function writeSimulationCsv(analyses) {
   for (let i = 1; i <= 6; i++) {
     suggestionHeaders.push(
       `opleiding_${i}`, `crebo_${i}`, `dim_${i}`, `family_${i}`,
-      `school_${i}`, `locatie_${i}`, `niveau_${i}`, `match_${i}`, `url_${i}`
+      `school_${i}`, `locatie_${i}`, `niveau_${i}`, `match_${i}`, `sim_${i}`, `url_${i}`
     );
   }
   const headers = [...baseHeaders, ...suggestionHeaders];
@@ -322,6 +426,7 @@ function writeSimulationCsv(analyses) {
       row[`locatie_${n}`] = s.locatie;
       row[`niveau_${n}`] = s.niveau;
       row[`match_${n}`] = s.match;
+      row[`sim_${n}`] = s.sim.toFixed(4);
       row[`url_${n}`] = s.url;
     });
     return row;
@@ -331,6 +436,52 @@ function writeSimulationCsv(analyses) {
     ...rows.map(row => headers.map(h => csvEscape(row[h])).join(','))
   ].join('\n');
   fs.writeFileSync(simulationCsvPath, csv, 'utf8');
+}
+
+function classificationRows(model) {
+  return model.MBO.map(m => ({
+    crebo: m.c,
+    opleiding: decodeText(m.o),
+    school: decodeText(m.s),
+    family: familyFor(model, m),
+    stem: stemFor(model, m),
+    dominantLetters: dominantLettersFor(model, m).join(''),
+    modelCategory: m.modelCategory || ''
+  }));
+}
+
+function writeClassificationCsv(model) {
+  const headers = ['crebo', 'opleiding', 'school', 'family', 'stem', 'dominantLetters', 'modelCategory'];
+  const rows = classificationRows(model);
+  const csv = [
+    headers.map(csvEscape).join(','),
+    ...rows.map(row => headers.map(h => csvEscape(row[h])).join(','))
+  ].join('\n');
+  fs.writeFileSync(classificationCsvPath, csv, 'utf8');
+  return rows;
+}
+
+function classificationAudit(rows) {
+  const warnings = [];
+  const stemCounts = {};
+  rows.forEach(row => {
+    increment(stemCounts, row.stem || '(leeg)');
+    const text = `${row.opleiding} ${row.school}`.toLowerCase();
+    if (/dierverzorg|dier en|paraveterinair/.test(text) && row.family === 'Zorg & welzijn') {
+      warnings.push({ Type: 'false-positive', Opleiding: row.opleiding, Family: row.family, Verwacht: 'Voeding, natuur & dier' });
+    }
+    if (/autoschade|asfalt|metsel/.test(text) && row.family !== 'Techniek & maken') {
+      warnings.push({ Type: 'false-positive', Opleiding: row.opleiding, Family: row.family, Verwacht: 'Techniek & maken' });
+    }
+    if (/verpleeg|verzorgende|dokters|apotheek|apothekers|helpende/.test(text) && !/dierverzorg/.test(text) && row.family !== 'Zorg & welzijn') {
+      warnings.push({ Type: 'false-negative', Opleiding: row.opleiding, Family: row.family, Verwacht: 'Zorg & welzijn' });
+    }
+  });
+  const largeStems = Object.entries(stemCounts)
+    .filter(([, count]) => count > 10)
+    .sort((a, b) => b[1] - a[1])
+    .map(([Stem, Aantal]) => ({ Stem, Aantal }));
+  return { warnings, largeStems };
 }
 
 function increment(map, key, by = 1) {
@@ -379,12 +530,18 @@ function diversityAudit(analyses) {
       });
     }
   });
+  const totalSlots = analyses.reduce((sum, a) => sum + a.suggestions.length, 0);
+  const topSchool = Object.entries(schoolCounts).sort((a, b) => b[1] - a[1])[0] || ['', 0];
+  const topFamily = Object.entries(familyCounts).sort((a, b) => b[1] - a[1])[0] || ['', 0];
 
   return {
     opleidingCounts,
     creboCounts,
     schoolCounts,
     familyCounts,
+    totalSlots,
+    topSchool: { name: topSchool[0], count: topSchool[1], share: totalSlots ? topSchool[1] / totalSlots : 0 },
+    topFamily: { name: topFamily[0], count: topFamily[1], share: totalSlots ? topFamily[1] / totalSlots : 0 },
     lowDiversityScenarios
   };
 }
@@ -393,7 +550,7 @@ function scoreText(model, scores) {
   return model.D.map(d => `${d} ${scores[d]}%`).join(', ');
 }
 
-function renderReport(model, analyses, random) {
+function renderReport(model, analyses, random, classifiedRows) {
   const now = new Date().toISOString().slice(0, 10);
   const validation = model.validateQuestions();
   const validationErrors = validation.filter(x => x.status !== 'ok');
@@ -401,6 +558,8 @@ function renderReport(model, analyses, random) {
   const smallGapAnalyses = analyses.filter(a => a.gaps.top1Top2 <= 2 || a.gaps.top2Top3 <= 2 || a.gaps.top3Top4 <= 2 || a.meta.hasTie);
   const weakDiversity = analyses.filter(a => a.uniqueSuggestionNames < 6 || new Set(a.suggestionDims).size < Math.min(3, a.meta.code.length));
   const diversity = diversityAudit(analyses);
+  const classification = classificationAudit(classifiedRows);
+  const sourceLabel = path.relative(repoRoot, htmlPath);
 
   const summaryRows = analyses.map(a => ({
     Scenario: a.label,
@@ -428,11 +587,18 @@ function renderReport(model, analyses, random) {
     .sort((a, b) => b[1] - a[1])
     .slice(0, 15)
     .map(([Code, Aantal]) => ({ Code, Aantal }));
+  const sCoverage = random.sTop2Coverage;
+  const sCoverageRows = [{
+    Cases: sCoverage.cases,
+    'Zorg & welzijn': sCoverage.cases ? `${sCoverage.zorgWelzijn} (${Math.round(sCoverage.zorgWelzijn / sCoverage.cases * 100)}%)` : '0',
+    'Onderwijs & sport': sCoverage.cases ? `${sCoverage.onderwijsSport} (${Math.round(sCoverage.onderwijsSport / sCoverage.cases * 100)}%)` : '0',
+    'Een van beide': sCoverage.cases ? `${sCoverage.either} (${Math.round(sCoverage.either / sCoverage.cases * 100)}%)` : '0'
+  }];
 
   return `---
 title: RIASOC model-audit
 date: ${now}
-source: index.html
+source: ${sourceLabel}
 ---
 
 # RIASOC model-audit
@@ -450,17 +616,24 @@ Deze audit draait rechtstreeks op de HTML/JS-bron van de MBO Opleidingen Verkenn
 - Unieke sets van 6 opleidingen in random simulaties: ${random.uniqueSuggestionSets}.
 - Scenario's met kleine verschillen of ties: ${smallGapAnalyses.length}.
 - Scenario's met mogelijke diversiteitszwakte in de 6 opleidingen: ${weakDiversity.length}.
+- Classificatie-waarschuwingen: ${classification.warnings.length}.
 
-Beoordeling: ${validationErrors.length === 0 && niveauCases.every(x => x.ok) && random.uniqueTopCodes >= 20 && random.uniqueSuggestionSets >= 50 && weakDiversity.length <= 3 ? 'de diversiteit en werking zijn op hoofdlijnen gezond. Kleine verschillen worden zichtbaar via de tie/gap-informatie en leiden niet tot één vaste standaarduitkomst.' : 'er zijn aandachtspunten; bekijk vooral de tabellen met kleine verschillen en mogelijke diversiteitszwakte.'}
+Beoordeling: ${validationErrors.length === 0 && niveauCases.every(x => x.ok) && random.uniqueTopCodes >= 20 && random.uniqueSuggestionSets >= 50 && weakDiversity.length <= 3 && classification.warnings.length === 0 ? 'de diversiteit en werking zijn op hoofdlijnen gezond. Kleine verschillen worden zichtbaar via de tie/gap-informatie en leiden niet tot één vaste standaarduitkomst.' : 'er zijn aandachtspunten; bekijk vooral de tabellen met kleine verschillen, classificatie en mogelijke diversiteitszwakte.'}
 
 ## Gecontroleerde methode
 
-1. De audit laadt \`index.html\` en exporteert de bestaande modeldata en functies in een Node VM-context.
+1. De audit laadt \`${sourceLabel}\` en exporteert de bestaande modeldata en functies in een Node VM-context.
 2. Per testprofiel worden 62 keuzes gesimuleerd.
 3. Ruwe RIASOC-punten worden genormaliseerd met \`norm()\`.
 4. De topcode en tie-informatie komen uit \`topCodeMeta()\`.
 5. De 6 opleidingen komen uit \`selectSuggestions()\`.
 6. School en locatie worden bepaald met \`selectedProvider()\`, dus ook de Zuid-Holland-voorkeur wordt getest.
+
+De classificatie-dump staat in:
+
+\`\`\`text
+${path.relative(repoRoot, classificationCsvPath)}
+\`\`\`
 
 ## Scenario-overzicht
 
@@ -500,9 +673,13 @@ ${table(frequencyRows(diversity.creboCounts, 'CREBO', 20), ['CREBO', 'Aantal'])}
 
 ${table(frequencyRows(diversity.schoolCounts, 'School', 15), ['School', 'Aantal'])}
 
+Hoogste schoolconcentratie: ${diversity.topSchool.name} met ${diversity.topSchool.count}/${diversity.totalSlots} slots (${Math.round(diversity.topSchool.share * 100)}%).
+
 ### Sectorfamilies in alle suggesties
 
 ${table(frequencyRows(diversity.familyCounts, 'Familie', 15), ['Familie', 'Aantal'])}
+
+Hoogste sectorfamilieconcentratie: ${diversity.topFamily.name} met ${diversity.topFamily.count}/${diversity.totalSlots} slots (${Math.round(diversity.topFamily.share * 100)}%).
 
 ### Scenario's met lage variatie
 
@@ -520,6 +697,19 @@ ${table(topCodes, ['Code', 'Aantal'])}
 
 ${table(Object.entries(random.top1Counts).map(([Dimensie, Aantal]) => ({ Dimensie, Aantal })), ['Dimensie', 'Aantal'])}
 
+### Matchscore per positie
+
+${table(random.averageMatchByPosition.map((GemiddeldeMatch, index) => ({ Positie: index + 1, GemiddeldeMatch })), ['Positie', 'GemiddeldeMatch'])}
+
+- Gemiddelde verhouding positie 6 / positie 1: ${random.averagePos6ToPos1Ratio}.
+- Random cases waarin positie 6 onder 65% van positie 1 valt: ${random.pos6Below65Count}.
+
+### S-top2 dekking
+
+Random cases met S in top-2 en S >= 60:
+
+${table(sCoverageRows, ['Cases', 'Zorg & welzijn', 'Onderwijs & sport', 'Een van beide'])}
+
 ### Kleine verschillen
 
 - Aantal random cases met top-gaps van 2 punten of minder, of exacte ties: ${random.tinyGapCount}.
@@ -530,6 +720,18 @@ ${random.tinyGapExamples.map(x => `- ${x.label}: ${x.code}, ${scoreText(model, x
 ### Meest voorkomende opleidingensets
 
 ${random.mostCommonSuggestionSets.map(x => `- ${x.n}x: ${x.set}`).join('\n')}
+
+## Classificatiechecks
+
+De classificatiecheck zoekt expliciet naar bekende false positives zoals dierverzorging als zorg/welzijn en autoschade/asfalt/metsel buiten techniek.
+
+${classification.warnings.length ? table(classification.warnings, ['Type', 'Opleiding', 'Family', 'Verwacht']) : '- Geen classificatie-waarschuwingen gevonden.'}
+
+### Grote opleidingsstammen
+
+Stammen met meer dan 10 records verdienen handmatige controle, omdat ze echte duplicaten kunnen zijn of juist te grof samengevoegde varianten.
+
+${classification.largeStems.length ? table(classification.largeStems, ['Stem', 'Aantal']) : '- Geen opleidingsstammen met meer dan 10 records.'}
 
 ## Validatievragen
 
@@ -561,17 +763,20 @@ function main() {
 
   const analyses = makeScenarios(model).map(s => analyzeScenario(model, s));
   const random = randomAudit(model, 1000);
+  const classifiedRows = writeClassificationCsv(model);
   writeSimulationCsv(analyses);
-  const report = renderReport(model, analyses, random);
+  const report = renderReport(model, analyses, random, classifiedRows);
   fs.writeFileSync(outputPath, report, 'utf8');
 
   const validationErrors = model.validateQuestions().filter(x => x.status !== 'ok').length;
   const niveauOk = model.validateNiveauMatchCases().every(x => x.ok);
   const smallGapCount = analyses.filter(a => a.gaps.top1Top2 <= 2 || a.gaps.top2Top3 <= 2 || a.gaps.top3Top4 <= 2 || a.meta.hasTie).length;
+  const classificationWarnings = classificationAudit(classifiedRows).warnings.length;
 
   console.log(JSON.stringify({
     report: outputPath,
     simulationCsv: simulationCsvPath,
+    classificationCsv: classificationCsvPath,
     scenarios: analyses.length,
     randomRuns: random.count,
     validationErrors,
@@ -579,7 +784,11 @@ function main() {
     uniqueTopCodes: random.uniqueTopCodes,
     uniqueSuggestionSets: random.uniqueSuggestionSets,
     scenarioSmallGaps: smallGapCount,
-    randomSmallGaps: random.tinyGapCount
+    randomSmallGaps: random.tinyGapCount,
+    averageMatchByPosition: random.averageMatchByPosition,
+    averagePos6ToPos1Ratio: random.averagePos6ToPos1Ratio,
+    sTop2Coverage: random.sTop2Coverage,
+    classificationWarnings
   }, null, 2));
 }
 

@@ -1316,7 +1316,7 @@ function reservedFamilies(n,code){
 function countBy(selected,key){
   return selected.reduce((acc,m)=>{const v=key(m);acc[v]=(acc[v]||0)+1;return acc;},{});
 }
-function canPickSuggestion(m,selected,{familyCap=2,schoolCap=1}={}){
+function canPickSuggestion(m,selected,{familyCap=2,schoolCap=2}={}){
   if(selected.some(s=>s.c===m.c||s.stem===m.stem)) return false;
   const provider=selectedProvider(m);
   const familyCounts=countBy(selected,s=>s.family);
@@ -1376,7 +1376,7 @@ function selectSuggestions(n,code,count=6){
   for(const m of deduped){
     if(selected.length>=count) break;
     if(selected.some(s=>s.c===m.c||s.stem===m.stem)) continue;
-    if(!canPickSuggestion(m,selected,{familyCap:3,schoolCap:2})) continue;
+    if(!canPickSuggestion(m,selected,{familyCap:3,schoolCap:3})) continue;
     addPick(selected,m,m.dim);
   }
   return selected.slice(0,count);

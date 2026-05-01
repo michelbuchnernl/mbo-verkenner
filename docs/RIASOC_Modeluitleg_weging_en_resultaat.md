@@ -226,7 +226,7 @@ Daarna berekent de software voor alle passende MBO-records een matchscore. Uit d
 - de beste pure match blijft altijd zichtbaar;
 - dubbele CREBO's en dubbele opleidingsstammen worden uit dezelfde uitslag geweerd;
 - per sectorfamilie geldt in de hoofdselectie een maximum van 2;
-- per school geldt in de hoofdselectie een maximum van 1, met alleen in de fallback ruimte voor een tweede;
+- per school geldt in de hoofdselectie een maximum van 2, met alleen in de fallback ruimte voor een derde;
 - de hoogste RIASOC-dimensie reserveert een passende sectorfamilie;
 - de tweede dimensie reserveert ook een familie als die score 60 procent of hoger is;
 - een derde dimensie kan zacht meewegen als die 70 procent of hoger is;
@@ -339,6 +339,12 @@ De 50-simulatie-tabel staat als CSV in:
 tests/output/riasoc_50_simulaties.csv
 ```
 
+De classificatie-dump voor handmatige controle staat in:
+
+```text
+tests/output/riasoc_classificatie_dump.csv
+```
+
 ### Laatste auditresultaat
 
 Auditdatum: 2026-05-01.
@@ -350,28 +356,34 @@ Auditdatum: 2026-05-01.
 | Scenario's getest | 50 |
 | Random simulaties | 1000 |
 | Unieke topcodes in random simulaties | 114 |
-| Unieke sets van 6 opleidingen | 403 |
+| Unieke sets van 6 opleidingen | 409 |
 | Scenario's met kleine verschillen of ties | 25 |
 | Scenario's met lage variatie in 6 opleidingen | 0 |
+| Classificatie-waarschuwingen | 0 |
+| Gemiddelde verhouding positie 6 / positie 1 | 0,95 |
+| Random cases positie 6 onder 65% van positie 1 | 0 |
+| S-top2 dekking zorg/welzijn | 230 van 230 |
 
 Interpretatie: de scoreberekening, topcode-spreiding en concrete opleidingsselectie zijn nu op hoofdlijnen gezond. Kleine verschillen blijven zichtbaar via de tie/gap-informatie, maar leiden niet meer tot één vaste standaarduitkomst. In de 50 scenario's is geen enkele uitslag meer gemarkeerd als lage variatie.
+
+Ter controle is de vorige versie (`27be48b`) opnieuw gemeten met dezelfde gefixte audit. Die eerlijke baseline gaf 240 unieke opleidingensets in 1000 random simulaties. De winst naar 409 unieke sets komt dus niet alleen door de audit-fix.
 
 De belangrijkste frequenties in 50 simulaties:
 
 | Type | Meest voorkomend | Aantal |
 |---|---|---:|
-| Opleiding | Assistant Fashion Tailor | 19 |
-| Opleiding | Creatief vakman (ontwerpen en maken met hout) | 18 |
-| Opleiding | Gespecialiseerd productiemedewerker voedingsmiddelenindustrie (VAPRO) | 16 |
-| CREBO | 25684 | 19 |
-| CREBO | 25548 | 18 |
-| CREBO | 25979 | 16 |
-| School | MBO Rijnland | 47 |
-| School | HMC | 44 |
-| School | ROC Da Vinci College | 43 |
-| Sectorfamilie | Techniek & maken | 64 |
-| Sectorfamilie | Horeca & toerisme | 48 |
-| Sectorfamilie | Commercieel & ondernemend | 47 |
+| Opleiding | Administratief Medewerker | 20 |
+| Opleiding | Creatief vakman (ontwerpen en maken met hout) | 20 |
+| Opleiding | Intercedent | 20 |
+| CREBO | 25136 | 20 |
+| CREBO | 25548 | 20 |
+| CREBO | 25723 | 20 |
+| School | ROC Mondriaan | 65 |
+| School | MBO Rijnland | 50 |
+| School | HMC | 46 |
+| Sectorfamilie | Techniek & maken | 60 |
+| Sectorfamilie | Horeca & toerisme | 46 |
+| Sectorfamilie | Commercieel & ondernemend | 43 |
 
 Belangrijkste verbetering: de concrete selectie gebruikt nu deduplicatie, sectorcaps, schoolcaps en reserveringen per dominante dimensie. Daardoor krijgt een sociaal profiel bijvoorbeeld zichtbaar ruimte voor zorg/welzijn als de match boven de minimale scorevloer komt, zonder dat commerciele of administratieve S/O/C-overlap de hele set vult.
 
