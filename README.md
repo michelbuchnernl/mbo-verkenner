@@ -73,7 +73,8 @@ De laatste lokale validatie gaf:
 - Q32-Q62 gevuld: ja
 - `validateQuestions()`: 62 vragen, 0 fouten
 - `niveauMatch()` testcases: geslaagd
-- model-audit: 31 scenario's, 1000 random simulaties, 114 unieke topcodes, 251 unieke opleidingensets
+- model-audit: 50 scenario's, 1000 random simulaties, 114 unieke topcodes, 251 unieke opleidingensets
+- CSV-analyse: `tests/output/riasoc_50_simulaties.csv`
 
 ## Doel
 

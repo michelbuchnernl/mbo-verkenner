@@ -8,6 +8,7 @@ const repoRoot = path.resolve(__dirname, '..');
 const htmlPath = path.join(repoRoot, 'index.html');
 const outputDir = path.join(__dirname, 'output');
 const outputPath = path.join(outputDir, 'riasoc_model_audit.md');
+const simulationCsvPath = path.join(outputDir, 'riasoc_50_simulaties.csv');
 
 function loadModel() {
   const html = fs.readFileSync(htmlPath, 'utf8');
@@ -133,6 +134,7 @@ function analyzeScenario(model, scenario, allowedLevels = [2, 3, 4]) {
       dim: m.dim,
       opleiding: m.o,
       crebo: m.c,
+      family: sectorFamily(m),
       school: provider.school,
       locatie: provider.location,
       niveau: provider.level,
@@ -153,19 +155,33 @@ function analyzeScenario(model, scenario, allowedLevels = [2, 3, 4]) {
     suggestions: providerRows,
     uniqueSuggestionNames: new Set(providerRows.map(x => x.opleiding.toLowerCase())).size,
     uniqueSchools: new Set(providerRows.map(x => x.school.toLowerCase())).size,
+    uniqueFamilies: new Set(providerRows.map(x => x.family)).size,
     suggestionDims: providerRows.map(x => x.dim)
   };
+}
+
+function combos(items, size) {
+  if (size === 0) return [[]];
+  if (items.length < size) return [];
+  const [head, ...tail] = items;
+  return [
+    ...combos(tail, size - 1).map(rest => [head, ...rest]),
+    ...combos(tail, size)
+  ];
 }
 
 function makeScenarios(model) {
   const scenarios = [];
   model.D.forEach(d => scenarios.push(scoreScenario(model, [d], `Zuiver ${d} (${model.META[d].naam})`)));
 
-  const pairs = ['RI', 'IA', 'AS', 'SO', 'OC', 'CR', 'RS', 'IO', 'AC', 'RO', 'IC', 'SA'];
-  pairs.forEach(pair => scenarios.push(scoreScenario(model, pair.split(''), `Combinatie ${pair}`)));
+  combos(model.D, 2).forEach(pair => {
+    const code = pair.join('');
+    scenarios.push(scoreScenario(model, pair, `Combinatie ${code}`));
+  });
 
-  ['RIA', 'IAS', 'ASO', 'SOC', 'OCR', 'CRI', 'SIC', 'AIC', 'OSC'].forEach(code => {
-    scenarios.push(scoreScenario(model, code.split(''), `Top-3 ${code}`));
+  combos(model.D, 3).forEach(triple => {
+    const code = triple.join('');
+    scenarios.push(scoreScenario(model, triple, `Top-3 ${code}`));
   });
 
   scenarios.push(scoreAnswerPattern(model, 'Alle A-antwoorden', () => 'A'));
@@ -173,7 +189,32 @@ function makeScenarios(model) {
   scenarios.push(scoreAnswerPattern(model, 'Om-en-om A/B', (_q, i) => i % 2 === 0 ? 'A' : 'B'));
   scenarios.push(scoreAnswerPattern(model, 'Om-en-om B/A', (_q, i) => i % 2 === 0 ? 'B' : 'A'));
 
+  const random = seededRandom(6200501);
+  for (let i = 0; i < 5; i++) {
+    scenarios.push(scoreAnswerPattern(model, `Seeded random ${i + 1}`, () => random() < 0.5 ? 'A' : 'B'));
+  }
+
+  if (scenarios.length !== 50) {
+    throw new Error(`Audit verwacht precies 50 scenario's, maar kreeg ${scenarios.length}.`);
+  }
+
   return scenarios;
+}
+
+function sectorFamily(m) {
+  const text = `${m.o} ${(m.b || []).join(' ')} ${m.s}`.toLowerCase();
+  if (/pedagog|onderwijsassistent|kinderopvang|sociaal werker|maatschappelijke zorg|begeleider/.test(text)) return 'Zorg/pedagogiek/sociaal';
+  if (/verpleeg|verzorg|zorg|dokters|apotheek|schoonheid|kapper|barbier|helpende/.test(text)) return 'Zorg/uiterlijke verzorging';
+  if (/hospitality|toerisme|tourism|hotel|gastheer|gastvrouw|leisure|event|evenement|bar|kok|food|bakker/.test(text)) return 'Hospitality/toerisme/events';
+  if (/commerc|account|sales|marketing|retail|interieuradviseur|intercedent|ondernemer|manager|leidinggevende/.test(text)) return 'Commercieel/ondernemend';
+  if (/administr|jurid|business services|office|finance|hr|control|secretar/.test(text)) return 'Administratief/juridisch';
+  if (/ict|software|developer|media|mediavorm|mediamaker|redactie|fotografie|av-|sign|immersive|game/.test(text)) return 'ICT/media/creatief';
+  if (/bouw|infra|timmer|install|elektro|metaal|monteur|technicus|engineering|mechatronica|voertuig|fiets|hout|meubel|schilder|stukadoor/.test(text)) return 'Techniek/maken';
+  if (/labor|analist|onderzoek|dier|groen|hovenier|natuur|water/.test(text)) return 'Onderzoek/groen/dier';
+  if (/logistiek|transport|chauffeur|warehouse|voorraad/.test(text)) return 'Logistiek/transport';
+  if (/sport|beweging|beweeg|coach/.test(text)) return 'Sport/begeleiding';
+  if (/veilig|beveil|handhaver|militair|veva/.test(text)) return 'Veiligheid/handhaving';
+  return 'Overig';
 }
 
 function randomAudit(model, count = 1000) {
@@ -223,6 +264,122 @@ function table(rows, headers) {
   return [head, sep, ...body].join('\n');
 }
 
+function csvEscape(value) {
+  const s = String(value ?? '');
+  return /[",\n;]/.test(s) ? `"${s.replace(/"/g, '""')}"` : s;
+}
+
+function writeSimulationCsv(analyses) {
+  const baseHeaders = [
+    'scenario_id', 'scenario', 'target_dims', 'answer_pattern',
+    'R', 'I', 'A', 'S', 'O', 'C',
+    'topcode', 'gap_1_2', 'gap_2_3', 'gap_3_4',
+    'unique_families', 'unique_schools'
+  ];
+  const suggestionHeaders = [];
+  for (let i = 1; i <= 6; i++) {
+    suggestionHeaders.push(
+      `opleiding_${i}`, `crebo_${i}`, `dim_${i}`, `family_${i}`,
+      `school_${i}`, `locatie_${i}`, `niveau_${i}`, `match_${i}`, `url_${i}`
+    );
+  }
+  const headers = [...baseHeaders, ...suggestionHeaders];
+  const rows = analyses.map((a, index) => {
+    const row = {
+      scenario_id: index + 1,
+      scenario: a.label,
+      target_dims: a.targetDims.join(''),
+      answer_pattern: a.answers.join(''),
+      R: a.normalized.R,
+      I: a.normalized.I,
+      A: a.normalized.A,
+      S: a.normalized.S,
+      O: a.normalized.O,
+      C: a.normalized.C,
+      topcode: a.meta.code,
+      gap_1_2: a.gaps.top1Top2,
+      gap_2_3: a.gaps.top2Top3,
+      gap_3_4: a.gaps.top3Top4,
+      unique_families: a.uniqueFamilies,
+      unique_schools: a.uniqueSchools
+    };
+    a.suggestions.forEach((s, i) => {
+      const n = i + 1;
+      row[`opleiding_${n}`] = s.opleiding;
+      row[`crebo_${n}`] = s.crebo;
+      row[`dim_${n}`] = s.dim;
+      row[`family_${n}`] = s.family;
+      row[`school_${n}`] = s.school;
+      row[`locatie_${n}`] = s.locatie;
+      row[`niveau_${n}`] = s.niveau;
+      row[`match_${n}`] = s.match;
+      row[`url_${n}`] = s.url;
+    });
+    return row;
+  });
+  const csv = [
+    headers.map(csvEscape).join(','),
+    ...rows.map(row => headers.map(h => csvEscape(row[h])).join(','))
+  ].join('\n');
+  fs.writeFileSync(simulationCsvPath, csv, 'utf8');
+}
+
+function increment(map, key, by = 1) {
+  map[key] = (map[key] || 0) + by;
+}
+
+function frequencyRows(map, keyName, limit = 20) {
+  return Object.entries(map)
+    .sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0]))
+    .slice(0, limit)
+    .map(([key, count]) => ({ [keyName]: key, Aantal: count }));
+}
+
+function diversityAudit(analyses) {
+  const opleidingCounts = {};
+  const creboCounts = {};
+  const schoolCounts = {};
+  const familyCounts = {};
+  const lowDiversityScenarios = [];
+
+  analyses.forEach(a => {
+    const familyInScenario = {};
+    const schoolInScenario = {};
+    const creboInScenario = {};
+    a.suggestions.forEach(s => {
+      increment(opleidingCounts, s.opleiding);
+      increment(creboCounts, s.crebo);
+      increment(schoolCounts, s.school);
+      increment(familyCounts, s.family);
+      increment(familyInScenario, s.family);
+      increment(schoolInScenario, s.school);
+      increment(creboInScenario, s.crebo);
+    });
+    const maxFamily = Math.max(...Object.values(familyInScenario));
+    const maxSchool = Math.max(...Object.values(schoolInScenario));
+    const repeatedCrebos = Object.entries(creboInScenario).filter(([, count]) => count > 1).map(([crebo, count]) => `${crebo} (${count}x)`);
+    if (a.uniqueFamilies < 3 || maxFamily >= 4 || maxSchool >= 4 || repeatedCrebos.length) {
+      lowDiversityScenarios.push({
+        Scenario: a.label,
+        Code: a.meta.code,
+        Families: a.uniqueFamilies,
+        Schools: a.uniqueSchools,
+        DominanteFamilie: Object.entries(familyInScenario).sort((x, y) => y[1] - x[1])[0].join(' '),
+        DominanteSchool: Object.entries(schoolInScenario).sort((x, y) => y[1] - x[1])[0].join(' '),
+        HerhaaldeCrebos: repeatedCrebos.join(', ')
+      });
+    }
+  });
+
+  return {
+    opleidingCounts,
+    creboCounts,
+    schoolCounts,
+    familyCounts,
+    lowDiversityScenarios
+  };
+}
+
 function scoreText(model, scores) {
   return model.D.map(d => `${d} ${scores[d]}%`).join(', ');
 }
@@ -234,6 +391,7 @@ function renderReport(model, analyses, random) {
   const niveauCases = model.validateNiveauMatchCases();
   const smallGapAnalyses = analyses.filter(a => a.gaps.top1Top2 <= 2 || a.gaps.top2Top3 <= 2 || a.gaps.top3Top4 <= 2 || a.meta.hasTie);
   const weakDiversity = analyses.filter(a => a.uniqueSuggestionNames < 6 || new Set(a.suggestionDims).size < Math.min(3, a.meta.code.length));
+  const diversity = diversityAudit(analyses);
 
   const summaryRows = analyses.map(a => ({
     Scenario: a.label,
@@ -250,6 +408,7 @@ function renderReport(model, analyses, random) {
     Scenario: a.label,
     Nr: index + 1,
     Dim: s.dim,
+    Familie: s.family,
     Opleiding: s.opleiding,
     School: s.school,
     Locatie: s.locatie,
@@ -276,6 +435,7 @@ Deze audit draait rechtstreeks op de HTML/JS-bron van de MBO Opleidingen Verkenn
 - Vraagvalidatie: ${validationErrors.length === 0 ? 'geslaagd' : `${validationErrors.length} fouten gevonden`}.
 - Niveau-testcases: ${niveauCases.every(x => x.ok) ? 'geslaagd' : 'niet allemaal geslaagd'}.
 - Scenario's getest: ${analyses.length}.
+- CSV met 50 simulaties: \`${path.relative(repoRoot, simulationCsvPath)}\`.
 - Random simulaties: ${random.count}.
 - Unieke topcodes in random simulaties: ${random.uniqueTopCodes}.
 - Unieke sets van 6 opleidingen in random simulaties: ${random.uniqueSuggestionSets}.
@@ -301,7 +461,45 @@ ${table(summaryRows, ['Scenario', 'Code', 'Scores', 'Gaps', 'Beroepen', 'Opleidi
 
 Alle suggesties hieronder zijn de eerste 12 scenario's uit de audit. Dit is bedoeld als steekproef om te zien of de concrete opleidingen niet steeds uit dezelfde school of categorie komen.
 
-${table(suggestionRows, ['Scenario', 'Nr', 'Dim', 'Opleiding', 'School', 'Locatie', 'Match'])}
+${table(suggestionRows, ['Scenario', 'Nr', 'Dim', 'Familie', 'Opleiding', 'School', 'Locatie', 'Match'])}
+
+## Analyse 50 simulaties
+
+De 50 simulaties bestaan uit:
+
+- 6 zuivere profielen: R, I, A, S, O, C;
+- 15 tweedimensionale combinaties;
+- 20 driedimensionale combinaties;
+- 4 vaste patronen: alle A, alle B, om-en-om A/B, om-en-om B/A;
+- 5 seeded random profielen.
+
+Alle 50 simulaties zijn als tabel weggeschreven naar:
+
+\`\`\`text
+${path.relative(repoRoot, simulationCsvPath)}
+\`\`\`
+
+### Meest voorkomende opleidingen in 50 simulaties
+
+${table(frequencyRows(diversity.opleidingCounts, 'Opleiding', 20), ['Opleiding', 'Aantal'])}
+
+### Meest voorkomende CREBO's
+
+${table(frequencyRows(diversity.creboCounts, 'CREBO', 20), ['CREBO', 'Aantal'])}
+
+### Meest voorkomende scholen
+
+${table(frequencyRows(diversity.schoolCounts, 'School', 15), ['School', 'Aantal'])}
+
+### Sectorfamilies in alle suggesties
+
+${table(frequencyRows(diversity.familyCounts, 'Familie', 15), ['Familie', 'Aantal'])}
+
+### Scenario's met lage variatie
+
+Een scenario wordt hier gemarkeerd als er minder dan 3 sectorfamilies zijn, als één familie of school 4 of meer plekken vult, of als dezelfde CREBO meer dan één keer voorkomt.
+
+${diversity.lowDiversityScenarios.length ? table(diversity.lowDiversityScenarios, ['Scenario', 'Code', 'Families', 'Schools', 'DominanteFamilie', 'DominanteSchool', 'HerhaaldeCrebos']) : '- Geen scenario’s met lage variatie gevonden.'}
 
 ## Random simulaties
 
@@ -354,6 +552,7 @@ function main() {
 
   const analyses = makeScenarios(model).map(s => analyzeScenario(model, s));
   const random = randomAudit(model, 1000);
+  writeSimulationCsv(analyses);
   const report = renderReport(model, analyses, random);
   fs.writeFileSync(outputPath, report, 'utf8');
 
@@ -363,6 +562,7 @@ function main() {
 
   console.log(JSON.stringify({
     report: outputPath,
+    simulationCsv: simulationCsvPath,
     scenarios: analyses.length,
     randomRuns: random.count,
     validationErrors,

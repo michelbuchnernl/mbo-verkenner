@@ -296,9 +296,10 @@ Deze tool draait rechtstreeks op `index.html`. Hij laadt de bestaande vragen, MB
 De audit simuleert:
 
 - 6 zuivere profielen, één per RIASOC-dimensie;
-- combinaties van twee dimensies;
-- combinaties van drie dimensies;
+- alle 15 combinaties van twee dimensies;
+- alle 20 combinaties van drie dimensies;
 - vaste patronen zoals alle A, alle B en om-en-om;
+- 5 seeded random profielen voor de 50-simulatie-tabel;
 - 1000 random antwoordreeksen.
 
 Per scenario worden vastgelegd:
@@ -309,12 +310,19 @@ Per scenario worden vastgelegd:
 - aantal beroepideeën;
 - de 6 concrete opleidingen;
 - aantal unieke scholen;
-- dimensies die in de opleidingenset terugkomen.
+- dimensies die in de opleidingenset terugkomen;
+- sectorfamilies, herhaalde CREBO's en dominante scholen.
 
 De audit schrijft het rapport naar:
 
 ```text
 tests/output/riasoc_model_audit.md
+```
+
+De 50-simulatie-tabel staat als CSV in:
+
+```text
+tests/output/riasoc_50_simulaties.csv
 ```
 
 ### Laatste auditresultaat
@@ -325,14 +333,32 @@ Auditdatum: 2026-05-01.
 |---|---:|
 | Vraagvalidatie | 0 fouten |
 | Niveau-testcases | geslaagd |
-| Scenario's getest | 31 |
+| Scenario's getest | 50 |
 | Random simulaties | 1000 |
 | Unieke topcodes in random simulaties | 114 |
 | Unieke sets van 6 opleidingen | 251 |
-| Scenario's met kleine verschillen of ties | 15 |
-| Scenario's met mogelijke diversiteitszwakte | 0 |
+| Scenario's met kleine verschillen of ties | 25 |
+| Scenario's met lage variatie in 6 opleidingen | 41 |
 
-Interpretatie: de diversiteit en werking zijn op hoofdlijnen gezond. Kleine verschillen komen vaak voor, vooral bij gebalanceerde of random antwoordpatronen, maar ze worden zichtbaar via scorebalken en tie/gap-informatie. De selectie valt niet terug op één vaste standaarduitkomst.
+Interpretatie: de scoreberekening en topcode-spreiding zijn gezond, maar de concrete opleidingsselectie is nog te smal. De 50-simulatie-tabel laat zien dat bepaalde opleidingen, CREBO's, scholen en sectorfamilies te vaak terugkomen. Vooral `ICT/media/creatief`, `Hospitality/toerisme/events`, `Commercieel/ondernemend` en enkele dubbele CREBO-families domineren de 6 concrete suggesties. Voor profielen met een sterke S-score komen zorg, pedagogiek, sociaal werk en begeleiding te laat in beeld, omdat opleidingen met gecombineerde S/O/C-scores hoger eindigen.
+
+De belangrijkste frequenties in 50 simulaties:
+
+| Type | Meest voorkomend | Aantal |
+|---|---|---:|
+| Opleiding | Mediavormgeven | 26 |
+| Opleiding | Medewerker hospitality | 24 |
+| Opleiding | 010 Bar Academy zelfstandig werkend bartender | 23 |
+| CREBO | 25771 | 37 |
+| CREBO | 27053 | 32 |
+| School | Grafisch Lyceum Rotterdam | 83 |
+| School | HMC | 64 |
+| School | ROC Da Vinci College | 63 |
+| Sectorfamilie | ICT/media/creatief | 81 |
+| Sectorfamilie | Hospitality/toerisme/events | 69 |
+| Sectorfamilie | Commercieel/ondernemend | 61 |
+
+Aanbevolen vervolgcorrectie: `selectSuggestions()` moet niet alleen op totale match en topdimensie selecteren, maar ook op sectorfamilie-spreiding, CREBO-deduplicatie en een minimale inhoudelijke dekking per topdimensie. Bij een sociaal profiel moet bijvoorbeeld minstens één echte mens-helpende opleiding uit zorg, pedagogiek, onderwijs, sociaal werk, sport/begeleiding of verwante contactberoepen worden geprobeerd voordat commerciële of administratieve S/O/C-overlap de set vult.
 
 De audit bracht ook twee praktische verbeterpunten aan het licht:
 
