@@ -13,7 +13,9 @@ De app is een zelfstandige HTML/JS-tool waarmee leerlingen 62 visuele A/B-keuzes
 - `validateQuestions()` voor controle van de R-I-A-S-O-C hexagon
 - tie-aware profielcode via `topCodeMeta()`
 - verbeterde `niveauMatch()` voor samengestelde niveauvelden
-- PDF-export zonder verticale samendrukking: lange canvassen worden over extra PDF-pagina's geknipt
+- PDF-export zonder verticale samendrukking: vaste A4-pagina's met klikbare opleidingslinks
+- 12 brede beroepideeën en 6 concrete MBO-opleidingen met spreiding over topdimensies
+- geautomatiseerde model-audit in `tests/riasoc_model_audit.js`
 - MBO-records krijgen expliciete codes en inhoudelijke RIASOC-herwegingen
 - modeluitleg in `docs/RIASOC_Modeluitleg_weging_en_resultaat.md`
 
@@ -33,6 +35,10 @@ mbo-verkenner/
 │       └── 62-bij-een-blijven-of-de-groep-organiseren.png
 ├── docs/
 │   └── RIASOC_Modeluitleg_weging_en_resultaat.md
+├── tests/
+│   ├── riasoc_model_audit.js
+│   └── output/
+│       └── riasoc_model_audit.md
 └── README.md
 ```
 
@@ -53,6 +59,12 @@ Lees de volledige uitleg in [docs/RIASOC_Modeluitleg_weging_en_resultaat.md](doc
 
 ## Validatie
 
+Voer de model-audit uit met:
+
+```bash
+node tests/riasoc_model_audit.js
+```
+
 De laatste lokale validatie gaf:
 
 - `<!DOCTYPE html>`: 1
@@ -61,6 +73,7 @@ De laatste lokale validatie gaf:
 - Q32-Q62 gevuld: ja
 - `validateQuestions()`: 62 vragen, 0 fouten
 - `niveauMatch()` testcases: geslaagd
+- model-audit: 31 scenario's, 1000 random simulaties, 114 unieke topcodes, 251 unieke opleidingensets
 
 ## Doel
 

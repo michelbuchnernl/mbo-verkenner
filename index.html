@@ -1179,7 +1179,13 @@ function mboDomainForSelection(m,n){
 }
 
 function splitField(value){
-  return String(value||'').split(';').map(x=>x.trim()).filter(Boolean);
+  const entities=[];
+  const protectedValue=String(value||'').replace(/&(?:#\d+|#x[\da-f]+|[a-z]+);/gi,m=>{
+    const token='__HTML_ENTITY_'+entities.length+'__';
+    entities.push(m);
+    return token;
+  });
+  return protectedValue.split(';').map(x=>x.trim().replace(/__HTML_ENTITY_(\d+)__/g,(_m,i)=>entities[Number(i)]||'')).filter(Boolean);
 }
 function providerScore(name,loc){
   const text=(name+' '+loc).toLowerCase();
@@ -1234,6 +1240,9 @@ function selectSuggestions(n,code,count=6){
   }
   return selected.slice(0,count);
 }
+function matchPct(m){
+  return Math.min(100,Math.round((m.sim/D.length)*100));
+}
 
 function buildSuggestions(n,code){
   const selected=selectSuggestions(n,code,6);
@@ -1241,7 +1250,7 @@ function buildSuggestions(n,code){
   document.getElementById('sug-count').textContent='6 concrete opties voor '+(tl[S.track]||S.track)+' · ZH · NH · Utrecht';
   document.getElementById('sug-list').innerHTML=selected.map((m,i)=>{
     const provider=selectedProvider(m);
-    const pct=Math.round(m.sim*100);
+    const pct=matchPct(m);
     const bHtml=(m.b&&m.b.length)?'<div class="sug-beroepen">'+m.b.slice(0,3).map(b=>'<span class="tag-b">Beroep: '+b+'</span>').join('')+'</div>':'';
     const urlBtn=provider.url?'<a href="'+provider.url+'" target="_blank" rel="noopener" class="sug-link">Bekijk opleiding</a>':'';
     return '<div class="sug-card '+(i<3?'hi':'lo')+'">'

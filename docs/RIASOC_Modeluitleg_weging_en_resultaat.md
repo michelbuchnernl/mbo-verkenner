@@ -186,14 +186,16 @@ MBO 3; 3; 4
 
 Daarmee vallen opleidingen niet weg door rommelige niveau-notatie.
 
-## 9. Waarom ziet de leerling maximaal 8 suggesties?
+## 9. Waarom ziet de leerling 12 beroepideeën en 6 opleidingen?
 
-De software berekent eerst voor alle passende MBO-records een matchscore. Daarna wordt een topselectie gemaakt met spreiding, zodat niet acht bijna dezelfde opleidingen uit dezelfde dominante categorie verschijnen.
+De uitslag begint breed. Voor de hoogste drie RIASOC-dimensies toont de verkenner telkens vier beroepideeën. Dat geeft samen 12 voorbeelden om over te praten. Die voorbeelden zijn bewust niet te smal: ze helpen een leerling woorden te geven aan mogelijke richtingen voordat er meteen een concrete opleiding wordt gekozen.
+
+Daarna berekent de software voor alle passende MBO-records een matchscore. Uit die lijst worden 6 concrete opleidingen gekozen, waar mogelijk twee per topdimensie. Zo ontstaat spreiding: niet zes bijna dezelfde opleidingen uit één dominante categorie, maar een compacte set die de breedte van het profiel laat zien.
 
 De suggestiekaart toont:
 
 - opleiding;
-- school en locatie;
+- één gekozen school en locatie, met voorkeur voor Zuid-Holland als er meerdere aanbieders in één record staan;
 - korte motivatie;
 - beroepsrollen;
 - niveau en leerweg;
@@ -201,6 +203,8 @@ De suggestiekaart toont:
 - link naar de opleiding als die bekend is.
 
 De motivatie wordt automatisch opgebouwd uit de overlap tussen het leerlingprofiel en het opleidingsprofiel. Daardoor staat er niet alleen "past bij jou", maar ook waarom.
+
+De matchscore is een overeenkomstsscore over zes dimensies. In de interface wordt die score genormaliseerd naar een begrijpelijke 0-100 procent, zodat er geen percentages boven 100 procent verschijnen.
 
 ## 10. Datastroom in het kort
 
@@ -212,7 +216,7 @@ flowchart TD
     C --> E["MBO-records filteren op niveau"]
     E --> F["MBO-scores inhoudelijk corrigeren"]
     F --> G["Matchscore per opleiding berekenen"]
-    G --> H["Top 8 met spreiding tonen"]
+    G --> H["12 beroepideeën + 6 opleidingen met spreiding tonen"]
     D --> I["Profieltekst, radar en PDF"]
     H --> I
 ```
@@ -227,7 +231,7 @@ Gebruik de uitkomst daarom zo:
 - Kijk daarna naar bijna-gelijke scores.
 - Bespreek herkenning: "Klopt dit met wat jij leuk vindt?"
 - Gebruik de MBO-suggesties als startpunt voor open dagen, proeflessen en gesprekken.
-- Laat leerlingen ook opleidingen bekijken die net buiten de top 8 vallen als ze nieuwsgierig zijn.
+- Laat leerlingen ook opleidingen bekijken die net buiten de 6 getoonde opties vallen als ze nieuwsgierig zijn.
 
 ## 12. Kwaliteitscontrole
 
@@ -243,3 +247,65 @@ De software controleert op dit moment:
 - PDF gebruikt dezelfde berekening als het schermresultaat.
 
 Bij nieuwe data of nieuwe afbeeldingen moet opnieuw `validateQuestions()` worden uitgevoerd en moeten enkele vaste niveau-testcases slagen.
+
+## 13. Geautomatiseerde model-audit
+
+Naast de handmatige controle is er nu een audit-tool:
+
+```bash
+node tests/riasoc_model_audit.js
+```
+
+Deze tool draait rechtstreeks op `index.html`. Hij laadt de bestaande vragen, MBO-records en functies in een Node VM-context en gebruikt dus dezelfde logica als de website:
+
+- `norm()` voor normalisatie;
+- `topCodeMeta()` voor topcode en tie-informatie;
+- `selectSuggestions()` voor de 6 opleidingen;
+- `selectedProvider()` voor school- en locatiekeuze;
+- `validateQuestions()` en `validateNiveauMatchCases()` voor basale datakwaliteit.
+
+De audit simuleert:
+
+- 6 zuivere profielen, één per RIASOC-dimensie;
+- combinaties van twee dimensies;
+- combinaties van drie dimensies;
+- vaste patronen zoals alle A, alle B en om-en-om;
+- 1000 random antwoordreeksen.
+
+Per scenario worden vastgelegd:
+
+- ruwe en genormaliseerde RIASOC-scores;
+- topcode;
+- verschillen tussen plek 1-2, 2-3 en 3-4;
+- aantal beroepideeën;
+- de 6 concrete opleidingen;
+- aantal unieke scholen;
+- dimensies die in de opleidingenset terugkomen.
+
+De audit schrijft het rapport naar:
+
+```text
+tests/output/riasoc_model_audit.md
+```
+
+### Laatste auditresultaat
+
+Auditdatum: 2026-05-01.
+
+| Controle | Uitkomst |
+|---|---:|
+| Vraagvalidatie | 0 fouten |
+| Niveau-testcases | geslaagd |
+| Scenario's getest | 31 |
+| Random simulaties | 1000 |
+| Unieke topcodes in random simulaties | 114 |
+| Unieke sets van 6 opleidingen | 251 |
+| Scenario's met kleine verschillen of ties | 15 |
+| Scenario's met mogelijke diversiteitszwakte | 0 |
+
+Interpretatie: de diversiteit en werking zijn op hoofdlijnen gezond. Kleine verschillen komen vaak voor, vooral bij gebalanceerde of random antwoordpatronen, maar ze worden zichtbaar via scorebalken en tie/gap-informatie. De selectie valt niet terug op één vaste standaarduitkomst.
+
+De audit bracht ook twee praktische verbeterpunten aan het licht:
+
+- De matchscore werd eerst als percentage getoond zonder normalisatie, waardoor waarden boven 100 procent mogelijk waren. Dit is gecorrigeerd naar een 0-100 procentweergave.
+- Locaties met HTML-entiteiten, zoals `B&#232;taplein`, konden verkeerd worden gesplitst op de puntkomma in de entiteit. `splitField()` beschermt HTML-entiteiten nu voordat velden worden gesplitst.
