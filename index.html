@@ -1177,6 +1177,40 @@ function mboDomainForSelection(m,n){
   const primary=m.codeMeta?.primary?.length?m.codeMeta.primary:D.filter(d=>m.sc[d]===Math.max(...D.map(x=>m.sc[x]||0)));
   return primary.slice().sort((a,b)=>(n[b]||0)-(n[a]||0)||D.indexOf(a)-D.indexOf(b))[0]||'R';
 }
+
+function splitField(value){
+  return String(value||'').split(';').map(x=>x.trim()).filter(Boolean);
+}
+function providerScore(name,loc){
+  const text=(name+' '+loc).toLowerCase();
+  let score=0;
+  if(/rotterdam|den haag|delft|dordrecht|gouda|leiden|zoetermeer|alphen|schiedam|spijkenisse|naaldwijk|maasdijk|hardinxveld|gorinchem|waddinxveen|schoonhoven|hoogvliet|capelle/.test(text)) score+=20;
+  if(/grafisch lyceum rotterdam|techniek college rotterdam|zadkine|roc mondriaan|mbo rijnland|roc da vinci college|hmc/.test(text)) score+=8;
+  if(/amsterdam|utrecht|hilversum|rijswijk/.test(text)) score-=6;
+  if(!loc) score-=2;
+  return score;
+}
+function selectedProvider(m){
+  const schools=splitField(m.s);
+  const locations=splitField(m.l);
+  const levels=splitField(m.n);
+  const learning=splitField(m.lw);
+  const total=Math.max(schools.length,locations.length,1);
+  const items=[];
+  for(let i=0;i<total;i++){
+    const school=schools[i]||schools[0]||m.s||'';
+    const location=locations[i]||locations[0]||m.l||'';
+    items.push({
+      school,
+      location,
+      level:levels[i]||levels[0]||m.n||'',
+      learning:learning[i]||learning[0]||m.lw||'',
+      url:m.url||'',
+      score:providerScore(school,location)-i
+    });
+  }
+  return items.sort((a,b)=>b.score-a.score)[0] || {school:m.s||'',location:m.l||'',level:m.n||'',learning:m.lw||'',url:m.url||''};
+}
 function selectSuggestions(n,code,count=6){
   const scored=MBO.filter(m=>niveauMatch(m.n)).map(m=>({...m,sim:D.reduce((a,d)=>a+(n[d]/100)*(m.sc[d]/10),0)})).sort((a,b)=>b.sim-a.sim);
   const selected=[];
@@ -1206,18 +1240,19 @@ function buildSuggestions(n,code){
   const tl={Basis:'VMBO Basis',Kader:'VMBO Kader',GL:'VMBO GL',TL:'VMBO TL',Havo:'Havo',Anders:'Overig'};
   document.getElementById('sug-count').textContent='6 concrete opties voor '+(tl[S.track]||S.track)+' · ZH · NH · Utrecht';
   document.getElementById('sug-list').innerHTML=selected.map((m,i)=>{
+    const provider=selectedProvider(m);
     const pct=Math.round(m.sim*100);
     const bHtml=(m.b&&m.b.length)?'<div class="sug-beroepen">'+m.b.slice(0,3).map(b=>'<span class="tag-b">Beroep: '+b+'</span>').join('')+'</div>':'';
-    const urlBtn=m.url?'<a href="'+m.url+'" target="_blank" rel="noopener" class="sug-link">Bekijk opleiding</a>':'';
+    const urlBtn=provider.url?'<a href="'+provider.url+'" target="_blank" rel="noopener" class="sug-link">Bekijk opleiding</a>':'';
     return '<div class="sug-card '+(i<3?'hi':'lo')+'">'
       +'<div class="sug-title">'+m.o+'</div>'
-      +'<div class="sug-school">School: '+m.s+(m.l?' · '+m.l:'')+'</div>'
+      +'<div class="sug-school">School: '+provider.school+(provider.location?' · '+provider.location:'')+'</div>'
       +'<div class="sug-mot">'+makeMotivation(m,n)+'</div>'
       +bHtml+urlBtn
       +'<div class="sug-tags">'
       +'<span class="tag tag-g" style="background:rgba(115,210,255,.15)">Vanuit '+META[m.dim].naam+'</span>'
-      +(m.n?'<span class="tag tag-n">Niveau '+m.n+'</span>':'')
-      +(m.lw?'<span class="tag tag-s">'+m.lw+'</span>':'')
+      +(provider.level?'<span class="tag tag-n">Niveau '+provider.level+'</span>':'')
+      +(provider.learning?'<span class="tag tag-s">'+provider.learning+'</span>':'')
       +'<span class="tag tag-g" style="background:rgba(115,210,255,.15)">'+pct+'% match</span>'
       +'</div></div>';
   }).join('');
@@ -1253,10 +1288,10 @@ ${beroepen?`<div style="display:flex;flex-wrap:wrap;gap:4px;margin-bottom:5px;">
   const chartScores=`<div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px;"><div style="background:#1464c8;border-radius:9px;padding:18px;"><div style="font-size:7.5px;font-weight:700;letter-spacing:.15em;text-transform:uppercase;color:rgba(255,255,255,.6);text-align:center;margin-bottom:10px;">RIASOC Kompas</div><img src="${chartImg}" style="width:100%;height:auto;display:block;" alt="RIASOC kompas"></div><div style="background:#f0f4ff;border-radius:9px;padding:18px;"><div style="font-size:7.5px;font-weight:700;letter-spacing:.15em;text-transform:uppercase;color:#1464c8;margin-bottom:12px;">Scores per dimensie</div>${barsHTML}</div></div>`;
   const profile=`<div style="background:#eef3ff;border-radius:9px;padding:16px 18px;margin-bottom:16px;border-left:3px solid #1464c8;"><div style="font-size:7.5px;font-weight:700;letter-spacing:.15em;text-transform:uppercase;color:#1464c8;margin-bottom:7px;">Wat dit betekent</div><p style="font-size:11.5px;line-height:1.75;color:#1a1a2e;margin:0;">${profileHTML}</p></div>`;
   const sugHeader=`<div style="display:flex;align-items:baseline;gap:10px;margin-bottom:10px;"><div style="font-size:14px;font-weight:700;color:#140037;">6 concrete MBO-opleidingen</div><div style="font-size:9.5px;color:#666;">Voor ${trackLabel} · NH · ZH · Utrecht</div></div>`;
-  const footer=`<div style="margin-top:20px;padding-top:14px;border-top:1px solid #dde8ff;text-align:center;"><img src="assets/riasoc/CORBULO_LOGO_RGB_DIAPOSITIEF-transparant.png" alt="Corbulo Tech &amp; Design College" style="width:34px;height:34px;object-fit:contain;display:block;margin:0 auto 6px;"><div style="font-size:7.5px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#bbb;">Corbulo Tech &amp; Design College · Makers van de Toekomst</div></div>`;
+  const footer=`<div style="margin-top:20px;padding-top:14px;border-top:1px solid #dde8ff;text-align:center;"><img src="assets/riasoc/CORBULO_LOGO_RGB_V1-transparant.png" alt="Corbulo Tech &amp; Design College" style="width:76px;height:auto;object-fit:contain;display:block;margin:0 auto 6px;"><div style="font-size:7.5px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#777;">Corbulo Tech &amp; Design College · Makers van de Toekomst</div></div>`;
   const careerPdfCard=(dx)=>`<div style="background:#e8f0ff;border-radius:9px;padding:15px 17px;border:1px solid #dde8ff;border-left:3px solid ${META[dx].k};"><div style="display:flex;align-items:center;gap:10px;margin-bottom:10px;"><span style="display:inline-grid;place-items:center;width:30px;height:30px;border-radius:50%;background:${META[dx].k};color:#140037;font-weight:800;">${dx}</span><div><div style="font-size:13px;font-weight:800;color:#140037;">${META[dx].naam}</div><div style="font-size:8.5px;font-weight:800;color:#1464c8;text-transform:uppercase;letter-spacing:.08em;">${META[dx].kort}</div></div></div><ul style="margin:0;padding-left:18px;color:#333;font-size:11px;line-height:1.65;">${(CAREER_IDEAS[dx]||[]).map(x=>`<li>${x}</li>`).join('')}</ul></div>`;
   const careerPage=`<div style="font-size:7.5px;font-weight:800;letter-spacing:.18em;text-transform:uppercase;color:#1464c8;margin-bottom:8px;">Breed verkennen</div><div style="font-size:19px;font-weight:800;color:#140037;margin-bottom:8px;">12 beroepideeën om over te praten</div><p style="font-size:11.5px;line-height:1.65;color:#333;margin:0 0 16px;">Deze voorbeelden zijn bewust breed. Ze zijn bedoeld om woorden te geven aan richtingen die je kunt onderzoeken, niet om meteen één beroep vast te zetten.</p><div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;">${dims.map(careerPdfCard).join('')}</div>${footer}`;
-  const compactSugCard=(m)=>{const domain=m.url?m.url.replace(/https?:\/\/(?:www\.)?/,"").split("/")[0]:'';return `<div style="background:#e8f0ff;border-radius:8px;padding:12px 14px;border:1px solid #dde8ff;border-left:3px solid ${META[m.dim].k};"><div style="font-size:12px;font-weight:800;color:#140037;line-height:1.25;margin-bottom:4px;">${m.o}</div><div style="font-size:9.5px;color:#555;line-height:1.35;margin-bottom:5px;">${m.s}${m.l?' · '+m.l:''}</div><div style="font-size:9px;color:#2a5aa0;font-style:italic;line-height:1.35;margin-bottom:6px;">${makeMotivation(m,n)}</div>${domain?`<a href="${m.url}" style="font-size:8.5px;color:#1464c8;font-weight:700;text-decoration:none;">${domain}</a>`:''}<div style="display:flex;gap:4px;flex-wrap:wrap;margin-top:6px;"><span style="font-size:8px;font-weight:700;padding:2px 6px;border-radius:3px;background:#dde8ff;color:#1464c8;">${META[m.dim].naam}</span><span style="font-size:8px;font-weight:700;padding:2px 6px;border-radius:3px;background:#eef0f4;color:#444;">Niveau ${m.n}</span><span style="font-size:8px;font-weight:500;padding:2px 6px;border-radius:3px;background:#f0f0f0;color:#666;">CREBO ${m.c}</span></div></div>`;};
+  const compactSugCard=(m)=>{const provider=selectedProvider(m);const domain=provider.url?provider.url.replace(/https?:\/\/(?:www\.)?/,"").split("/")[0]:'';return `<div style="background:#e8f0ff;border-radius:8px;padding:12px 14px;border:1px solid #dde8ff;border-left:3px solid ${META[m.dim].k};"><div style="font-size:12px;font-weight:800;color:#140037;line-height:1.25;margin-bottom:4px;">${m.o}</div><div style="font-size:9.5px;color:#555;line-height:1.35;margin-bottom:5px;">${provider.school}${provider.location?' · '+provider.location:''}</div><div style="font-size:9px;color:#2a5aa0;font-style:italic;line-height:1.35;margin-bottom:6px;">${makeMotivation(m,n)}</div>${domain?`<a href="${provider.url}" style="font-size:8.5px;color:#1464c8;font-weight:700;text-decoration:none;">${domain}</a>`:''}<div style="display:flex;gap:4px;flex-wrap:wrap;margin-top:6px;"><span style="font-size:8px;font-weight:700;padding:2px 6px;border-radius:3px;background:#dde8ff;color:#1464c8;">${META[m.dim].naam}</span><span style="font-size:8px;font-weight:700;padding:2px 6px;border-radius:3px;background:#eef0f4;color:#444;">Niveau ${provider.level||m.n}</span><span style="font-size:8px;font-weight:500;padding:2px 6px;border-radius:3px;background:#f0f0f0;color:#666;">CREBO ${m.c}</span></div></div>`;};
   const sugPage=`${sugHeader}<p style="font-size:11px;line-height:1.55;color:#333;margin:0 0 12px;">Per topdimensie zijn twee concrete opleidingen gekozen waar mogelijk. Gebruik de links om open dagen, toelating en inhoud verder te bekijken.</p><div style="display:grid;grid-template-columns:1fr 1fr;gap:9px;">${suggestions.map(compactSugCard).join('')}</div>${footer}`;
   const typeCard=(dx,text)=>`<div style="background:#f0f4ff;border-radius:8px;padding:13px 15px;border:1px solid #dde8ff;border-left:3px solid ${META[dx].k};"><div style="display:flex;align-items:center;gap:9px;margin-bottom:6px;"><span style="display:inline-grid;place-items:center;width:28px;height:28px;border-radius:50%;background:${META[dx].k};color:#140037;font-size:13px;font-weight:800;">${dx}</span><div><div style="font-size:12.5px;font-weight:800;color:#140037;">${META[dx].naam}</div><div style="font-size:8.5px;font-weight:800;color:#1464c8;text-transform:uppercase;letter-spacing:.08em;">${META[dx].kort}</div></div></div><div style="font-size:10.5px;line-height:1.55;color:#333;">${text}</div></div>`;
   const comboCard=(label,title,example)=>`<div style="display:grid;grid-template-columns:48px 1fr;gap:10px;align-items:center;background:#eef3ff;border-radius:8px;padding:10px 12px;border:1px solid #dde8ff;"><div style="font-size:10px;font-weight:800;color:#1464c8;background:#dde8ff;border-radius:5px;text-align:center;padding:5px 0;">${label}</div><div style="font-size:10.5px;line-height:1.45;color:#333;"><strong style="color:#140037;">${title}</strong> - ${example}</div></div>`;
@@ -1284,15 +1319,27 @@ async function dlPDF(){
     const pw=pdf.internal.pageSize.getWidth(),ph=pdf.internal.pageSize.getHeight();
     const mg=8,uw=pw-mg*2,pageH=ph-mg*2;
     const resEl=document.getElementById('pdf-results');
-    const capturePage=async(html,isFirst)=>{
+    const addSuggestionLinks=(items)=>{
+      const scaleX=uw/680, scaleY=pageH/962;
+      const cardW=300, cardH=168;
+      const xs=[36,346], ys=[132,329,526];
+      items.forEach((m,i)=>{
+        const provider=selectedProvider(m);
+        if(!provider.url) return;
+        const col=i%2, row=Math.floor(i/2);
+        pdf.link(mg+xs[col]*scaleX,mg+ys[row]*scaleY,cardW*scaleX,cardH*scaleY,{url:provider.url});
+      });
+    };
+    const capturePage=async(html,isFirst,onPageReady)=>{
       resEl.innerHTML=html;resEl.style.display='block';
       const cv=await html2canvas(resEl,{scale:2.5,useCORS:true,backgroundColor:'#ffffff',logging:false});
       resEl.style.display='none';resEl.innerHTML='';
       if(!isFirst)pdf.addPage();
       pdf.addImage(cv.toDataURL('image/jpeg',.94),'JPEG',mg,mg,uw,pageH);
+      if(onPageReady) onPageReady();
     };
     const pages=buildPDFPages(n,code,topCodeMeta(n));
-    for(let i=0;i<pages.length;i++) await capturePage(pages[i],i===0);
+    for(let i=0;i<pages.length;i++) await capturePage(pages[i],i===0,i===2?()=>addSuggestionLinks(selectSuggestions(n,code,6)):null);
     actions.style.display='';
     pdf.save(`RIASOC_${S.name.replace(/\s+/g,'_')||'profiel'}_${new Date().toISOString().slice(0,10)}.pdf`);
     toast('📥 PDF opgeslagen!');
