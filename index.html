@@ -97,6 +97,16 @@
     .profile-card{background:rgba(20,100,200,.35);border-radius:var(--rc);padding:24px 28px;margin-bottom:18px;border:1px solid var(--border);}
     .profile-card p{font-size:.92rem;font-weight:300;line-height:1.75;color:var(--bw);}
     .profile-card strong{color:var(--lb);font-weight:700;}
+    .career-section{margin:4px 0 22px;}
+    .career-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;}
+    .career-card{background:var(--db);border-radius:var(--rc);padding:16px 18px;border:1px solid var(--border);}
+    .career-head{display:flex;align-items:center;gap:10px;margin-bottom:10px;}
+    .career-letter{width:30px;height:30px;border-radius:50%;display:grid;place-items:center;background:var(--lb);color:var(--dp);font-weight:800;font-size:.9rem;}
+    .career-title{font-size:.94rem;font-weight:800;color:var(--white);line-height:1.2;}
+    .career-sub{font-size:.68rem;font-weight:700;color:var(--lb);text-transform:uppercase;letter-spacing:.08em;margin-top:2px;}
+    .career-card ul{list-style:none;display:flex;flex-direction:column;gap:7px;}
+    .career-card li{font-size:.8rem;line-height:1.42;color:var(--bw);padding-left:12px;position:relative;}
+    .career-card li::before{content:"";position:absolute;left:0;top:.62em;width:4px;height:4px;border-radius:50%;background:var(--lb);}
     .explain-card{background:rgba(20,100,200,.22);border-radius:var(--rc);padding:24px 28px;margin:24px 0 18px;border:1px solid var(--border);}
     .explain-card h3{font-size:1.05rem;font-weight:700;color:var(--white);margin-bottom:8px;}
     .explain-card h4{font-size:.82rem;font-weight:700;color:var(--lb);margin:18px 0 8px;text-transform:uppercase;letter-spacing:.08em;}
@@ -126,7 +136,7 @@
     .sug-link{display:inline-flex;align-items:center;gap:5px;margin-top:8px;font-size:.73rem;font-weight:700;color:var(--lb);text-decoration:none;border:1px solid rgba(115,210,255,.3);border-radius:var(--r);padding:4px 10px;transition:all .2s;}
     .sug-link:hover{background:rgba(115,210,255,.1);border-color:var(--lb);}
     .corbulo-strip{margin-top:36px;padding:20px 0 0;border-top:1px solid var(--border);display:flex;align-items:center;justify-content:center;gap:12px;}
-    .c-mark{width:26px;height:26px;border-radius:50%;background:linear-gradient(135deg,var(--db),var(--lb));display:grid;place-items:center;font-size:.75rem;font-weight:700;color:var(--dp);}
+    .c-mark{width:42px;height:42px;object-fit:contain;display:block;}
     .c-name{font-size:.65rem;font-weight:600;letter-spacing:.07em;text-transform:uppercase;color:var(--muted);}
     .actions{margin-top:28px;display:flex;flex-direction:column;align-items:center;gap:10px;}
     .toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(80px);background:var(--db);color:var(--white);padding:10px 22px;border-radius:var(--r);border:1px solid var(--border);font-size:.84rem;font-weight:600;transition:transform .3s;z-index:100;white-space:nowrap;}
@@ -138,6 +148,7 @@
     .img-ph{width:100%;padding-top:44%;background:#1a1a30;position:relative;}
     .img-ph-i{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;color:var(--muted);gap:8px;font-size:.78rem;}
     @media(max-width:480px){.score-row{grid-template-columns:100px 1fr 36px;}.email-card{padding:28px 20px;}}
+    @media(max-width:680px){.career-grid{grid-template-columns:1fr;}}
     @media(max-width:560px){.explain-types,.explain-note{grid-template-columns:1fr;}}
   </style>
 </head>
@@ -201,7 +212,7 @@
   <div class="res-outer">
     <div id="printable">
       <div class="res-hdr fade">
-        <div class="corbulo-tag">Corbulo Tech &amp; Design College — RIASOC Verkenner</div>
+        <div class="corbulo-tag">Corbulo Tech &amp; Design College — MBO opleidingen verkenner</div>
         <h2 id="res-name">Jouw Kompas</h2>
         <div class="res-date" id="res-date"></div>
         <div class="badge" id="res-code">---</div>
@@ -217,6 +228,13 @@
       <div class="profile-card fade">
         <div style="font-size:.6rem;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:var(--lb);margin-bottom:10px;">Wat dit betekent</div>
         <p id="profile-text"></p>
+      </div>
+      <div class="career-section fade">
+        <div class="sug-header">
+          <h3>12 beroepideeën om over te praten</h3>
+          <span class="sug-count">Breed verkennen voordat je kiest</span>
+        </div>
+        <div class="career-grid" id="career-grid"></div>
       </div>
       <div class="fade">
         <div class="sug-header">
@@ -245,7 +263,7 @@
         </div>
       </div>
       <div class="corbulo-strip">
-        <div class="c-mark">C</div>
+        <img class="c-mark" src="assets/riasoc/CORBULO_LOGO_RGB_DIAPOSITIEF-transparant.png" alt="Corbulo Tech &amp; Design College">
         <div class="c-name">Corbulo Tech &amp; Design College · Makers van de Toekomst</div>
       </div>
     </div>
@@ -334,68 +352,68 @@ const IMG = [
 ];
 
 const QS=[
-  {n:1,t:"Fiets Maken of Fiets Uitleggen",lA:"Fiets Maken",lB:"Fiets Uitleggen",wA:{R:3,C:1},wB:{S:3,O:1}},
-  {n:2,t:"Evenement Klaarzetten of Bezoekers Helpen",lA:"Evenement Klaarzetten",lB:"Bezoekers Helpen",wA:{R:3,C:1},wB:{S:3,O:1}},
-  {n:3,t:"Machine Maken of Gebruiker Helpen",lA:"Machine Maken",lB:"Gebruiker Helpen",wA:{R:3,C:1},wB:{S:3,O:1}},
-  {n:4,t:"Bankje Maken of Ruzie Helpen Oplossen",lA:"Bankje Maken",lB:"Ruzie Oplossen",wA:{R:3,C:1},wB:{S:3,O:1}},
-  {n:5,t:"Speeltoestel Maken of Op Kinderen Letten",lA:"Speeltoestel Maken",lB:"Op Kinderen Letten",wA:{R:3,C:1},wB:{S:3,O:1}},
-  {n:6,t:"Robot Onderzoeken of Team Leiden",lA:"Robot Onderzoeken",lB:"Team Leiden",wA:{I:3,A:1,C:1},wB:{S:1,O:3,C:1}},
-  {n:7,t:"Oplossingen Vergelijken of Een Keuze Uitleggen",lA:"Oplossingen Vergelijken",lB:"Keuze Uitleggen",wA:{I:3,A:1,C:1},wB:{S:1,O:3,C:1}},
-  {n:8,t:"Website Bekijken of Website Idee Verkopen",lA:"Website Bekijken",lB:"Website Idee Verkopen",wA:{I:3,A:1,C:1},wB:{S:1,O:3,C:1}},
-  {n:9,t:"Gegevens Bekijken of Keuze Leiden",lA:"Gegevens Bekijken",lB:"Keuze Leiden",wA:{I:3,A:1,C:1},wB:{S:1,O:3,C:1}},
-  {n:10,t:"Probleem Bekijken of Team Aan Het Werk Zetten",lA:"Probleem Bekijken",lB:"Team Aan Het Werk",wA:{I:3,A:1,C:1},wB:{S:1,O:3,C:1}},
-  {n:11,t:"Eigen Poster Maken of Voorbeeld Volgen",lA:"Eigen Poster Maken",lB:"Voorbeeld Volgen",wA:{I:1,A:3},wB:{O:1,C:3}},
-  {n:12,t:"Creatieve Presentatie Maken of Materiaal Sorteren",lA:"Creatieve Presentatie",lB:"Materiaal Sorteren",wA:{I:1,A:3},wB:{O:1,C:3}},
-  {n:13,t:"Kostuum Bedenken of Kostuums Bijhouden",lA:"Kostuum Bedenken",lB:"Kostuums Bijhouden",wA:{I:1,A:3},wB:{O:1,C:3}},
-  {n:14,t:"Website Uitproberen of Website Netjes Indelen",lA:"Website Uitproberen",lB:"Website Indelen",wA:{I:1,A:3},wB:{O:1,C:3}},
-  {n:15,t:"Tentoonstelling Snel Inrichten of Kaartjes Controleren",lA:"Snel Inrichten",lB:"Kaartjes Controleren",wA:{I:1,A:3},wB:{O:1,C:3}},
-  {n:16,t:"Stevig Krukje Maken of Apart Krukje Maken",lA:"Stevig Krukje",lB:"Apart Krukje",wA:{R:3,C:1},wB:{I:1,A:3}},
-  {n:17,t:"Lamp Maken of Lamp Omtoveren",lA:"Lamp Maken",lB:"Lamp Omtoveren",wA:{R:3,C:1},wB:{I:1,A:3}},
-  {n:18,t:"Wand Maken of Kamer Mooi Inrichten",lA:"Wand Maken",lB:"Kamer Inrichten",wA:{R:3,C:1},wB:{I:1,A:3}},
-  {n:19,t:"Handige Haak Maken of Opvallende Haak Maken",lA:"Handige Haak",lB:"Opvallende Haak",wA:{R:3,C:1},wB:{I:1,A:3}},
-  {n:20,t:"Geluid Aansluiten of Opbouw Leiden",lA:"Geluid Aansluiten",lB:"Opbouw Leiden",wA:{R:3,C:1},wB:{S:1,O:3}},
-  {n:21,t:"Pomp Maken of Tuinproject Regelen",lA:"Pomp Maken",lB:"Tuinproject Regelen",wA:{R:3,C:1},wB:{S:1,O:3}},
-  {n:22,t:"Stand Maken of Stand Uitleggen",lA:"Stand Maken",lB:"Stand Uitleggen",wA:{R:3,C:1},wB:{S:1,O:3}},
-  {n:23,t:"Machine Bedienen of Team Motiveren",lA:"Machine Bedienen",lB:"Team Motiveren",wA:{R:3,C:1},wB:{S:1,O:3}},
-  {n:24,t:"Water Onderzoeken of Met Bewoner Praten",lA:"Water Onderzoeken",lB:"Bewoner Praten",wA:{I:3,C:1},wB:{S:3,O:1}},
-  {n:25,t:"App Onderzoeken of Iemand Met App Helpen",lA:"App Onderzoeken",lB:"App Helpen",wA:{I:3,C:1},wB:{S:3,O:1}},
-  {n:26,t:"Storing Zoeken of Gebruiker Rustig Helpen",lA:"Storing Zoeken",lB:"Gebruiker Helpen",wA:{I:3,C:1},wB:{S:3,O:1}},
-  {n:27,t:"Uitleg Maken of Persoon Begeleiden",lA:"Uitleg Maken",lB:"Persoon Begeleiden",wA:{I:3,C:1},wB:{S:3,O:1}},
-  {n:28,t:"Oorzaak Zoeken of Stappen Checken",lA:"Oorzaak Zoeken",lB:"Stappen Checken",wA:{I:3,A:1},wB:{R:1,C:3}},
-  {n:29,t:"Gegevens Bekijken of Gegevens Sorteren",lA:"Gegevens Bekijken",lB:"Gegevens Sorteren",wA:{I:3,A:1},wB:{R:1,C:3}},
-  {n:30,t:"Ideeen Uitproberen of Stappenplan Volgen",lA:"Ideeen Uitproberen",lB:"Stappenplan Volgen",wA:{I:3,A:1},wB:{R:1,C:3}},
-  {n:31,t:"Machineprobleem Zoeken of Machine In De Gaten Houden",lA:"Probleem Zoeken",lB:"Machine In Gaten",wA:{I:3,A:1},wB:{R:1,C:3}},
-  {n:32,t:"Schoolfotoserie Maken of Leerling Helpen",lA:"Fotoserie Maken",lB:"Leerling Helpen",wA:{I:1,A:3},wB:{S:3,O:1}},
-  {n:33,t:"Buurtmuur Maken of Buurtgesprek Houden",lA:"Buurtmuur Maken",lB:"Buurtgesprek Houden",wA:{I:1,A:3},wB:{S:3,O:1}},
-  {n:34,t:"Toneelscene Maken of Ruzie Oplossen",lA:"Toneelscene Maken",lB:"Ruzie Oplossen",wA:{I:1,A:3},wB:{S:3,O:1}},
-  {n:35,t:"Verhaal Maken of Bezoekers Helpen",lA:"Verhaal Maken",lB:"Bezoekers Helpen",wA:{I:1,A:3},wB:{S:3,O:1}},
-  {n:36,t:"Kraam Leiden of Kraam Bijhouden",lA:"Kraam Leiden",lB:"Kraam Bijhouden",wA:{S:1,O:3},wB:{R:1,C:3}},
-  {n:37,t:"Sponsor Overtuigen of Formulieren Invullen",lA:"Sponsor Overtuigen",lB:"Formulieren Invullen",wA:{S:1,O:3},wB:{R:1,C:3}},
-  {n:38,t:"Kans Pakken of Plan Volhouden",lA:"Kans Pakken",lB:"Plan Volhouden",wA:{S:1,O:3},wB:{R:1,C:3}},
-  {n:39,t:"Spannend Idee Voorstellen of Duidelijk Plan Maken",lA:"Spannend Idee",lB:"Duidelijk Plan",wA:{S:1,O:3},wB:{R:1,C:3}},
-  {n:40,t:"Motor Openmaken of Schema Bekijken",lA:"Motor Openmaken",lB:"Schema Bekijken",wA:{R:2,I:1,C:1},wB:{R:1,I:2,A:1}},
-  {n:41,t:"Snel Bouwen of Eerst Nadenken",lA:"Snel Bouwen",lB:"Eerst Nadenken",wA:{R:2,I:1,C:1},wB:{R:1,I:2,A:1}},
-  {n:42,t:"Leren Door Doen of Leren Door Vergelijken",lA:"Leren Door Doen",lB:"Leren Door Vergelijken",wA:{R:2,I:1,C:1},wB:{R:1,I:2,A:1}},
-  {n:43,t:"Storing Oplossen of Oorzaak Vinden",lA:"Storing Oplossen",lB:"Oorzaak Vinden",wA:{R:2,I:1,C:1},wB:{R:1,I:2,A:1}},
-  {n:44,t:"Wind Uitleggen of Wind In Beeld Brengen",lA:"Wind Uitleggen",lB:"Wind Verbeelden",wA:{I:2,A:1,C:1},wB:{I:1,A:2,S:1}},
-  {n:45,t:"Goed Antwoord Zoeken of Eigen Uitleg Maken",lA:"Goed Antwoord Zoeken",lB:"Eigen Uitleg Maken",wA:{I:2,A:1,C:1},wB:{I:1,A:2,S:1}},
-  {n:46,t:"Technische Tekening Maken of Gevoel Laten Zien",lA:"Technische Tekening",lB:"Gevoel Laten Zien",wA:{I:2,A:1,C:1},wB:{I:1,A:2,S:1}},
-  {n:47,t:"Schema Begrijpen of Idee Verbeelden",lA:"Schema Begrijpen",lB:"Idee Verbeelden",wA:{I:2,A:1,C:1},wB:{I:1,A:2,S:1}},
-  {n:48,t:"Muziek Maken of Makers Helpen",lA:"Muziek Maken",lB:"Makers Helpen",wA:{I:1,A:2,S:1},wB:{A:1,S:2,O:1}},
-  {n:49,t:"Campagne Maken of Gesprek Leiden",lA:"Campagne Maken",lB:"Gesprek Leiden",wA:{I:1,A:2,S:1},wB:{A:1,S:2,O:1}},
-  {n:50,t:"Een Persoon Helpen of Groep Leiden",lA:"Een Persoon Helpen",lB:"Groep Leiden",wA:{A:1,S:2,O:1},wB:{S:1,O:2,C:1}},
-  {n:51,t:"Goed Luisteren of Snel Overtuigen",lA:"Goed Luisteren",lB:"Snel Overtuigen",wA:{A:1,S:2,O:1},wB:{S:1,O:2,C:1}},
-  {n:52,t:"Mensen Helpen of Team Motiveren",lA:"Mensen Helpen",lB:"Team Motiveren",wA:{A:1,S:2,O:1},wB:{S:1,O:2,C:1}},
-  {n:53,t:"Stap voor Stap Helpen of Team In Actie Zetten",lA:"Stap voor Stap Helpen",lB:"Team In Actie Zetten",wA:{A:1,S:2,O:1},wB:{S:1,O:2,C:1}},
-  {n:54,t:"Kans Najagen of Werkproces In De Gaten Houden",lA:"Kans Najagen",lB:"Werkproces Bewaken",wA:{S:1,O:2,C:1},wB:{R:1,O:1,C:2}},
-  {n:55,t:"Energiek Leiden of Zorgvuldig Controleren",lA:"Energiek Leiden",lB:"Zorgvuldig Controleren",wA:{S:1,O:2,C:1},wB:{R:1,O:1,C:2}},
-  {n:56,t:"Voorraad Netjes Leggen of Opstelling Bouwen",lA:"Voorraad Leggen",lB:"Opstelling Bouwen",wA:{R:1,O:1,C:2},wB:{R:2,I:1,C:1}},
-  {n:57,t:"Codes Checken of Apparatuur Plaatsen",lA:"Codes Checken",lB:"Apparatuur Plaatsen",wA:{R:1,O:1,C:2},wB:{R:2,I:1,C:1}},
-  {n:58,t:"Logboek Bijwerken of Onderhoud Doen",lA:"Logboek Bijwerken",lB:"Onderhoud Doen",wA:{R:1,O:1,C:2},wB:{R:2,I:1,C:1}},
-  {n:59,t:"Gegevens Netjes Zetten of Betekenis Zoeken",lA:"Gegevens Zetten",lB:"Betekenis Zoeken",wA:{R:1,I:1,C:2},wB:{I:2,A:1,C:1}},
-  {n:60,t:"Resultaten Opbergen of Patronen Zoeken",lA:"Resultaten Opbergen",lB:"Patronen Zoeken",wA:{R:1,I:1,C:2},wB:{I:2,A:1,C:1}},
-  {n:61,t:"Hulpvraag Afhandelen of Persoon Helpen",lA:"Hulpvraag Afhandelen",lB:"Persoon Helpen",wA:{R:1,O:1,C:2},wB:{A:1,S:2,O:1}},
-  {n:62,t:"Bij Een Persoon Blijven of Groep Regelen",lA:"Bij Een Persoon Blijven",lB:"Groep Regelen",wA:{A:1,S:2,O:1},wB:{S:1,O:2,C:1}}
+  {n:1,t:"Fiets maken of fiets uitleggen",lA:"Fiets maken",lB:"Fiets uitleggen",wA:{R:3,C:1},wB:{S:3,O:1}},
+  {n:2,t:"Evenement klaarzetten of bezoekers helpen",lA:"Evenement klaarzetten",lB:"Bezoekers helpen",wA:{R:3,C:1},wB:{S:3,O:1}},
+  {n:3,t:"Machine maken of gebruiker helpen",lA:"Machine maken",lB:"Gebruiker helpen",wA:{R:3,C:1},wB:{S:3,O:1}},
+  {n:4,t:"Bankje maken of ruzie helpen oplossen",lA:"Bankje maken",lB:"Ruzie oplossen",wA:{R:3,C:1},wB:{S:3,O:1}},
+  {n:5,t:"Speeltoestel maken of op kinderen letten",lA:"Speeltoestel maken",lB:"Op kinderen letten",wA:{R:3,C:1},wB:{S:3,O:1}},
+  {n:6,t:"Robot onderzoeken of team leiden",lA:"Robot onderzoeken",lB:"Team leiden",wA:{I:3,A:1,C:1},wB:{S:1,O:3,C:1}},
+  {n:7,t:"Oplossingen vergelijken of een keuze uitleggen",lA:"Oplossingen vergelijken",lB:"Keuze uitleggen",wA:{I:3,A:1,C:1},wB:{S:1,O:3,C:1}},
+  {n:8,t:"Website bekijken of website idee verkopen",lA:"Website bekijken",lB:"Website idee verkopen",wA:{I:3,A:1,C:1},wB:{S:1,O:3,C:1}},
+  {n:9,t:"Gegevens bekijken of keuze leiden",lA:"Gegevens bekijken",lB:"Keuze leiden",wA:{I:3,A:1,C:1},wB:{S:1,O:3,C:1}},
+  {n:10,t:"Probleem bekijken of team aan het werk zetten",lA:"Probleem bekijken",lB:"Team aan het werk",wA:{I:3,A:1,C:1},wB:{S:1,O:3,C:1}},
+  {n:11,t:"Eigen poster maken of voorbeeld volgen",lA:"Eigen poster maken",lB:"Voorbeeld volgen",wA:{I:1,A:3},wB:{O:1,C:3}},
+  {n:12,t:"Creatieve presentatie maken of materiaal sorteren",lA:"Creatieve presentatie",lB:"Materiaal sorteren",wA:{I:1,A:3},wB:{O:1,C:3}},
+  {n:13,t:"Kostuum bedenken of kostuums bijhouden",lA:"Kostuum bedenken",lB:"Kostuums bijhouden",wA:{I:1,A:3},wB:{O:1,C:3}},
+  {n:14,t:"Website uitproberen of website netjes indelen",lA:"Website uitproberen",lB:"Website indelen",wA:{I:1,A:3},wB:{O:1,C:3}},
+  {n:15,t:"Tentoonstelling snel inrichten of kaartjes controleren",lA:"Snel inrichten",lB:"Kaartjes controleren",wA:{I:1,A:3},wB:{O:1,C:3}},
+  {n:16,t:"Stevig krukje maken of apart krukje maken",lA:"Stevig krukje",lB:"Apart krukje",wA:{R:3,C:1},wB:{I:1,A:3}},
+  {n:17,t:"Lamp maken of lamp omtoveren",lA:"Lamp maken",lB:"Lamp omtoveren",wA:{R:3,C:1},wB:{I:1,A:3}},
+  {n:18,t:"Wand maken of kamer mooi inrichten",lA:"Wand maken",lB:"Kamer inrichten",wA:{R:3,C:1},wB:{I:1,A:3}},
+  {n:19,t:"Handige haak maken of opvallende haak maken",lA:"Handige haak",lB:"Opvallende haak",wA:{R:3,C:1},wB:{I:1,A:3}},
+  {n:20,t:"Geluid aansluiten of opbouw leiden",lA:"Geluid aansluiten",lB:"Opbouw leiden",wA:{R:3,C:1},wB:{S:1,O:3}},
+  {n:21,t:"Pomp maken of tuinproject regelen",lA:"Pomp maken",lB:"Tuinproject regelen",wA:{R:3,C:1},wB:{S:1,O:3}},
+  {n:22,t:"Stand maken of stand uitleggen",lA:"Stand maken",lB:"Stand uitleggen",wA:{R:3,C:1},wB:{S:1,O:3}},
+  {n:23,t:"Machine bedienen of team motiveren",lA:"Machine bedienen",lB:"Team motiveren",wA:{R:3,C:1},wB:{S:1,O:3}},
+  {n:24,t:"Water onderzoeken of met bewoner praten",lA:"Water onderzoeken",lB:"Bewoner praten",wA:{I:3,C:1},wB:{S:3,O:1}},
+  {n:25,t:"App onderzoeken of iemand met app helpen",lA:"App onderzoeken",lB:"App helpen",wA:{I:3,C:1},wB:{S:3,O:1}},
+  {n:26,t:"Storing zoeken of gebruiker rustig helpen",lA:"Storing zoeken",lB:"Gebruiker helpen",wA:{I:3,C:1},wB:{S:3,O:1}},
+  {n:27,t:"Uitleg maken of persoon begeleiden",lA:"Uitleg maken",lB:"Persoon begeleiden",wA:{I:3,C:1},wB:{S:3,O:1}},
+  {n:28,t:"Oorzaak zoeken of stappen checken",lA:"Oorzaak zoeken",lB:"Stappen checken",wA:{I:3,A:1},wB:{R:1,C:3}},
+  {n:29,t:"Gegevens bekijken of gegevens sorteren",lA:"Gegevens bekijken",lB:"Gegevens sorteren",wA:{I:3,A:1},wB:{R:1,C:3}},
+  {n:30,t:"Ideeen uitproberen of stappenplan volgen",lA:"Ideeen uitproberen",lB:"Stappenplan volgen",wA:{I:3,A:1},wB:{R:1,C:3}},
+  {n:31,t:"Machineprobleem zoeken of machine in de gaten houden",lA:"Probleem zoeken",lB:"Machine in de gaten",wA:{I:3,A:1},wB:{R:1,C:3}},
+  {n:32,t:"Schoolfotoserie maken of leerling helpen",lA:"Fotoserie maken",lB:"Leerling helpen",wA:{I:1,A:3},wB:{S:3,O:1}},
+  {n:33,t:"Buurtmuur maken of buurtgesprek houden",lA:"Buurtmuur maken",lB:"Buurtgesprek houden",wA:{I:1,A:3},wB:{S:3,O:1}},
+  {n:34,t:"Toneelscene maken of ruzie oplossen",lA:"Toneelscene maken",lB:"Ruzie oplossen",wA:{I:1,A:3},wB:{S:3,O:1}},
+  {n:35,t:"Verhaal maken of bezoekers helpen",lA:"Verhaal maken",lB:"Bezoekers helpen",wA:{I:1,A:3},wB:{S:3,O:1}},
+  {n:36,t:"Kraam leiden of kraam bijhouden",lA:"Kraam leiden",lB:"Kraam bijhouden",wA:{S:1,O:3},wB:{R:1,C:3}},
+  {n:37,t:"Sponsor overtuigen of formulieren invullen",lA:"Sponsor overtuigen",lB:"Formulieren invullen",wA:{S:1,O:3},wB:{R:1,C:3}},
+  {n:38,t:"Kans pakken of plan volhouden",lA:"Kans pakken",lB:"Plan volhouden",wA:{S:1,O:3},wB:{R:1,C:3}},
+  {n:39,t:"Spannend idee voorstellen of duidelijk plan maken",lA:"Spannend idee",lB:"Duidelijk plan",wA:{S:1,O:3},wB:{R:1,C:3}},
+  {n:40,t:"Motor openmaken of schema bekijken",lA:"Motor openmaken",lB:"Schema bekijken",wA:{R:2,I:1,C:1},wB:{R:1,I:2,A:1}},
+  {n:41,t:"Snel bouwen of eerst nadenken",lA:"Snel bouwen",lB:"Eerst nadenken",wA:{R:2,I:1,C:1},wB:{R:1,I:2,A:1}},
+  {n:42,t:"Leren door doen of leren door vergelijken",lA:"Leren door doen",lB:"Leren door vergelijken",wA:{R:2,I:1,C:1},wB:{R:1,I:2,A:1}},
+  {n:43,t:"Storing oplossen of oorzaak vinden",lA:"Storing oplossen",lB:"Oorzaak vinden",wA:{R:2,I:1,C:1},wB:{R:1,I:2,A:1}},
+  {n:44,t:"Wind uitleggen of wind in beeld brengen",lA:"Wind uitleggen",lB:"Wind verbeelden",wA:{I:2,A:1,C:1},wB:{I:1,A:2,S:1}},
+  {n:45,t:"Goed antwoord zoeken of eigen uitleg maken",lA:"Goed antwoord zoeken",lB:"Eigen uitleg maken",wA:{I:2,A:1,C:1},wB:{I:1,A:2,S:1}},
+  {n:46,t:"Technische tekening maken of gevoel laten zien",lA:"Technische tekening",lB:"Gevoel laten zien",wA:{I:2,A:1,C:1},wB:{I:1,A:2,S:1}},
+  {n:47,t:"Schema begrijpen of idee verbeelden",lA:"Schema begrijpen",lB:"Idee verbeelden",wA:{I:2,A:1,C:1},wB:{I:1,A:2,S:1}},
+  {n:48,t:"Muziek maken of makers helpen",lA:"Muziek maken",lB:"Makers helpen",wA:{I:1,A:2,S:1},wB:{A:1,S:2,O:1}},
+  {n:49,t:"Campagne maken of gesprek leiden",lA:"Campagne maken",lB:"Gesprek leiden",wA:{I:1,A:2,S:1},wB:{A:1,S:2,O:1}},
+  {n:50,t:"Een persoon helpen of groep leiden",lA:"Een persoon helpen",lB:"Groep leiden",wA:{A:1,S:2,O:1},wB:{S:1,O:2,C:1}},
+  {n:51,t:"Goed luisteren of snel overtuigen",lA:"Goed luisteren",lB:"Snel overtuigen",wA:{A:1,S:2,O:1},wB:{S:1,O:2,C:1}},
+  {n:52,t:"Mensen helpen of team motiveren",lA:"Mensen helpen",lB:"Team motiveren",wA:{A:1,S:2,O:1},wB:{S:1,O:2,C:1}},
+  {n:53,t:"Stap voor stap helpen of team in actie zetten",lA:"Stap voor stap helpen",lB:"Team in actie zetten",wA:{A:1,S:2,O:1},wB:{S:1,O:2,C:1}},
+  {n:54,t:"Kans najagen of werkproces in de gaten houden",lA:"Kans najagen",lB:"Werkproces bewaken",wA:{S:1,O:2,C:1},wB:{R:1,O:1,C:2}},
+  {n:55,t:"Energiek leiden of zorgvuldig controleren",lA:"Energiek leiden",lB:"Zorgvuldig controleren",wA:{S:1,O:2,C:1},wB:{R:1,O:1,C:2}},
+  {n:56,t:"Voorraad netjes leggen of opstelling bouwen",lA:"Voorraad leggen",lB:"Opstelling bouwen",wA:{R:1,O:1,C:2},wB:{R:2,I:1,C:1}},
+  {n:57,t:"Codes checken of apparatuur plaatsen",lA:"Codes checken",lB:"Apparatuur plaatsen",wA:{R:1,O:1,C:2},wB:{R:2,I:1,C:1}},
+  {n:58,t:"Logboek bijwerken of onderhoud doen",lA:"Logboek bijwerken",lB:"Onderhoud doen",wA:{R:1,O:1,C:2},wB:{R:2,I:1,C:1}},
+  {n:59,t:"Gegevens netjes zetten of betekenis zoeken",lA:"Gegevens zetten",lB:"Betekenis zoeken",wA:{R:1,I:1,C:2},wB:{I:2,A:1,C:1}},
+  {n:60,t:"Resultaten opbergen of patronen zoeken",lA:"Resultaten opbergen",lB:"Patronen zoeken",wA:{R:1,I:1,C:2},wB:{I:2,A:1,C:1}},
+  {n:61,t:"Hulpvraag afhandelen of persoon helpen",lA:"Hulpvraag afhandelen",lB:"Persoon helpen",wA:{R:1,O:1,C:2},wB:{A:1,S:2,O:1}},
+  {n:62,t:"Bij een persoon blijven of groep regelen",lA:"Bij een persoon blijven",lB:"Groep regelen",wA:{A:1,S:2,O:1},wB:{S:1,O:2,C:1}}
 ];
 
 
@@ -415,6 +433,52 @@ const PROFIEL={
   S:"Mensen helpen geeft jou energie. Je bent een goede luisteraar en vindt het fijn om iemand verder te helpen. Contact en zorg zijn voor jou belangrijk.",
   O:"Je neemt graag initiatief en wil anderen in beweging krijgen. Organiseren, overtuigen en kansen pakken: dat past bij jou. Je houdt van impact maken.",
   C:"Structuur en precisie zijn jouw kracht. Checklists, procedures en ordening geven jou houvast. Jij zorgt dat de details kloppen en dingen soepel lopen.",
+};
+const PROFIEL_DUIDING={
+  R:"In opleidingen betekent dit vaak dat je graag leert door te doen: oefenen, maken, monteren, koken, bouwen, installeren of repareren. Let bij open dagen op werkplaatsen, praktijklokalen en opdrachten waarbij je resultaat direct zichtbaar wordt.",
+  I:"In opleidingen betekent dit vaak dat je nieuwsgierig bent naar oorzaken, systemen en oplossingen. Let bij open dagen op vakken waarin je onderzoekt, vergelijkt, test, programmeert, meet of analyseert.",
+  A:"In opleidingen betekent dit vaak dat je ruimte zoekt om iets eigen te maken: een ontwerp, beeld, verhaal, sfeer, product of ervaring. Let bij open dagen op portfolio's, creatieve opdrachten en hoeveel vrijheid je krijgt in projecten.",
+  S:"In opleidingen betekent dit vaak dat contact met mensen belangrijk is. Je wilt merken dat jouw werk iemand verder helpt. Let bij open dagen op stages, begeleiding, klantcontact, samenwerken en de doelgroep waarmee je werkt.",
+  O:"In opleidingen betekent dit vaak dat je energie krijgt van initiatief, organiseren en verantwoordelijkheid. Let bij open dagen op projecten, ondernemerschap, leidinggeven, presenteren en situaties waarin je anderen meekrijgt.",
+  C:"In opleidingen betekent dit vaak dat structuur, duidelijkheid en betrouwbaarheid bij jou passen. Let bij open dagen op plannen, dossiers, administratie, logistiek, veiligheid, kwaliteit en werken volgens afspraken."
+};
+const CAREER_IDEAS={
+  R:[
+    "Technisch maker of monteur",
+    "Bouw-, infra- of installatiemedewerker",
+    "Ambachtelijk maker, kok of meubelmaker",
+    "Voertuig-, fiets- of machine-specialist"
+  ],
+  I:[
+    "ICT'er, softwaredeveloper of supportmedewerker",
+    "Laborant, analist of onderzoeker",
+    "Technisch tekenaar of engineering-assistent",
+    "Probleemoplosser in techniek, data of systemen"
+  ],
+  A:[
+    "Mediavormgever, fotograaf of mediamaker",
+    "Interieur-, styling- of ruimtelijk ontwerper",
+    "Podium-, event- of decorprofessional",
+    "Creatieve software- of experience-maker"
+  ],
+  S:[
+    "Zorgmedewerker, helpende of verpleegkundige",
+    "Pedagogisch medewerker of onderwijsassistent",
+    "Begeleider, sociaal werker of sportcoach",
+    "Gastheer/gastvrouw, hospitality- of klantcontactmedewerker"
+  ],
+  O:[
+    "Teamleider, supervisor of projectleider",
+    "Retailmanager, verkoper of accountmedewerker",
+    "Event-, hospitality- of marketingorganisator",
+    "Ondernemer of coördinator in een dienstverlenende omgeving"
+  ],
+  C:[
+    "Administratief of juridisch medewerker",
+    "Logistiek planner, voorraad- of procesmedewerker",
+    "ICT-beheerder, servicedesk of support technician",
+    "Kwaliteits-, veiligheids- of controlemedewerker"
+  ]
 };
 
 
@@ -1039,7 +1103,7 @@ function buildResults(n,code,meta){
   document.getElementById('res-name').textContent=`${S.name}'s Kompas`;
   document.getElementById('res-date').textContent=`${d} · ${trackLabel}`;
   document.getElementById('res-code').textContent=code;
-  buildChart(n);buildBars(n);buildProfile(n,code,meta);buildSuggestions(n);
+  buildChart(n);buildBars(n);buildProfile(n,code,meta);buildCareerIdeas(code);buildSuggestions(n,code);
 }
 
 function buildChart(n){
@@ -1054,9 +1118,22 @@ function buildBars(n){
 }
 
 function buildProfile(n,code,meta){
-  const top3=code.split('').map(d=>META[d].naam).join(', ');
-  const d0=code[0],d1=code[1]||'';
-  document.getElementById('profile-text').innerHTML=`Je keuzes wijzen het sterkst naar <strong>${top3}</strong>. ${PROFIEL[d0]}${d1?' '+PROFIEL[d1]:''}${tieNotice(meta)}`;
+  const dims=code.split('');
+  const top3=dims.map(d=>META[d].naam).join(', ');
+  const d0=dims[0],d1=dims[1],d2=dims[2];
+  const mix=`Samen laat deze combinatie zien waar je waarschijnlijk energie van krijgt. Je eerste type zegt iets over je sterkste voorkeur, maar de tweede en derde kleur geven nuance: ze laten zien in welke omgeving of rol die voorkeur goed tot zijn recht kan komen. Gebruik dit dus niet als hokje, maar als taal om over jezelf te praten.`;
+  const action=`Kijk bij opleidingen vooral naar de praktijk: welke opdrachten doe je, met wie werk je samen, hoeveel vrijheid of structuur is er, en welke stages horen erbij? Bespreek met je mentor of decaan welke voorbeelden je herkent en welke juist niet. Dat gesprek is minstens zo belangrijk als de score zelf.`;
+  document.getElementById('profile-text').innerHTML=`Je keuzes wijzen het sterkst naar <strong>${top3}</strong>. ${PROFIEL[d0]} ${PROFIEL_DUIDING[d0]}${d1?' '+PROFIEL[d1]+' '+PROFIEL_DUIDING[d1]:''}${d2?' Je derde richting, '+META[d2].naam.toLowerCase()+', vult dit profiel aan en kan helpen om opleidingen beter te vergelijken.':''} ${mix} ${action}${tieNotice(meta)}`;
+}
+
+function topDims(code){return code.split('').filter(d=>D.includes(d)).slice(0,3);}
+
+function buildCareerIdeas(code){
+  const dims=topDims(code);
+  document.getElementById('career-grid').innerHTML=dims.map(d=>{
+    const ideas=CAREER_IDEAS[d]||[];
+    return `<div class="career-card"><div class="career-head"><div class="career-letter">${d}</div><div><div class="career-title">${META[d].naam}</div><div class="career-sub">${META[d].kort}</div></div></div><ul>${ideas.map(x=>`<li>${x}</li>`).join('')}</ul></div>`;
+  }).join('');
 }
 
 function makeMotivation(mbo,norm){
@@ -1100,18 +1177,34 @@ function mboDomainForSelection(m,n){
   const primary=m.codeMeta?.primary?.length?m.codeMeta.primary:D.filter(d=>m.sc[d]===Math.max(...D.map(x=>m.sc[x]||0)));
   return primary.slice().sort((a,b)=>(n[b]||0)-(n[a]||0)||D.indexOf(a)-D.indexOf(b))[0]||'R';
 }
-function buildSuggestions(n){
+function selectSuggestions(n,code,count=6){
   const scored=MBO.filter(m=>niveauMatch(m.n)).map(m=>({...m,sim:D.reduce((a,d)=>a+(n[d]/100)*(m.sc[d]/10),0)})).sort((a,b)=>b.sim-a.sim);
-  const pool=scored.slice(0,40);
-  const selected=[],usedCode={};
-  for(const m of pool){
-    if(selected.length>=8) break;
-    const dom=mboDomainForSelection(m,n);
-    if(!usedCode[dom]||usedCode[dom]<2){selected.push(m);usedCode[dom]=(usedCode[dom]||0)+1;}
+  const selected=[];
+  const seen=new Set();
+  for(const dim of topDims(code)){
+    const matches=scored.filter(m=>mboDomainForSelection(m,n)===dim || (m.codeMeta?.primary||[]).includes(dim));
+    for(const m of matches){
+      if(selected.filter(x=>x.dim===dim).length>=2) break;
+      const key=(m.o+'|'+m.c).toLowerCase();
+      if(seen.has(key)) continue;
+      selected.push({...m,dim});
+      seen.add(key);
+    }
   }
-  for(const m of pool){if(selected.length>=8) break;if(!selected.find(s=>s.o===m.o)) selected.push(m);}
+  for(const m of scored){
+    if(selected.length>=count) break;
+    const key=(m.o+'|'+m.c).toLowerCase();
+    if(seen.has(key)) continue;
+    selected.push({...m,dim:mboDomainForSelection(m,n)});
+    seen.add(key);
+  }
+  return selected.slice(0,count);
+}
+
+function buildSuggestions(n,code){
+  const selected=selectSuggestions(n,code,6);
   const tl={Basis:'VMBO Basis',Kader:'VMBO Kader',GL:'VMBO GL',TL:'VMBO TL',Havo:'Havo',Anders:'Overig'};
-  document.getElementById('sug-count').textContent='Top 8 voor '+(tl[S.track]||S.track)+' · ZH · NH · Utrecht';
+  document.getElementById('sug-count').textContent='6 concrete opties voor '+(tl[S.track]||S.track)+' · ZH · NH · Utrecht';
   document.getElementById('sug-list').innerHTML=selected.map((m,i)=>{
     const pct=Math.round(m.sim*100);
     const bHtml=(m.b&&m.b.length)?'<div class="sug-beroepen">'+m.b.slice(0,3).map(b=>'<span class="tag-b">Beroep: '+b+'</span>').join('')+'</div>':'';
@@ -1122,6 +1215,7 @@ function buildSuggestions(n){
       +'<div class="sug-mot">'+makeMotivation(m,n)+'</div>'
       +bHtml+urlBtn
       +'<div class="sug-tags">'
+      +'<span class="tag tag-g" style="background:rgba(115,210,255,.15)">Vanuit '+META[m.dim].naam+'</span>'
       +(m.n?'<span class="tag tag-n">Niveau '+m.n+'</span>':'')
       +(m.lw?'<span class="tag tag-s">'+m.lw+'</span>':'')
       +'<span class="tag tag-g" style="background:rgba(115,210,255,.15)">'+pct+'% match</span>'
@@ -1140,11 +1234,11 @@ function buildPDFPages(n,code,meta){
   const trackLabel={Basis:'VMBO Basis',Kader:'VMBO Kader',GL:'VMBO Gemengde Leerweg',TL:'VMBO Theoretische Leerweg',Havo:'Havo',Anders:'Overig'}[S.track]||S.track;
   const sortedD=D.slice().sort((a,b)=>n[b]-n[a]);
   const barsHTML=sortedD.map(dx=>`<div style="display:grid;grid-template-columns:112px 1fr 38px;align-items:center;gap:8px;margin-bottom:10px;"><div style="font-size:10.5px;font-weight:700;color:#140037;">${META[dx].naam}<div style="font-size:8.5px;font-weight:400;color:#666;margin-top:1px;">${META[dx].kort}</div></div><div style="height:7px;background:#dde8ff;border-radius:4px;overflow:hidden;"><div style="width:${n[dx]}%;height:100%;background:${META[dx].k};border-radius:4px;"></div></div><div style="font-size:10px;font-weight:700;color:#1464c8;text-align:right;">${n[dx]}%</div></div>`).join('');
-  const top3=code.split('').map(dx=>META[dx].naam).join(', ');
-  const d0=code[0],d1=code[1]||'';
-  const profileHTML=`Je keuzes wijzen het sterkst naar <strong style="color:#1464c8;">${top3}</strong>. ${PROFIEL[d0]}${d1?' '+PROFIEL[d1]:''}${tieNotice(meta)}`;
-  const filtered=MBO.filter(m=>niveauMatch(m.n));
-  const suggestions=filtered.map(m=>({...m,sim:D.reduce((a,dx)=>a+(n[dx]/100)*(m.sc[dx]/10),0)})).sort((a,b)=>b.sim-a.sim).slice(0,8);
+  const dims=topDims(code);
+  const top3=dims.map(dx=>META[dx].naam).join(', ');
+  const d0=dims[0],d1=dims[1],d2=dims[2];
+  const profileHTML=`Je keuzes wijzen het sterkst naar <strong style="color:#1464c8;">${top3}</strong>. ${PROFIEL[d0]} ${PROFIEL_DUIDING[d0]}${d1?' '+PROFIEL[d1]+' '+PROFIEL_DUIDING[d1]:''}${d2?' Je derde richting, '+META[d2].naam.toLowerCase()+', vult dit profiel aan en kan helpen om opleidingen beter te vergelijken.':''} Gebruik dit niet als hokje, maar als taal voor een gesprek met je mentor of decaan.${tieNotice(meta)}`;
+  const suggestions=selectSuggestions(n,code,6);
   const sugCard=(m,i)=>{
     const beroepen=(m.b||[]).slice(0,2).map(b=>`<span style="font-size:8px;font-weight:600;padding:2px 6px;border-radius:3px;background:#dde8ff;color:#1464c8;border:1px solid #c0d0f0;white-space:nowrap;">${b}</span>`).join(' ');
     const mot=makeMotivation(m,n);
@@ -1158,11 +1252,12 @@ ${beroepen?`<div style="display:flex;flex-wrap:wrap;gap:4px;margin-bottom:5px;">
   const header=`<div style="text-align:center;margin-bottom:22px;"><div style="font-size:7.5px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:#1464c8;margin-bottom:7px;">Corbulo Tech &amp; Design College — MBO Opleidingen Verkenner</div><div style="font-size:24px;font-weight:700;color:#140037;margin-bottom:5px;">${S.name}'s Kompas</div><div style="font-size:10.5px;color:#666;margin-bottom:11px;">${d} · ${trackLabel}</div><div style="display:inline-block;background:#1464c8;color:#fff;font-size:17px;font-weight:700;letter-spacing:.2em;padding:7px 26px;border-radius:5px;">${code}</div></div><div style="height:1px;background:#dde8ff;margin-bottom:20px;"></div>`;
   const chartScores=`<div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px;"><div style="background:#1464c8;border-radius:9px;padding:18px;"><div style="font-size:7.5px;font-weight:700;letter-spacing:.15em;text-transform:uppercase;color:rgba(255,255,255,.6);text-align:center;margin-bottom:10px;">RIASOC Kompas</div><img src="${chartImg}" style="width:100%;height:auto;display:block;" alt="RIASOC kompas"></div><div style="background:#f0f4ff;border-radius:9px;padding:18px;"><div style="font-size:7.5px;font-weight:700;letter-spacing:.15em;text-transform:uppercase;color:#1464c8;margin-bottom:12px;">Scores per dimensie</div>${barsHTML}</div></div>`;
   const profile=`<div style="background:#eef3ff;border-radius:9px;padding:16px 18px;margin-bottom:16px;border-left:3px solid #1464c8;"><div style="font-size:7.5px;font-weight:700;letter-spacing:.15em;text-transform:uppercase;color:#1464c8;margin-bottom:7px;">Wat dit betekent</div><p style="font-size:11.5px;line-height:1.75;color:#1a1a2e;margin:0;">${profileHTML}</p></div>`;
-  const sugHeader=`<div style="display:flex;align-items:baseline;gap:10px;margin-bottom:10px;"><div style="font-size:14px;font-weight:700;color:#140037;">Passende MBO-opleidingen</div><div style="font-size:9.5px;color:#666;">8 suggesties voor ${trackLabel} · NH · ZH · Utrecht</div></div>`;
-  const footer=`<div style="margin-top:20px;padding-top:14px;border-top:1px solid #dde8ff;text-align:center;"><div style="font-size:7.5px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#bbb;">Corbulo Tech &amp; Design College · Makers van de Toekomst</div></div>`;
-  const sugPage=(items,offset)=>`${sugHeader}${items.map((m,i)=>sugCard(m,i+offset)).join('')}${footer}`;
-  const sug1=suggestions.slice(0,4);
-  const sug2=suggestions.slice(4,8);
+  const sugHeader=`<div style="display:flex;align-items:baseline;gap:10px;margin-bottom:10px;"><div style="font-size:14px;font-weight:700;color:#140037;">6 concrete MBO-opleidingen</div><div style="font-size:9.5px;color:#666;">Voor ${trackLabel} · NH · ZH · Utrecht</div></div>`;
+  const footer=`<div style="margin-top:20px;padding-top:14px;border-top:1px solid #dde8ff;text-align:center;"><img src="assets/riasoc/CORBULO_LOGO_RGB_DIAPOSITIEF-transparant.png" alt="Corbulo Tech &amp; Design College" style="width:34px;height:34px;object-fit:contain;display:block;margin:0 auto 6px;"><div style="font-size:7.5px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#bbb;">Corbulo Tech &amp; Design College · Makers van de Toekomst</div></div>`;
+  const careerPdfCard=(dx)=>`<div style="background:#e8f0ff;border-radius:9px;padding:15px 17px;border:1px solid #dde8ff;border-left:3px solid ${META[dx].k};"><div style="display:flex;align-items:center;gap:10px;margin-bottom:10px;"><span style="display:inline-grid;place-items:center;width:30px;height:30px;border-radius:50%;background:${META[dx].k};color:#140037;font-weight:800;">${dx}</span><div><div style="font-size:13px;font-weight:800;color:#140037;">${META[dx].naam}</div><div style="font-size:8.5px;font-weight:800;color:#1464c8;text-transform:uppercase;letter-spacing:.08em;">${META[dx].kort}</div></div></div><ul style="margin:0;padding-left:18px;color:#333;font-size:11px;line-height:1.65;">${(CAREER_IDEAS[dx]||[]).map(x=>`<li>${x}</li>`).join('')}</ul></div>`;
+  const careerPage=`<div style="font-size:7.5px;font-weight:800;letter-spacing:.18em;text-transform:uppercase;color:#1464c8;margin-bottom:8px;">Breed verkennen</div><div style="font-size:19px;font-weight:800;color:#140037;margin-bottom:8px;">12 beroepideeën om over te praten</div><p style="font-size:11.5px;line-height:1.65;color:#333;margin:0 0 16px;">Deze voorbeelden zijn bewust breed. Ze zijn bedoeld om woorden te geven aan richtingen die je kunt onderzoeken, niet om meteen één beroep vast te zetten.</p><div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;">${dims.map(careerPdfCard).join('')}</div>${footer}`;
+  const compactSugCard=(m)=>{const domain=m.url?m.url.replace(/https?:\/\/(?:www\.)?/,"").split("/")[0]:'';return `<div style="background:#e8f0ff;border-radius:8px;padding:12px 14px;border:1px solid #dde8ff;border-left:3px solid ${META[m.dim].k};"><div style="font-size:12px;font-weight:800;color:#140037;line-height:1.25;margin-bottom:4px;">${m.o}</div><div style="font-size:9.5px;color:#555;line-height:1.35;margin-bottom:5px;">${m.s}${m.l?' · '+m.l:''}</div><div style="font-size:9px;color:#2a5aa0;font-style:italic;line-height:1.35;margin-bottom:6px;">${makeMotivation(m,n)}</div>${domain?`<a href="${m.url}" style="font-size:8.5px;color:#1464c8;font-weight:700;text-decoration:none;">${domain}</a>`:''}<div style="display:flex;gap:4px;flex-wrap:wrap;margin-top:6px;"><span style="font-size:8px;font-weight:700;padding:2px 6px;border-radius:3px;background:#dde8ff;color:#1464c8;">${META[m.dim].naam}</span><span style="font-size:8px;font-weight:700;padding:2px 6px;border-radius:3px;background:#eef0f4;color:#444;">Niveau ${m.n}</span><span style="font-size:8px;font-weight:500;padding:2px 6px;border-radius:3px;background:#f0f0f0;color:#666;">CREBO ${m.c}</span></div></div>`;};
+  const sugPage=`${sugHeader}<p style="font-size:11px;line-height:1.55;color:#333;margin:0 0 12px;">Per topdimensie zijn twee concrete opleidingen gekozen waar mogelijk. Gebruik de links om open dagen, toelating en inhoud verder te bekijken.</p><div style="display:grid;grid-template-columns:1fr 1fr;gap:9px;">${suggestions.map(compactSugCard).join('')}</div>${footer}`;
   const typeCard=(dx,text)=>`<div style="background:#f0f4ff;border-radius:8px;padding:13px 15px;border:1px solid #dde8ff;border-left:3px solid ${META[dx].k};"><div style="display:flex;align-items:center;gap:9px;margin-bottom:6px;"><span style="display:inline-grid;place-items:center;width:28px;height:28px;border-radius:50%;background:${META[dx].k};color:#140037;font-size:13px;font-weight:800;">${dx}</span><div><div style="font-size:12.5px;font-weight:800;color:#140037;">${META[dx].naam}</div><div style="font-size:8.5px;font-weight:800;color:#1464c8;text-transform:uppercase;letter-spacing:.08em;">${META[dx].kort}</div></div></div><div style="font-size:10.5px;line-height:1.55;color:#333;">${text}</div></div>`;
   const comboCard=(label,title,example)=>`<div style="display:grid;grid-template-columns:48px 1fr;gap:10px;align-items:center;background:#eef3ff;border-radius:8px;padding:10px 12px;border:1px solid #dde8ff;"><div style="font-size:10px;font-weight:800;color:#1464c8;background:#dde8ff;border-radius:5px;text-align:center;padding:5px 0;">${label}</div><div style="font-size:10.5px;line-height:1.45;color:#333;"><strong style="color:#140037;">${title}</strong> - ${example}</div></div>`;
   const explanationHeader=`<div style="text-align:center;margin-bottom:22px;"><div style="font-size:7.5px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:#1464c8;margin-bottom:7px;">Corbulo Tech &amp; Design College — MBO Opleidingen Verkenner</div><div style="font-size:24px;font-weight:700;color:#140037;margin-bottom:5px;">Wat betekent jouw uitslag?</div><div style="font-size:10.5px;color:#666;">Een toelichting op de zes types en hoe je ze kunt lezen</div></div><div style="height:2px;background:#1464c8;margin-bottom:24px;"></div>`;
@@ -1172,8 +1267,8 @@ ${beroepen?`<div style="display:flex;flex-wrap:wrap;gap:4px;margin-bottom:5px;">
   const indication=`<div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:8px;"><div style="background:#fff7df;border-radius:9px;padding:16px 18px;border-left:3px solid #ffb74d;"><div style="font-size:14px;font-weight:800;color:#c65300;margin-bottom:8px;">Slechts een indicatie</div><p style="font-size:11.5px;line-height:1.75;margin:0;color:#333;">De uitkomst is een <strong>startpunt</strong>, geen definitief advies. Jij bent veel meer dan een paar letters. Schoolresultaten, ervaringen, motivatie en je persoonlijke situatie spelen ook mee. Gebruik de uitslag als gespreksonderwerp en ga daarna op onderzoek: bezoek open dagen, doe stages en praat met mensen in het vak.</p></div><div style="background:#e8f0ff;border-radius:9px;padding:16px 18px;border-left:3px solid #1464c8;"><div style="font-size:14px;font-weight:800;color:#1464c8;margin-bottom:8px;">Plan een gesprek met je decaan</div><p style="font-size:11.5px;line-height:1.75;margin:0;color:#333;">De decaan van jouw school kent jou en de opleidingen. Neem deze uitslag mee naar het gesprek. Dat is een goed startpunt om over je toekomst te praten. Vraag aan je mentor wanneer je een afspraak kunt maken.</p></div></div>`;
   return [
     pageWrap(header+chartScores+profile+footer),
-    pageWrap(sugPage(sug1,0)),
-    pageWrap(sugPage(sug2,4)),
+    pageWrap(careerPage),
+    pageWrap(sugPage),
     pageWrap(explanationHeader+howItWorks+typeGrid),
     pageWrap(mixGrid+indication+footer)
   ];
