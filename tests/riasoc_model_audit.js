@@ -38,7 +38,31 @@ function loadModel() {
         appendChild() {},
         getContext: () => ({})
       }),
-      createElement: () => ({ style: {}, appendChild() {}, setAttribute() {} })
+      createElement: tag => {
+        const tagName = String(tag).toLowerCase();
+        if (tagName === 'textarea' || tagName === 'div') {
+          return {
+            value: '',
+            textContent: '',
+            innerText: '',
+            set innerHTML(value) {
+              const decoded = String(value || '')
+                .replace(/&#8211;/g, '-')
+                .replace(/&#232;/g, 'e')
+                .replace(/&#246;/g, 'o')
+                .replace(/&amp;/g, '&');
+              this.value = decoded;
+              this.textContent = decoded;
+              this.innerText = decoded;
+            },
+            get innerHTML() { return this.value; },
+            style: {},
+            appendChild() {},
+            setAttribute() {}
+          };
+        }
+        return { style: {}, appendChild() {}, setAttribute() {} };
+      }
     },
     Chart: function Chart() { return { destroy() {} }; },
     fetch: async () => ({ ok: true })
@@ -51,6 +75,7 @@ function loadModel() {
       maxSc, norm, topCodeMeta, topCode, validateQuestions,
       validateNiveauMatchCases, extractNiveaus, niveauMatch,
       selectedProvider, selectSuggestions, mboDomainForSelection, matchPct,
+      sectorFamily, opleidingStam, dominantLetters, dedupeScored,
       setAllowedLevels(levels){ S.allowedLevels = levels.slice(); },
       getAllowedLevels(){ return S.allowedLevels.slice(); }
     };
@@ -134,7 +159,7 @@ function analyzeScenario(model, scenario, allowedLevels = [2, 3, 4]) {
       dim: m.dim,
       opleiding: m.o,
       crebo: m.c,
-      family: sectorFamily(m),
+      family: model.sectorFamily(m),
       school: provider.school,
       locatie: provider.location,
       niveau: provider.level,
@@ -199,22 +224,6 @@ function makeScenarios(model) {
   }
 
   return scenarios;
-}
-
-function sectorFamily(m) {
-  const text = `${m.o} ${(m.b || []).join(' ')} ${m.s}`.toLowerCase();
-  if (/pedagog|onderwijsassistent|kinderopvang|sociaal werker|maatschappelijke zorg|begeleider/.test(text)) return 'Zorg/pedagogiek/sociaal';
-  if (/verpleeg|verzorg|zorg|dokters|apotheek|schoonheid|kapper|barbier|helpende/.test(text)) return 'Zorg/uiterlijke verzorging';
-  if (/hospitality|toerisme|tourism|hotel|gastheer|gastvrouw|leisure|event|evenement|bar|kok|food|bakker/.test(text)) return 'Hospitality/toerisme/events';
-  if (/commerc|account|sales|marketing|retail|interieuradviseur|intercedent|ondernemer|manager|leidinggevende/.test(text)) return 'Commercieel/ondernemend';
-  if (/administr|jurid|business services|office|finance|hr|control|secretar/.test(text)) return 'Administratief/juridisch';
-  if (/ict|software|developer|media|mediavorm|mediamaker|redactie|fotografie|av-|sign|immersive|game/.test(text)) return 'ICT/media/creatief';
-  if (/bouw|infra|timmer|install|elektro|metaal|monteur|technicus|engineering|mechatronica|voertuig|fiets|hout|meubel|schilder|stukadoor/.test(text)) return 'Techniek/maken';
-  if (/labor|analist|onderzoek|dier|groen|hovenier|natuur|water/.test(text)) return 'Onderzoek/groen/dier';
-  if (/logistiek|transport|chauffeur|warehouse|voorraad/.test(text)) return 'Logistiek/transport';
-  if (/sport|beweging|beweeg|coach/.test(text)) return 'Sport/begeleiding';
-  if (/veilig|beveil|handhaver|militair|veva/.test(text)) return 'Veiligheid/handhaving';
-  return 'Overig';
 }
 
 function randomAudit(model, count = 1000) {

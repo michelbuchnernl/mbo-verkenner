@@ -971,6 +971,14 @@ function applyMboModelCorrections(){
       }else{
         cat=setMboScores(m,{R:5,I:3,A:4,S:9,O:7,C:6},'hospitality-contact-uitvoerend');
       }
+    }else if(/juwelier|goudsmid|zilversmid|uurwerk/.test(txt)){
+      cat=setMboScores(m,{R:8,I:3,A:6,S:3,O:4,C:7},'ambacht-precisie-vormgeving');
+    }else if(/meubelstoffeerder/.test(txt)){
+      cat=setMboScores(m,{R:9,I:4,A:6,S:3,O:4,C:8},'ambacht-materiaal-vormgeving');
+    }else if(/pianotechnicus|keukenmonteur/.test(txt)){
+      cat=setMboScores(m,{R:10,I:5,A:5,S:4,O:5,C:8},'ambacht-service-techniek');
+    }else if(/vastgoedadviseur|ondernemer vastgoed|regisseur vastgoed|vastgoedonderhoud|projectmanager/.test(txt)){
+      cat=setMboScores(m,{R:6,I:6,A:3,S:4,O:8,C:8},'vastgoed-organisatie-advies');
     }else if(/media|vormgev|sign|styling|fotografie|av-specialist|podium|decor|immersive|muziek|dance|musical|acteur|creatief|fashion|interieuradviseur/.test(txt)){
       if(/av-specialist|podium|evenemententechnicus|standbouwer/.test(txt)){
         cat=setMboScores(m,{R:6,I:6,A:8,S:3,O:4,C:6},'creatief-media-technisch');
@@ -1217,26 +1225,159 @@ function selectedProvider(m){
   }
   return items.sort((a,b)=>b.score-a.score)[0] || {school:m.s||'',location:m.l||'',level:m.n||'',learning:m.lw||'',url:m.url||''};
 }
+function plainText(value){
+  const helper=document.createElement('textarea');
+  helper.innerHTML=String(value||'');
+  return helper.value;
+}
+function sectorFamily(m){
+  const text=plainText(`${m.o} ${(m.b||[]).join(' ')} ${m.s}`).toLowerCase();
+  if(/dier|paraveterinair|groen|hovenier|natuur|water|voeding|vapro|agrar/.test(text)) return 'Voeding, natuur & dier';
+  if(/verpleeg|verzorg|dokters|apotheek|apothekers|pedagog|onderwijsassistent|kinderopvang|sociaal werker|maatschappelijke zorg|begeleider|zorg en welzijn|helpende/.test(text)) return 'Zorg & welzijn';
+  if(/sport|bewegings|buurtsport|leefstijlcoach|onderwijs/.test(text)) return 'Onderwijs & sport';
+  if(/bouw|infra|asfalt|autoschade|timmer|metsel|install|elektro|metaal|monteur|technicus elektrotechn|technicus gas|technicus elektric|engineering|mechatronica|voertuig|fiets|hout|meubel|schilder|stukadoor|juwelier|goudsmid|uurwerk|piano|keuken|smart building|productietechniek/.test(text)) return 'Techniek & maken';
+  if(/schoonheid|kapper|barbier|hairstylist|beauty|fashion|tailor/.test(text)) return 'Uiterlijke verzorging';
+  if(/software|developer|applicatie|ict|cyber|system engineer|support technician|beheerder|data/.test(text)) return 'ICT & data';
+  if(/media|mediavorm|mediamaker|redactie|fotografie|av-|podium|sign|immersive|interieuradviseur|styling|vormgeving|ruimtemaker|decor|muziek|dance|musical|creatief/.test(text)) return 'Creatief & media';
+  if(/hospitality|toerisme|tourism|hotel|gastheer|gastvrouw|leisure|event|evenement|bar|kok|food|bakker|boulanger|patissier|horeca/.test(text)) return 'Horeca & toerisme';
+  if(/commerc|account|sales|marketing|retail|intercedent|ondernemer|manager|leidinggevende|transport en logistiek/.test(text)) return 'Commercieel & ondernemend';
+  if(/administr|jurid|business services|office|finance|hr|control|secretar/.test(text)) return 'Administratie & juridisch';
+  if(/logistiek|transport|chauffeur|warehouse|voorraad/.test(text)) return 'Logistiek & transport';
+  if(/veilig|beveil|handhaver|militair|veva|defensie/.test(text)) return 'Veiligheid & defensie';
+  if(/labor|analist|onderzoek|research|instrumentmaker/.test(text)) return 'Laboratorium & onderzoek';
+  return 'Overig';
+}
+function opleidingStam(m){
+  const text=plainText(m.o).toLowerCase()
+    .normalize('NFD').replace(/[\u0300-\u036f]/g,'')
+    .replace(/\([^)]*\)/g,' ')
+    .replace(/\b(010|allround|junior|senior|eerste|zelfstandig|leidinggevende|versneld|verkort|kopjaar|praktijkroute|structuurklas|niveau|bbl|bol|nt2|veva|defensie|i\.s\.m\.|ism)\b/g,' ')
+    .replace(/[^a-z0-9]+/g,' ')
+    .trim();
+  const rules=[
+    [/software developer|applicatieontwikkelaar|creative software/,'software developer'],
+    [/ict support technician|ict medewerker|medewerker ict/,'ict support technician'],
+    [/ict system engineer|ict beheerder|ict mediatechnologie/,'ict system engineer'],
+    [/interieuradviseur/,'interieuradviseur'],
+    [/mediavorm/,'mediavormgeven'],
+    [/mediamaker/,'mediamaker'],
+    [/mediamanager/,'mediamanager'],
+    [/redactiemedewerker/,'redactiemedewerker'],
+    [/hospitality|bar academy/,'hospitality'],
+    [/toerisme|tourism/,'toerisme'],
+    [/pedagogisch medewerker|onderwijsassistent/,'pedagogisch medewerker onderwijsassistent'],
+    [/verzorgende|verzorgkundige/,'verzorgende ig'],
+    [/verpleegkundige/,'mbo verpleegkundige'],
+    [/doktersassistent/,'doktersassistent'],
+    [/apothekersassistent/,'apothekersassistent'],
+    [/sociaal werker/,'sociaal werker'],
+    [/intercedent/,'intercedent'],
+    [/juridisch/,'juridisch medewerker'],
+    [/administratief|business assistant|assistant business services/,'administratief medewerker'],
+    [/transport en logistiek|logistiek supervisor/,'transport logistiek'],
+    [/meubelmaker|interieurbouwer/,'meubelmaker interieurbouwer'],
+    [/restauratie.*decoratie|decoratie.*restauratie/,'restauratie decoratie'],
+    [/werkvoorbereider elektro/,'werkvoorbereider elektro']
+  ];
+  const hit=rules.find(([rx])=>rx.test(text));
+  return hit?hit[1]:text.split(' ').filter(Boolean).slice(0,4).join(' ');
+}
+function dominantLetters(m){
+  return D.slice().sort((a,b)=>(m.sc[b]||0)-(m.sc[a]||0)||D.indexOf(a)-D.indexOf(b)).slice(0,2);
+}
+function dedupeScored(scored){
+  const usedCrebo=new Set(),usedStem=new Set(),out=[];
+  for(const m of scored){
+    const stem=opleidingStam(m),crebo=String(m.c||'').trim();
+    if(crebo&&usedCrebo.has(crebo)) continue;
+    if(stem&&usedStem.has(stem)) continue;
+    out.push({...m,stem,family:sectorFamily(m),dominantLetters:dominantLetters(m)});
+    if(crebo) usedCrebo.add(crebo);
+    if(stem) usedStem.add(stem);
+  }
+  return out;
+}
+const FAMILY_BY_LETTER={
+  R:['Techniek & maken','Voeding, natuur & dier','Logistiek & transport'],
+  I:['ICT & data','Laboratorium & onderzoek','Techniek & maken'],
+  A:['Creatief & media','Uiterlijke verzorging'],
+  S:['Zorg & welzijn','Onderwijs & sport','Uiterlijke verzorging'],
+  O:['Commercieel & ondernemend','Horeca & toerisme'],
+  C:['Administratie & juridisch','Logistiek & transport','Veiligheid & defensie']
+};
+function reservedFamilies(n,code){
+  const letters=D.slice().sort((a,b)=>(n[b]||0)-(n[a]||0)||D.indexOf(a)-D.indexOf(b));
+  const res=[];
+  if(letters[0]) res.push({letter:letters[0],families:FAMILY_BY_LETTER[letters[0]]||[]});
+  if(letters[1]&&n[letters[1]]>=60) res.push({letter:letters[1],families:FAMILY_BY_LETTER[letters[1]]||[]});
+  if(letters[2]&&n[letters[2]]>=70) res.push({letter:letters[2],families:FAMILY_BY_LETTER[letters[2]]||[],soft:true});
+  return res.slice(0,3);
+}
+function countBy(selected,key){
+  return selected.reduce((acc,m)=>{const v=key(m);acc[v]=(acc[v]||0)+1;return acc;},{});
+}
+function canPickSuggestion(m,selected,{familyCap=2,schoolCap=1}={}){
+  if(selected.some(s=>s.c===m.c||s.stem===m.stem)) return false;
+  const provider=selectedProvider(m);
+  const familyCounts=countBy(selected,s=>s.family);
+  const schoolCounts=countBy(selected,s=>selectedProvider(s).school);
+  return (familyCounts[m.family]||0)<familyCap && (schoolCounts[provider.school]||0)<schoolCap;
+}
+function addPick(selected,m,dim){
+  if(!m) return false;
+  selected.push({...m,dim:dim||m.dim||mboDomainForSelection(m,{})});
+  return true;
+}
 function selectSuggestions(n,code,count=6){
-  const scored=MBO.filter(m=>niveauMatch(m.n)).map(m=>({...m,sim:D.reduce((a,d)=>a+(n[d]/100)*(m.sc[d]/10),0)})).sort((a,b)=>b.sim-a.sim);
+  const scored=MBO.filter(m=>niveauMatch(m.n)).map(m=>({...m,sim:D.reduce((a,d)=>a+(n[d]/100)*(m.sc[d]/10),0),dim:mboDomainForSelection(m,n)})).sort((a,b)=>b.sim-a.sim);
+  const deduped=dedupeScored(scored);
   const selected=[];
-  const seen=new Set();
-  for(const dim of topDims(code)){
-    const matches=scored.filter(m=>mboDomainForSelection(m,n)===dim || (m.codeMeta?.primary||[]).includes(dim));
-    for(const m of matches){
-      if(selected.filter(x=>x.dim===dim).length>=2) break;
-      const key=(m.o+'|'+m.c).toLowerCase();
-      if(seen.has(key)) continue;
-      selected.push({...m,dim});
-      seen.add(key);
+  const top1=deduped[0];
+  if(top1) addPick(selected,top1,top1.dim);
+  const floor=(top1?.sim||0)*0.70;
+  for(const res of reservedFamilies(n,code)){
+    if(selected.length>=count) break;
+    if(selected.some(m=>res.families.includes(m.family))) continue;
+    let candidate=null;
+    for(const family of res.families){
+      candidate=deduped.find(m=>
+        !selected.includes(m) &&
+        m.family===family &&
+        (m.dim===res.letter || (m.codeMeta?.primary||[]).includes(res.letter) || (m.dominantLetters||[]).includes(res.letter)) &&
+        m.sim>=floor &&
+        canPickSuggestion(m,selected)
+      );
+      if(candidate) break;
+    }
+    if(candidate) addPick(selected,candidate,res.letter);
+    else if(!res.soft){
+      let fallback=null;
+      for(const family of res.families){
+        fallback=deduped.find(m=>!selected.includes(m)&&m.family===family&&m.sim>=floor&&canPickSuggestion(m,selected));
+        if(fallback) break;
+      }
+      if(fallback) addPick(selected,fallback,res.letter);
     }
   }
-  for(const m of scored){
+  for(const dim of topDims(code)){
+    for(const m of deduped){
+      if(selected.length>=count) break;
+      if(selected.filter(x=>x.dim===dim).length>=2) break;
+      if(!(m.dim===dim || (m.codeMeta?.primary||[]).includes(dim) || (m.dominantLetters||[]).includes(dim))) continue;
+      if(!canPickSuggestion(m,selected)) continue;
+      addPick(selected,m,dim);
+    }
+  }
+  for(const m of deduped){
     if(selected.length>=count) break;
-    const key=(m.o+'|'+m.c).toLowerCase();
-    if(seen.has(key)) continue;
-    selected.push({...m,dim:mboDomainForSelection(m,n)});
-    seen.add(key);
+    if(!canPickSuggestion(m,selected)) continue;
+    addPick(selected,m,m.dim);
+  }
+  for(const m of deduped){
+    if(selected.length>=count) break;
+    if(selected.some(s=>s.c===m.c||s.stem===m.stem)) continue;
+    if(!canPickSuggestion(m,selected,{familyCap:3,schoolCap:2})) continue;
+    addPick(selected,m,m.dim);
   }
   return selected.slice(0,count);
 }

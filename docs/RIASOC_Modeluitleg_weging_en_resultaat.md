@@ -165,6 +165,8 @@ De huidige correctielagen zijn:
 | Zorg/welzijn/contact | S primair als helpen, begeleiden of contact de kern is |
 | Hospitality/contact | S primair bij gastcontact; O hoger bij leiding/ondernemen |
 | Creatief/media | A/I/C inhoudelijk gewogen, niet door tie-volgorde |
+| Ambacht/precisie | Smalle R/A/C-profielen voor niche-ambachten, zodat ze niet als algemene match domineren |
+| Vastgoed/advies | O/C/I/R gescheiden voor organiseren, adviseren en projectmatig werken |
 
 Na die correctie krijgt elk MBO-record een expliciete `codeMeta` en `code`. De selectie is dus niet meer afhankelijk van lege `code:""` velden of toevallige volgorde in de data.
 
@@ -219,7 +221,18 @@ Daarmee vallen opleidingen niet weg door rommelige niveau-notatie.
 
 De uitslag begint breed. Voor de hoogste drie RIASOC-dimensies toont de verkenner telkens vier beroepideeën. Dat geeft samen 12 voorbeelden om over te praten. Die voorbeelden zijn bewust niet te smal: ze helpen een leerling woorden te geven aan mogelijke richtingen voordat er meteen een concrete opleiding wordt gekozen.
 
-Daarna berekent de software voor alle passende MBO-records een matchscore. Uit die lijst worden 6 concrete opleidingen gekozen, waar mogelijk twee per topdimensie. Zo ontstaat spreiding: niet zes bijna dezelfde opleidingen uit één dominante categorie, maar een compacte set die de breedte van het profiel laat zien.
+Daarna berekent de software voor alle passende MBO-records een matchscore. Uit die lijst worden 6 concrete opleidingen gekozen met een extra diversiteitslaag:
+
+- de beste pure match blijft altijd zichtbaar;
+- dubbele CREBO's en dubbele opleidingsstammen worden uit dezelfde uitslag geweerd;
+- per sectorfamilie geldt in de hoofdselectie een maximum van 2;
+- per school geldt in de hoofdselectie een maximum van 1, met alleen in de fallback ruimte voor een tweede;
+- de hoogste RIASOC-dimensie reserveert een passende sectorfamilie;
+- de tweede dimensie reserveert ook een familie als die score 60 procent of hoger is;
+- een derde dimensie kan zacht meewegen als die 70 procent of hoger is;
+- gereserveerde opleidingen moeten minimaal 70 procent van de topmatch halen.
+
+Zo ontstaat spreiding: niet zes bijna dezelfde opleidingen uit één dominante categorie, maar een compacte set die de breedte van het profiel laat zien.
 
 De suggestiekaart toont:
 
@@ -245,9 +258,10 @@ flowchart TD
     C --> E["MBO-records filteren op niveau"]
     E --> F["MBO-scores inhoudelijk corrigeren"]
     F --> G["Matchscore per opleiding berekenen"]
-    G --> H["12 beroepideeën + 6 opleidingen met spreiding tonen"]
+    G --> H["Dedupe, sectorcaps, schoolcaps en reserveringen"]
+    H --> J["12 beroepideeën + 6 opleidingen met spreiding tonen"]
     D --> I["Profieltekst, radar en PDF"]
-    H --> I
+    J --> I
 ```
 
 ## 11. Wat is belangrijk om erbij te vertellen?
@@ -336,29 +350,32 @@ Auditdatum: 2026-05-01.
 | Scenario's getest | 50 |
 | Random simulaties | 1000 |
 | Unieke topcodes in random simulaties | 114 |
-| Unieke sets van 6 opleidingen | 251 |
+| Unieke sets van 6 opleidingen | 403 |
 | Scenario's met kleine verschillen of ties | 25 |
-| Scenario's met lage variatie in 6 opleidingen | 41 |
+| Scenario's met lage variatie in 6 opleidingen | 0 |
 
-Interpretatie: de scoreberekening en topcode-spreiding zijn gezond, maar de concrete opleidingsselectie is nog te smal. De 50-simulatie-tabel laat zien dat bepaalde opleidingen, CREBO's, scholen en sectorfamilies te vaak terugkomen. Vooral `ICT/media/creatief`, `Hospitality/toerisme/events`, `Commercieel/ondernemend` en enkele dubbele CREBO-families domineren de 6 concrete suggesties. Voor profielen met een sterke S-score komen zorg, pedagogiek, sociaal werk en begeleiding te laat in beeld, omdat opleidingen met gecombineerde S/O/C-scores hoger eindigen.
+Interpretatie: de scoreberekening, topcode-spreiding en concrete opleidingsselectie zijn nu op hoofdlijnen gezond. Kleine verschillen blijven zichtbaar via de tie/gap-informatie, maar leiden niet meer tot één vaste standaarduitkomst. In de 50 scenario's is geen enkele uitslag meer gemarkeerd als lage variatie.
 
 De belangrijkste frequenties in 50 simulaties:
 
 | Type | Meest voorkomend | Aantal |
 |---|---|---:|
-| Opleiding | Mediavormgeven | 26 |
-| Opleiding | Medewerker hospitality | 24 |
-| Opleiding | 010 Bar Academy zelfstandig werkend bartender | 23 |
-| CREBO | 25771 | 37 |
-| CREBO | 27053 | 32 |
-| School | Grafisch Lyceum Rotterdam | 83 |
-| School | HMC | 64 |
-| School | ROC Da Vinci College | 63 |
-| Sectorfamilie | ICT/media/creatief | 81 |
-| Sectorfamilie | Hospitality/toerisme/events | 69 |
-| Sectorfamilie | Commercieel/ondernemend | 61 |
+| Opleiding | Assistant Fashion Tailor | 19 |
+| Opleiding | Creatief vakman (ontwerpen en maken met hout) | 18 |
+| Opleiding | Gespecialiseerd productiemedewerker voedingsmiddelenindustrie (VAPRO) | 16 |
+| CREBO | 25684 | 19 |
+| CREBO | 25548 | 18 |
+| CREBO | 25979 | 16 |
+| School | MBO Rijnland | 47 |
+| School | HMC | 44 |
+| School | ROC Da Vinci College | 43 |
+| Sectorfamilie | Techniek & maken | 64 |
+| Sectorfamilie | Horeca & toerisme | 48 |
+| Sectorfamilie | Commercieel & ondernemend | 47 |
 
-Aanbevolen vervolgcorrectie: `selectSuggestions()` moet niet alleen op totale match en topdimensie selecteren, maar ook op sectorfamilie-spreiding, CREBO-deduplicatie en een minimale inhoudelijke dekking per topdimensie. Bij een sociaal profiel moet bijvoorbeeld minstens één echte mens-helpende opleiding uit zorg, pedagogiek, onderwijs, sociaal werk, sport/begeleiding of verwante contactberoepen worden geprobeerd voordat commerciële of administratieve S/O/C-overlap de set vult.
+Belangrijkste verbetering: de concrete selectie gebruikt nu deduplicatie, sectorcaps, schoolcaps en reserveringen per dominante dimensie. Daardoor krijgt een sociaal profiel bijvoorbeeld zichtbaar ruimte voor zorg/welzijn als de match boven de minimale scorevloer komt, zonder dat commerciele of administratieve S/O/C-overlap de hele set vult.
+
+Resterend aandachtspunt: de topfrequenties zijn nog niet volledig vlak. Dat hoeft ook niet; sommige opleidingen passen nu eenmaal bij veel samengestelde profielen. De volgende verfijning kan gericht kijken naar sectorfamilies die structureel ondervertegenwoordigd zijn, vooral onderwijs/sport en logistiek/transport, en naar uitbreiding of betere tagging van de onderliggende dataset.
 
 De audit bracht ook twee praktische verbeterpunten aan het licht:
 

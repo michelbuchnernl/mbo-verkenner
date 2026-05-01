@@ -14,7 +14,7 @@ De app is een zelfstandige HTML/JS-tool waarmee leerlingen 62 visuele A/B-keuzes
 - tie-aware profielcode via `topCodeMeta()`
 - verbeterde `niveauMatch()` voor samengestelde niveauvelden
 - PDF-export zonder verticale samendrukking: vaste A4-pagina's met klikbare opleidingslinks
-- 12 brede beroepideeën en 6 concrete MBO-opleidingen met spreiding over topdimensies
+- 12 brede beroepideeën en 6 concrete MBO-opleidingen met deduplicatie, sectorcaps en schoolspreiding
 - geautomatiseerde model-audit in `tests/riasoc_model_audit.js`
 - MBO-records krijgen expliciete codes en inhoudelijke RIASOC-herwegingen
 - modeluitleg in `docs/RIASOC_Modeluitleg_weging_en_resultaat.md`
@@ -73,7 +73,7 @@ De laatste lokale validatie gaf:
 - Q32-Q62 gevuld: ja
 - `validateQuestions()`: 62 vragen, 0 fouten
 - `niveauMatch()` testcases: geslaagd
-- model-audit: 50 scenario's, 1000 random simulaties, 114 unieke topcodes, 251 unieke opleidingensets
+- model-audit: 50 scenario's, 1000 random simulaties, 114 unieke topcodes, 403 unieke opleidingensets, 0 lage-variatiescenario's
 - CSV-analyse: `tests/output/riasoc_50_simulaties.csv`
 
 ## Doel
