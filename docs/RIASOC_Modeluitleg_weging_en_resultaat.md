@@ -13,6 +13,35 @@ created: 2026-05-01
 
 Deze notitie beschrijft hoe de RIASOC/MBO Opleidingen Verkenner keuzes omzet naar een profiel en daarna naar passende MBO-suggesties. De verkenner is bedoeld als orienterend hulpmiddel: hij laat zien welke richtingen aansluiten bij voorkeuren, maar vervangt geen loopbaangesprek, intake of advies van mentor/decaan.
 
+## 0. Projectmap en bronnen
+
+De RIASOC-werkmap is opgeschoond rond de huidige hoofdstructuur van de Verkenner:
+
+| Pad | Inhoud |
+|---|---|
+| `RIASOC Wiki.md` | Hoofdingang voor de RIASOC-werkmap. |
+| `RIASOC_Modeluitleg_weging_en_resultaat.md` | Deze uitleg: model, weging, resultaatlogica en auditmethode. |
+| `02_Model_en_Data/Overzicht_Totaal_Riasoc.md` | Masterdocument met totaaloverzicht en modelinhoud. |
+| `03_Scenebank/RIASOC_AB_scenebank_werkdocument.md` | Werkdocument voor A/B-scenes en vraagbank. |
+| `04_Prompts/RIASOC_Nano_Banana_prompts.md` | Promptlaag voor beeldgeneratie. |
+| `05_Assets/Quiz_62/` | Definitieve lokale PNG-set voor Q01-Q62 plus Corbulo-logo's. |
+| `05_Assets/Conceptbeelden_v1/` | Oudere/conceptuele gegenereerde beeldreeks. |
+| `06_Backups/` | Backups van eerdere model- en datacorrecties. |
+| `07_Archive/` | Oud visueel materiaal en superseded previews. |
+
+De softwarebron staat in de GitHub/local repo:
+
+```text
+/Users/michelbuchner/mbo-verkenner/index.html
+```
+
+De model-audit in de repo staat hier:
+
+```text
+/Users/michelbuchner/mbo-verkenner/tests/riasoc_model_audit.js
+/Users/michelbuchner/mbo-verkenner/tests/output/riasoc_model_audit.md
+```
+
 ## 1. Wat wordt gepeild?
 
 De vragen peilen voorkeuren langs de zes RIASOC-dimensies:
