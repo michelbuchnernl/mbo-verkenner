@@ -170,6 +170,15 @@ De huidige correctielagen zijn:
 
 Na die correctie krijgt elk MBO-record een expliciete `codeMeta` en `code`. De selectie is dus niet meer afhankelijk van lege `code:""` velden of toevallige volgorde in de data.
 
+Daarnaast is de vraaglaag visueel gecontroleerd. De 62 plaatjes zijn niet alleen illustraties, maar het meetinstrument zelf. Na de beeldaudit zijn geen beelden vervangen; wel zijn labels en secundaire gewichten aangescherpt waar het beeld duidelijker was dan de oude weging:
+
+- Q22 is aangescherpt van "stand uitleggen" naar "stand presenteren", zodat de O-component beter klopt met het beeld.
+- Q27 gebruikt nu "uitleg ontwerpen" en "stap voor stap begeleiden", omdat beide beelden met uitleg/documenten werken en het gedragsverschil scherper moest worden benoemd.
+- Q48-Q62 zijn inhoudelijk herwogen waar de oude A/S/O- en S/O/C-mixen te veel ruis gaven. Vooral Q50-Q53 en Q62 meten nu scherper Sociaal helpen tegenover Ondernemend leiden.
+- Q56-Q60 zijn dichter bij C/R/I gezet: ordenen, controleren, bouwen, onderhouden en betekenis zoeken.
+
+Deze aanpassing verandert dus niet de MBO-records, maar de bronmeting: de punten die uit de leerlingkeuzes komen sluiten beter aan op wat het plaatje daadwerkelijk vertelt.
+
 ## 7. Hoe wordt de match berekend?
 
 De match tussen leerling en opleiding is een gewogen overeenkomst tussen twee profielen.
@@ -356,38 +365,38 @@ Auditdatum: 2026-05-01.
 | Scenario's getest | 50 |
 | Random simulaties | 1000 |
 | Unieke topcodes in random simulaties | 114 |
-| Unieke sets van 6 opleidingen | 409 |
+| Unieke sets van 6 opleidingen | 443 |
 | Scenario's met kleine verschillen of ties | 25 |
 | Scenario's met lage variatie in 6 opleidingen | 0 |
 | Classificatie-waarschuwingen | 0 |
 | Gemiddelde verhouding positie 6 / positie 1 | 0,95 |
 | Random cases positie 6 onder 65% van positie 1 | 0 |
-| S-top2 dekking zorg/welzijn | 230 van 230 |
+| S-top2 dekking zorg/welzijn | 192 van 192 |
 
 Interpretatie: de scoreberekening, topcode-spreiding en concrete opleidingsselectie zijn nu op hoofdlijnen gezond. Kleine verschillen blijven zichtbaar via de tie/gap-informatie, maar leiden niet meer tot één vaste standaarduitkomst. In de 50 scenario's is geen enkele uitslag meer gemarkeerd als lage variatie.
 
-Ter controle is de vorige versie (`27be48b`) opnieuw gemeten met dezelfde gefixte audit. Die eerlijke baseline gaf 240 unieke opleidingensets in 1000 random simulaties. De winst naar 409 unieke sets komt dus niet alleen door de audit-fix.
+Ter controle is de vorige versie (`27be48b`) opnieuw gemeten met dezelfde gefixte audit. Die eerlijke baseline gaf 240 unieke opleidingensets in 1000 random simulaties. De winst naar 443 unieke sets komt dus niet alleen door de audit-fix.
 
 De belangrijkste frequenties in 50 simulaties:
 
 | Type | Meest voorkomend | Aantal |
 |---|---|---:|
-| Opleiding | Administratief Medewerker | 20 |
-| Opleiding | Creatief vakman (ontwerpen en maken met hout) | 20 |
-| Opleiding | Intercedent | 20 |
-| CREBO | 25136 | 20 |
-| CREBO | 25548 | 20 |
-| CREBO | 25723 | 20 |
-| School | ROC Mondriaan | 65 |
-| School | MBO Rijnland | 50 |
-| School | HMC | 46 |
-| Sectorfamilie | Techniek & maken | 60 |
+| Opleiding | Creatief vakman (ontwerpen en maken met hout) | 23 |
+| Opleiding | Intercedent | 19 |
+| Opleiding | Administratief Medewerker | 18 |
+| CREBO | 25548 | 23 |
+| CREBO | 25136 | 19 |
+| CREBO | 25723 | 18 |
+| School | ROC Mondriaan | 64 |
+| School | HMC | 48 |
+| School | MBO Rijnland | 47 |
+| Sectorfamilie | Techniek & maken | 62 |
 | Sectorfamilie | Horeca & toerisme | 46 |
-| Sectorfamilie | Commercieel & ondernemend | 43 |
+| Sectorfamilie | Commercieel & ondernemend | 40 |
 
 Belangrijkste verbetering: de concrete selectie gebruikt nu deduplicatie, sectorcaps, schoolcaps en reserveringen per dominante dimensie. Daardoor krijgt een sociaal profiel bijvoorbeeld zichtbaar ruimte voor zorg/welzijn als de match boven de minimale scorevloer komt, zonder dat commerciele of administratieve S/O/C-overlap de hele set vult.
 
-Resterend aandachtspunt: de topfrequenties zijn nog niet volledig vlak. Dat hoeft ook niet; sommige opleidingen passen nu eenmaal bij veel samengestelde profielen. De volgende verfijning kan gericht kijken naar sectorfamilies die structureel ondervertegenwoordigd zijn, vooral onderwijs/sport en logistiek/transport, en naar uitbreiding of betere tagging van de onderliggende dataset.
+Resterend aandachtspunt: de topfrequenties zijn nog niet volledig vlak. Dat hoeft ook niet; sommige opleidingen passen nu eenmaal bij veel samengestelde profielen. De volgende verfijning kan gericht kijken naar sectorfamilies die structureel ondervertegenwoordigd zijn, vooral onderwijs/sport en logistiek/transport, en naar uitbreiding of betere tagging van de onderliggende dataset. In de laatste run is S-top2 goed gedekt via zorg/welzijn, maar onderwijs/sport blijft vrijwel afwezig in de concrete 6-pack.
 
 De audit bracht ook twee praktische verbeterpunten aan het licht:
 

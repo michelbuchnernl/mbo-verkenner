@@ -61,6 +61,8 @@
     .choice-tag{text-align:center;font-size:.7rem;font-weight:600;color:var(--muted);}
     .choice-tag em{display:block;font-style:normal;font-size:.68rem;color:rgba(115,210,255,.65);margin-top:2px;}
     .choice-row{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+    .q-nav{display:flex;justify-content:center;margin-top:14px;min-height:42px;}
+    .btn-back{width:auto;max-width:none;padding:10px 18px;font-size:.78rem;}
     .email-card{background:var(--db);border-radius:var(--rc);padding:40px 36px;max-width:420px;width:100%;box-shadow:var(--shadow);border:1px solid var(--border);text-align:center;}
     .email-card .em{font-size:2.6rem;margin-bottom:14px;display:block;}
     .email-card h2{font-size:1.5rem;font-weight:700;color:var(--white);margin-bottom:8px;}
@@ -181,6 +183,9 @@
     <div class="choice-row">
       <button class="btn btn-a" id="btn-a" onclick="pick('A')">← Kies A</button>
       <button class="btn btn-b" id="btn-b" onclick="pick('B')">Kies B →</button>
+    </div>
+    <div class="q-nav">
+      <button class="btn btn-ghost btn-back" id="btn-back" onclick="goBack()" style="display:none;">← Vorige vraag</button>
     </div>
   </div>
 </div>
@@ -373,12 +378,12 @@ const QS=[
   {n:19,t:"Handige haak maken of opvallende haak maken",lA:"Handige haak",lB:"Opvallende haak",wA:{R:3,C:1},wB:{I:1,A:3}},
   {n:20,t:"Geluid aansluiten of opbouw leiden",lA:"Geluid aansluiten",lB:"Opbouw leiden",wA:{R:3,C:1},wB:{S:1,O:3}},
   {n:21,t:"Pomp maken of tuinproject regelen",lA:"Pomp maken",lB:"Tuinproject regelen",wA:{R:3,C:1},wB:{S:1,O:3}},
-  {n:22,t:"Stand maken of stand uitleggen",lA:"Stand maken",lB:"Stand uitleggen",wA:{R:3,C:1},wB:{S:1,O:3}},
+  {n:22,t:"Stand maken of stand presenteren",lA:"Stand maken",lB:"Stand presenteren",wA:{R:3,C:1},wB:{S:1,O:3}},
   {n:23,t:"Machine bedienen of team motiveren",lA:"Machine bedienen",lB:"Team motiveren",wA:{R:3,C:1},wB:{S:1,O:3}},
   {n:24,t:"Water onderzoeken of met bewoner praten",lA:"Water onderzoeken",lB:"Bewoner praten",wA:{I:3,C:1},wB:{S:3,O:1}},
   {n:25,t:"App onderzoeken of iemand met app helpen",lA:"App onderzoeken",lB:"App helpen",wA:{I:3,C:1},wB:{S:3,O:1}},
   {n:26,t:"Storing zoeken of gebruiker rustig helpen",lA:"Storing zoeken",lB:"Gebruiker helpen",wA:{I:3,C:1},wB:{S:3,O:1}},
-  {n:27,t:"Uitleg maken of persoon begeleiden",lA:"Uitleg maken",lB:"Persoon begeleiden",wA:{I:3,C:1},wB:{S:3,O:1}},
+  {n:27,t:"Uitleg ontwerpen of stap voor stap begeleiden",lA:"Uitleg ontwerpen",lB:"Stap voor stap begeleiden",wA:{I:3,C:1},wB:{S:3,O:1}},
   {n:28,t:"Oorzaak zoeken of stappen checken",lA:"Oorzaak zoeken",lB:"Stappen checken",wA:{I:3,A:1},wB:{R:1,C:3}},
   {n:29,t:"Gegevens bekijken of gegevens sorteren",lA:"Gegevens bekijken",lB:"Gegevens sorteren",wA:{I:3,A:1},wB:{R:1,C:3}},
   {n:30,t:"Ideeen uitproberen of stappenplan volgen",lA:"Ideeen uitproberen",lB:"Stappenplan volgen",wA:{I:3,A:1},wB:{R:1,C:3}},
@@ -399,21 +404,21 @@ const QS=[
   {n:45,t:"Goed antwoord zoeken of eigen uitleg maken",lA:"Goed antwoord zoeken",lB:"Eigen uitleg maken",wA:{I:2,A:1,C:1},wB:{I:1,A:2,S:1}},
   {n:46,t:"Technische tekening maken of gevoel laten zien",lA:"Technische tekening",lB:"Gevoel laten zien",wA:{I:2,A:1,C:1},wB:{I:1,A:2,S:1}},
   {n:47,t:"Schema begrijpen of idee verbeelden",lA:"Schema begrijpen",lB:"Idee verbeelden",wA:{I:2,A:1,C:1},wB:{I:1,A:2,S:1}},
-  {n:48,t:"Muziek maken of makers helpen",lA:"Muziek maken",lB:"Makers helpen",wA:{I:1,A:2,S:1},wB:{A:1,S:2,O:1}},
-  {n:49,t:"Campagne maken of gesprek leiden",lA:"Campagne maken",lB:"Gesprek leiden",wA:{I:1,A:2,S:1},wB:{A:1,S:2,O:1}},
-  {n:50,t:"Een persoon helpen of groep leiden",lA:"Een persoon helpen",lB:"Groep leiden",wA:{A:1,S:2,O:1},wB:{S:1,O:2,C:1}},
-  {n:51,t:"Goed luisteren of snel overtuigen",lA:"Goed luisteren",lB:"Snel overtuigen",wA:{A:1,S:2,O:1},wB:{S:1,O:2,C:1}},
-  {n:52,t:"Mensen helpen of team motiveren",lA:"Mensen helpen",lB:"Team motiveren",wA:{A:1,S:2,O:1},wB:{S:1,O:2,C:1}},
-  {n:53,t:"Stap voor stap helpen of team in actie zetten",lA:"Stap voor stap helpen",lB:"Team in actie zetten",wA:{A:1,S:2,O:1},wB:{S:1,O:2,C:1}},
-  {n:54,t:"Kans najagen of werkproces in de gaten houden",lA:"Kans najagen",lB:"Werkproces bewaken",wA:{S:1,O:2,C:1},wB:{R:1,O:1,C:2}},
-  {n:55,t:"Energiek leiden of zorgvuldig controleren",lA:"Energiek leiden",lB:"Zorgvuldig controleren",wA:{S:1,O:2,C:1},wB:{R:1,O:1,C:2}},
-  {n:56,t:"Voorraad netjes leggen of opstelling bouwen",lA:"Voorraad leggen",lB:"Opstelling bouwen",wA:{R:1,O:1,C:2},wB:{R:2,I:1,C:1}},
-  {n:57,t:"Codes checken of apparatuur plaatsen",lA:"Codes checken",lB:"Apparatuur plaatsen",wA:{R:1,O:1,C:2},wB:{R:2,I:1,C:1}},
-  {n:58,t:"Logboek bijwerken of onderhoud doen",lA:"Logboek bijwerken",lB:"Onderhoud doen",wA:{R:1,O:1,C:2},wB:{R:2,I:1,C:1}},
-  {n:59,t:"Gegevens netjes zetten of betekenis zoeken",lA:"Gegevens zetten",lB:"Betekenis zoeken",wA:{R:1,I:1,C:2},wB:{I:2,A:1,C:1}},
-  {n:60,t:"Resultaten opbergen of patronen zoeken",lA:"Resultaten opbergen",lB:"Patronen zoeken",wA:{R:1,I:1,C:2},wB:{I:2,A:1,C:1}},
-  {n:61,t:"Hulpvraag afhandelen of persoon helpen",lA:"Hulpvraag afhandelen",lB:"Persoon helpen",wA:{R:1,O:1,C:2},wB:{A:1,S:2,O:1}},
-  {n:62,t:"Bij een persoon blijven of groep regelen",lA:"Bij een persoon blijven",lB:"Groep regelen",wA:{A:1,S:2,O:1},wB:{S:1,O:2,C:1}}
+  {n:48,t:"Muziek maken of makers helpen",lA:"Muziek maken",lB:"Makers helpen",wA:{A:3,I:1},wB:{S:3,A:1}},
+  {n:49,t:"Campagne maken of gesprek leiden",lA:"Campagne maken",lB:"Gesprek leiden",wA:{A:3,O:1},wB:{A:1,S:2,O:1}},
+  {n:50,t:"Een persoon helpen of groep leiden",lA:"Een persoon helpen",lB:"Groep leiden",wA:{S:3,A:1},wB:{O:3,S:1}},
+  {n:51,t:"Goed luisteren of snel overtuigen",lA:"Goed luisteren",lB:"Snel overtuigen",wA:{S:3,A:1},wB:{O:3,S:1}},
+  {n:52,t:"Mensen helpen of team motiveren",lA:"Mensen helpen",lB:"Team motiveren",wA:{S:3,A:1},wB:{O:3,S:1}},
+  {n:53,t:"Stap voor stap helpen of team in actie zetten",lA:"Stap voor stap helpen",lB:"Team in actie zetten",wA:{S:3,C:1},wB:{O:3,S:1}},
+  {n:54,t:"Kans najagen of werkproces in de gaten houden",lA:"Kans najagen",lB:"Werkproces bewaken",wA:{O:3,S:1},wB:{C:3,R:1}},
+  {n:55,t:"Energiek leiden of zorgvuldig controleren",lA:"Energiek leiden",lB:"Zorgvuldig controleren",wA:{O:3,S:1},wB:{C:3,I:1}},
+  {n:56,t:"Voorraad netjes leggen of opstelling bouwen",lA:"Voorraad leggen",lB:"Opstelling bouwen",wA:{C:3,R:1},wB:{R:3,I:1}},
+  {n:57,t:"Codes checken of apparatuur plaatsen",lA:"Codes checken",lB:"Apparatuur plaatsen",wA:{C:3,I:1},wB:{R:3,I:1}},
+  {n:58,t:"Logboek bijwerken of onderhoud doen",lA:"Logboek bijwerken",lB:"Onderhoud doen",wA:{C:3,R:1},wB:{R:3,I:1}},
+  {n:59,t:"Gegevens netjes zetten of betekenis zoeken",lA:"Gegevens zetten",lB:"Betekenis zoeken",wA:{C:3,I:1},wB:{I:3,A:1}},
+  {n:60,t:"Resultaten opbergen of patronen zoeken",lA:"Resultaten opbergen",lB:"Patronen zoeken",wA:{C:3,R:1},wB:{I:3,A:1}},
+  {n:61,t:"Hulpvraag afhandelen of persoon helpen",lA:"Hulpvraag afhandelen",lB:"Persoon helpen",wA:{C:3,O:1},wB:{S:3,O:1}},
+  {n:62,t:"Bij een persoon blijven of groep regelen",lA:"Bij een persoon blijven",lB:"Groep regelen",wA:{S:3,A:1},wB:{O:3,S:1}}
 ];
 
 
@@ -1062,6 +1067,7 @@ function renderQ(){
   } else {
     showPhPH(wrap,q.t);
   }
+  document.getElementById('btn-back').style.display=S.cur>0?'inline-flex':'none';
   ['btn-a','btn-b'].forEach(id=>{const b=document.getElementById(id);b.disabled=true;setTimeout(()=>b.disabled=false,280);});
 }
 function showPhPH(wrap,alt){
@@ -1077,6 +1083,18 @@ function pick(c){
   S.cur++;
   if(S.cur<QS.length){renderQ();}
   else{show('screen-email');if(S.name)document.getElementById('inp-name').value=S.name;}
+}
+
+function goBack(){
+  if(S.cur<=0) return;
+  const prev=S.answers.pop();
+  if(prev){
+    const q=QS.find(item=>item.n===prev.q)||QS[S.cur-1];
+    const w=prev.c==='A'?q.wA:q.wB;
+    D.forEach(d=>{S.scores[d]=Math.max(0,S.scores[d]-(w[d]||0));});
+  }
+  S.cur=Math.max(0,S.cur-1);
+  renderQ();
 }
 
 function selectTrack(btn){

@@ -15,6 +15,8 @@ De app is een zelfstandige HTML/JS-tool waarmee leerlingen 62 visuele A/B-keuzes
 - verbeterde `niveauMatch()` voor samengestelde niveauvelden
 - PDF-export zonder verticale samendrukking: vaste A4-pagina's met klikbare opleidingslinks
 - 12 brede beroepideeën en 6 concrete MBO-opleidingen met deduplicatie, sectorcaps en schoolspreiding
+- terugknop tijdens de 62 vragen, zodat een leerling een vorige keuze kan herstellen
+- beeldaudit op de 62 vraagbeelden en aangescherpte labels/wegingen bij Q22, Q27 en Q48-Q62
 - geautomatiseerde model-audit in `tests/riasoc_model_audit.js`
 - classificatie-dump in `tests/output/riasoc_classificatie_dump.csv`
 - MBO-records krijgen expliciete codes en inhoudelijke RIASOC-herwegingen
@@ -35,7 +37,9 @@ mbo-verkenner/
 │       ├── ...
 │       └── 62-bij-een-blijven-of-de-groep-organiseren.png
 ├── docs/
-│   └── RIASOC_Modeluitleg_weging_en_resultaat.md
+│   ├── RIASOC_Modeluitleg_weging_en_resultaat.md
+│   ├── RIASOC_Beeldaudit_62_plaatjes.md
+│   └── RIASOC_Claude_Beeldaudit_Reviewpakket.md
 ├── tests/
 │   ├── riasoc_model_audit.js
 │   └── output/
@@ -74,7 +78,7 @@ De laatste lokale validatie gaf:
 - Q32-Q62 gevuld: ja
 - `validateQuestions()`: 62 vragen, 0 fouten
 - `niveauMatch()` testcases: geslaagd
-- model-audit: 50 scenario's, 1000 random simulaties, 114 unieke topcodes, 409 unieke opleidingensets, 0 lage-variatiescenario's, 0 classificatie-waarschuwingen
+- model-audit: 50 scenario's, 1000 random simulaties, 114 unieke topcodes, 443 unieke opleidingensets, 0 lage-variatiescenario's, 0 classificatie-waarschuwingen
 - CSV-analyse: `tests/output/riasoc_50_simulaties.csv`
 
 ## Doel
