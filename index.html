@@ -97,6 +97,16 @@
     .profile-card{background:rgba(20,100,200,.35);border-radius:var(--rc);padding:24px 28px;margin-bottom:18px;border:1px solid var(--border);}
     .profile-card p{font-size:.92rem;font-weight:300;line-height:1.75;color:var(--bw);}
     .profile-card strong{color:var(--lb);font-weight:700;}
+    .explain-card{background:rgba(20,100,200,.22);border-radius:var(--rc);padding:24px 28px;margin:24px 0 18px;border:1px solid var(--border);}
+    .explain-card h3{font-size:1.05rem;font-weight:700;color:var(--white);margin-bottom:8px;}
+    .explain-card h4{font-size:.82rem;font-weight:700;color:var(--lb);margin:18px 0 8px;text-transform:uppercase;letter-spacing:.08em;}
+    .explain-card p{font-size:.88rem;font-weight:300;line-height:1.75;color:var(--bw);margin-bottom:10px;}
+    .explain-types{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:12px 0 4px;}
+    .explain-type{background:rgba(255,255,255,.06);border:1px solid var(--border);border-radius:var(--r);padding:10px 12px;}
+    .explain-type strong{display:block;color:var(--white);font-size:.86rem;margin-bottom:2px;}
+    .explain-type span{display:block;color:var(--muted);font-size:.76rem;line-height:1.45;}
+    .explain-note{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:14px;}
+    .explain-note div{background:rgba(115,210,255,.08);border-left:3px solid var(--lb);border-radius:var(--r);padding:13px 14px;}
     .sug-header{display:flex;align-items:baseline;gap:10px;margin-bottom:12px;}
     .sug-header h3{font-size:1.05rem;font-weight:700;color:var(--white);}
     .sug-count{font-size:.7rem;font-weight:300;color:var(--muted);}
@@ -128,6 +138,7 @@
     .img-ph{width:100%;padding-top:44%;background:#1a1a30;position:relative;}
     .img-ph-i{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;color:var(--muted);gap:8px;font-size:.78rem;}
     @media(max-width:480px){.score-row{grid-template-columns:100px 1fr 36px;}.email-card{padding:28px 20px;}}
+    @media(max-width:560px){.explain-types,.explain-note{grid-template-columns:1fr;}}
   </style>
 </head>
 <body>
@@ -213,6 +224,25 @@
           <span class="sug-count" id="sug-count">NH · ZH · Utrecht</span>
         </div>
         <div id="sug-list"></div>
+      </div>
+      <div class="explain-card fade">
+        <div class="card-lbl">Hoe lees je je uitslag?</div>
+        <h3>RIASOC is een startpunt voor gesprek</h3>
+        <p>De verkenner is gebaseerd op de RIASOC-theorie: zes interessegebieden die helpen om te ontdekken welk soort werk of opleiding bij iemand kan passen. Je kiest steeds tussen twee situaties. Op basis van die keuzes berekent de verkenner hoe sterk elk type naar voren komt.</p>
+        <p>De meeste mensen zijn geen enkel type helemaal. Je uitslag is meestal een mix van twee of drie richtingen. Gebruik die mix om woorden te geven aan wat je leuk vindt, waar je energie van krijgt en welke opleidingen je verder wilt onderzoeken.</p>
+        <h4>De zes types</h4>
+        <div class="explain-types">
+          <div class="explain-type"><strong>R · Realistisch</strong><span>Doen en maken. Praktisch werken, bouwen, repareren en tastbare resultaten zien.</span></div>
+          <div class="explain-type"><strong>I · Intellectueel</strong><span>Denken en analyseren. Begrijpen hoe dingen werken, onderzoeken en vragen stellen.</span></div>
+          <div class="explain-type"><strong>A · Artistiek</strong><span>Creeren en verbeelden. Eigen ideeen uitwerken, ontwerpen en op een persoonlijke manier maken.</span></div>
+          <div class="explain-type"><strong>S · Sociaal</strong><span>Helpen en ondersteunen. Contact met mensen, luisteren, begeleiden en zorgen.</span></div>
+          <div class="explain-type"><strong>O · Ondernemend</strong><span>Leiden en overtuigen. Initiatief nemen, organiseren en mensen in beweging krijgen.</span></div>
+          <div class="explain-type"><strong>C · Conventioneel</strong><span>Ordenen en structureren. Nauwkeurig werken, controleren en zorgen dat alles klopt.</span></div>
+        </div>
+        <div class="explain-note">
+          <div><h3>Slechts een indicatie</h3><p>De uitkomst is geen definitief advies. Schoolresultaten, ervaring, motivatie en persoonlijke omstandigheden tellen ook mee. Gebruik je uitslag als gespreksstarter en onderzoek daarna verder.</p></div>
+          <div><h3>Bespreek dit met je decaan</h3><p>Neem je uitslag mee naar je mentor of decaan. Die kent jou, je schoolroute en de opleidingen. Samen kun je kijken welke open dagen, meeloopdagen of stages logisch zijn.</p></div>
+        </div>
       </div>
       <div class="corbulo-strip">
         <div class="c-mark">C</div>
@@ -1116,23 +1146,37 @@ function buildPDFPages(n,code,meta){
   const filtered=MBO.filter(m=>niveauMatch(m.n));
   const suggestions=filtered.map(m=>({...m,sim:D.reduce((a,dx)=>a+(n[dx]/100)*(m.sc[dx]/10),0)})).sort((a,b)=>b.sim-a.sim).slice(0,8);
   const sugCard=(m,i)=>{
-    const beroepen=(m.b||[]).slice(0,3).map(b=>`<span style="font-size:8.5px;font-weight:600;padding:2px 7px;border-radius:3px;background:#dde8ff;color:#1464c8;border:1px solid #c0d0f0;white-space:nowrap;">💼 ${b}</span>`).join(' ');
+    const beroepen=(m.b||[]).slice(0,2).map(b=>`<span style="font-size:8px;font-weight:600;padding:2px 6px;border-radius:3px;background:#dde8ff;color:#1464c8;border:1px solid #c0d0f0;white-space:nowrap;">${b}</span>`).join(' ');
     const mot=makeMotivation(m,n);
     const bc=i<3?'#1464c8':'#93b4e8';
     const bg=i<3?'#e8f0ff':'#f0f4ff';
-    const linkHTML=m.url?`<div style="margin-top:6px;"><a href="${m.url}" style="font-size:9px;font-weight:700;color:#1464c8;text-decoration:none;">🔗 ${m.url.replace('https://','')}</a></div>`:'';
-    return `<div style="background:${bg};border-radius:8px;padding:13px 15px;margin-bottom:9px;border:1px solid #dde8ff;border-left:3px solid ${bc};"><div style="font-size:12.5px;font-weight:700;color:#140037;margin-bottom:3px;">${m.o}</div><div style="font-size:10.5px;color:#555;margin-bottom:5px;">📍 ${m.s} · ${m.l}</div><div style="font-size:10.5px;color:#2a5aa0;font-style:italic;line-height:1.5;margin-bottom:6px;">${mot}</div>${m.url?`<div style="margin-bottom:5px;"><a href="${m.url}" style="font-size:9px;color:#1464c8;font-weight:600;text-decoration:none;">🔗 ${m.url.replace(/https?:\/\/(?:www\.)?/,"").split("/")[0]}</a></div>`:""}
-${beroepen?`<div style="display:flex;flex-wrap:wrap;gap:4px;margin-bottom:6px;">${beroepen}</div>`:''}<div style="display:flex;gap:5px;flex-wrap:wrap;"><span style="font-size:8.5px;font-weight:700;padding:2px 8px;border-radius:3px;background:#dde8ff;color:#1464c8;">Niveau ${m.n}</span><span style="font-size:8.5px;font-weight:600;padding:2px 8px;border-radius:3px;background:#eef0f4;color:#444;">${m.lw}</span><span style="font-size:8.5px;font-weight:500;padding:2px 8px;border-radius:3px;background:#f0f0f0;color:#666;">CREBO ${m.c}</span></div>${linkHTML}</div>`;
+    const domain=m.url?m.url.replace(/https?:\/\/(?:www\.)?/,"").split("/")[0]:'';
+    return `<div style="background:${bg};border-radius:8px;padding:11px 13px;margin-bottom:9px;border:1px solid #dde8ff;border-left:3px solid ${bc};"><div style="font-size:12px;font-weight:700;color:#140037;margin-bottom:3px;">${m.o}</div><div style="font-size:9.5px;color:#555;line-height:1.35;margin-bottom:4px;">${m.s}${m.l?' · '+m.l:''}</div><div style="font-size:9.5px;color:#2a5aa0;font-style:italic;line-height:1.4;margin-bottom:5px;">${mot}</div>${domain?`<div style="margin-bottom:4px;"><a href="${m.url}" style="font-size:8.5px;color:#1464c8;font-weight:600;text-decoration:none;">${domain}</a></div>`:""}
+${beroepen?`<div style="display:flex;flex-wrap:wrap;gap:4px;margin-bottom:5px;">${beroepen}</div>`:''}<div style="display:flex;gap:5px;flex-wrap:wrap;"><span style="font-size:8px;font-weight:700;padding:2px 7px;border-radius:3px;background:#dde8ff;color:#1464c8;">Niveau ${m.n}</span><span style="font-size:8px;font-weight:600;padding:2px 7px;border-radius:3px;background:#eef0f4;color:#444;">${m.lw}</span><span style="font-size:8px;font-weight:500;padding:2px 7px;border-radius:3px;background:#f0f0f0;color:#666;">CREBO ${m.c}</span></div></div>`;
   };
-  const pageWrap=(content)=>`<div style="width:680px;background:#ffffff;padding:32px 36px;font-family:'Red Hat Text',sans-serif;color:#1a1a2e;font-size:13px;line-height:1.6;">${content}</div>`;
+  const pageWrap=(content)=>`<div style="width:680px;height:962px;overflow:hidden;background:#ffffff;padding:32px 36px;font-family:'Red Hat Text',sans-serif;color:#1a1a2e;font-size:13px;line-height:1.6;">${content}</div>`;
   const header=`<div style="text-align:center;margin-bottom:22px;"><div style="font-size:7.5px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:#1464c8;margin-bottom:7px;">Corbulo Tech &amp; Design College — MBO Opleidingen Verkenner</div><div style="font-size:24px;font-weight:700;color:#140037;margin-bottom:5px;">${S.name}'s Kompas</div><div style="font-size:10.5px;color:#666;margin-bottom:11px;">${d} · ${trackLabel}</div><div style="display:inline-block;background:#1464c8;color:#fff;font-size:17px;font-weight:700;letter-spacing:.2em;padding:7px 26px;border-radius:5px;">${code}</div></div><div style="height:1px;background:#dde8ff;margin-bottom:20px;"></div>`;
   const chartScores=`<div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px;"><div style="background:#1464c8;border-radius:9px;padding:18px;"><div style="font-size:7.5px;font-weight:700;letter-spacing:.15em;text-transform:uppercase;color:rgba(255,255,255,.6);text-align:center;margin-bottom:10px;">RIASOC Kompas</div><img src="${chartImg}" style="width:100%;height:auto;display:block;" alt="RIASOC kompas"></div><div style="background:#f0f4ff;border-radius:9px;padding:18px;"><div style="font-size:7.5px;font-weight:700;letter-spacing:.15em;text-transform:uppercase;color:#1464c8;margin-bottom:12px;">Scores per dimensie</div>${barsHTML}</div></div>`;
   const profile=`<div style="background:#eef3ff;border-radius:9px;padding:16px 18px;margin-bottom:16px;border-left:3px solid #1464c8;"><div style="font-size:7.5px;font-weight:700;letter-spacing:.15em;text-transform:uppercase;color:#1464c8;margin-bottom:7px;">Wat dit betekent</div><p style="font-size:11.5px;line-height:1.75;color:#1a1a2e;margin:0;">${profileHTML}</p></div>`;
   const sugHeader=`<div style="display:flex;align-items:baseline;gap:10px;margin-bottom:10px;"><div style="font-size:14px;font-weight:700;color:#140037;">Passende MBO-opleidingen</div><div style="font-size:9.5px;color:#666;">8 suggesties voor ${trackLabel} · NH · ZH · Utrecht</div></div>`;
   const footer=`<div style="margin-top:20px;padding-top:14px;border-top:1px solid #dde8ff;text-align:center;"><div style="font-size:7.5px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#bbb;">Corbulo Tech &amp; Design College · Makers van de Toekomst</div></div>`;
-  const sug1=suggestions.slice(0,2).map((m,i)=>sugCard(m,i)).join('');
-  const sug2=suggestions.slice(2).map((m,i)=>sugCard(m,i+2)).join('');
-  return [pageWrap(header+chartScores+profile+sugHeader+sug1),pageWrap(sug2+footer)];
+  const sugPage=(items,offset)=>`${sugHeader}${items.map((m,i)=>sugCard(m,i+offset)).join('')}${footer}`;
+  const sug1=suggestions.slice(0,4);
+  const sug2=suggestions.slice(4,8);
+  const typeCard=(dx,text)=>`<div style="background:#f0f4ff;border-radius:8px;padding:13px 15px;border:1px solid #dde8ff;border-left:3px solid ${META[dx].k};"><div style="display:flex;align-items:center;gap:9px;margin-bottom:6px;"><span style="display:inline-grid;place-items:center;width:28px;height:28px;border-radius:50%;background:${META[dx].k};color:#140037;font-size:13px;font-weight:800;">${dx}</span><div><div style="font-size:12.5px;font-weight:800;color:#140037;">${META[dx].naam}</div><div style="font-size:8.5px;font-weight:800;color:#1464c8;text-transform:uppercase;letter-spacing:.08em;">${META[dx].kort}</div></div></div><div style="font-size:10.5px;line-height:1.55;color:#333;">${text}</div></div>`;
+  const comboCard=(label,title,example)=>`<div style="display:grid;grid-template-columns:48px 1fr;gap:10px;align-items:center;background:#eef3ff;border-radius:8px;padding:10px 12px;border:1px solid #dde8ff;"><div style="font-size:10px;font-weight:800;color:#1464c8;background:#dde8ff;border-radius:5px;text-align:center;padding:5px 0;">${label}</div><div style="font-size:10.5px;line-height:1.45;color:#333;"><strong style="color:#140037;">${title}</strong> - ${example}</div></div>`;
+  const explanationHeader=`<div style="text-align:center;margin-bottom:22px;"><div style="font-size:7.5px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:#1464c8;margin-bottom:7px;">Corbulo Tech &amp; Design College — MBO Opleidingen Verkenner</div><div style="font-size:24px;font-weight:700;color:#140037;margin-bottom:5px;">Wat betekent jouw uitslag?</div><div style="font-size:10.5px;color:#666;">Een toelichting op de zes types en hoe je ze kunt lezen</div></div><div style="height:2px;background:#1464c8;margin-bottom:24px;"></div>`;
+  const howItWorks=`<div style="font-size:7.5px;font-weight:800;letter-spacing:.18em;text-transform:uppercase;color:#1464c8;margin-bottom:8px;">Over de verkenner</div><div style="font-size:15px;font-weight:800;color:#140037;margin-bottom:10px;">Hoe werkt de verkenner?</div><div style="background:#eef3ff;border-radius:9px;padding:16px 18px;margin-bottom:20px;"><p style="font-size:11.5px;line-height:1.75;margin:0;color:#1a1a2e;">De verkenner is gebaseerd op de <strong>RIASOC-theorie</strong>: een bekende methode om te ontdekken welk type werk bij iemand past. Tijdens de verkenner kies je steeds tussen twee situaties. Op basis van jouw keuzes berekent de verkenner hoe sterk jij bij elk van de zes types hoort. Hoe hoger de score, hoe meer dat type bij jou past. De meeste mensen zijn een mix van meerdere types; dat is heel normaal.</p></div>`;
+  const typeGrid=`<div style="font-size:7.5px;font-weight:800;letter-spacing:.18em;text-transform:uppercase;color:#1464c8;margin-bottom:8px;">De zes types</div><div style="font-size:15px;font-weight:800;color:#140037;margin-bottom:10px;">Wat betekent elk type?</div><div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:20px;">${typeCard('R','Werkt graag met de handen. Houdt van bouwen, repareren en sleutelen. Wil tastbare resultaten zien.')}${typeCard('I','Wil begrijpen hoe dingen werken. Stelt vragen, zoekt uit en gaat graag de diepte in.')}${typeCard('A','Denkt in beelden en ideeen. Houdt van creatieve vrijheid en wil dingen maken op eigen manier.')}${typeCard('S','Haalt energie uit contact met mensen. Luistert goed en helpt graag. Vindt zorg en begeleiding belangrijk.')}${typeCard('O','Neemt graag het voortouw. Organiseert, overtuigt en zet mensen in beweging. Houdt van impact maken.')}${typeCard('C','Houdt van orde en duidelijkheid. Werkt nauwkeurig en zorgt dat alles klopt. Details vallen op.')}</div>`;
+  const mixGrid=`<div style="font-size:7.5px;font-weight:800;letter-spacing:.18em;text-transform:uppercase;color:#1464c8;margin-bottom:8px;">Jouw unieke mix</div><div style="font-size:15px;font-weight:800;color:#140037;margin-bottom:10px;">Hoe mengen de types zich?</div><p style="font-size:11.5px;line-height:1.65;margin:0 0 12px;color:#333;">De meeste mensen zijn een combinatie van twee of drie types. Hieronder zie je een paar voorbeeldcombinaties:</p><div style="display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-bottom:20px;">${comboCard('R + I','Technisch denker','technicus, laborant, instrumentmaker')}${comboCard('A + I','Creatief onderzoeker','UX-designer, mediavormgever, AI developer')}${comboCard('S + O','Mensen-leider','zorgcoordinator, eventorganisator, teamleider')}${comboCard('R + A','Vakman met stijl','interieurbouwer, decorbouwer, meubelmaker')}${comboCard('I + C','Nauwkeurige analyticus','apothekersassistent, ICT support, medisch analist')}${comboCard('O + A','Creatieve ondernemer','mediamanager, marketeer, podiumtechnicus')}</div>`;
+  const indication=`<div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:8px;"><div style="background:#fff7df;border-radius:9px;padding:16px 18px;border-left:3px solid #ffb74d;"><div style="font-size:14px;font-weight:800;color:#c65300;margin-bottom:8px;">Slechts een indicatie</div><p style="font-size:11.5px;line-height:1.75;margin:0;color:#333;">De uitkomst is een <strong>startpunt</strong>, geen definitief advies. Jij bent veel meer dan een paar letters. Schoolresultaten, ervaringen, motivatie en je persoonlijke situatie spelen ook mee. Gebruik de uitslag als gespreksonderwerp en ga daarna op onderzoek: bezoek open dagen, doe stages en praat met mensen in het vak.</p></div><div style="background:#e8f0ff;border-radius:9px;padding:16px 18px;border-left:3px solid #1464c8;"><div style="font-size:14px;font-weight:800;color:#1464c8;margin-bottom:8px;">Plan een gesprek met je decaan</div><p style="font-size:11.5px;line-height:1.75;margin:0;color:#333;">De decaan van jouw school kent jou en de opleidingen. Neem deze uitslag mee naar het gesprek. Dat is een goed startpunt om over je toekomst te praten. Vraag aan je mentor wanneer je een afspraak kunt maken.</p></div></div>`;
+  return [
+    pageWrap(header+chartScores+profile+footer),
+    pageWrap(sugPage(sug1,0)),
+    pageWrap(sugPage(sug2,4)),
+    pageWrap(explanationHeader+howItWorks+typeGrid),
+    pageWrap(mixGrid+indication+footer)
+  ];
 }
 
 async function dlPDF(){
@@ -1145,32 +1189,15 @@ async function dlPDF(){
     const pw=pdf.internal.pageSize.getWidth(),ph=pdf.internal.pageSize.getHeight();
     const mg=8,uw=pw-mg*2,pageH=ph-mg*2;
     const resEl=document.getElementById('pdf-results');
-    let hasPdfPage=false;
-    const addCanvasSlice=(sourceCanvas,sourceY,sourceH)=>{
-      const slice=document.createElement('canvas');
-      slice.width=sourceCanvas.width;
-      slice.height=sourceH;
-      const ctx=slice.getContext('2d');
-      ctx.fillStyle='#ffffff';
-      ctx.fillRect(0,0,slice.width,slice.height);
-      ctx.drawImage(sourceCanvas,0,sourceY,sourceCanvas.width,sourceH,0,0,slice.width,sourceH);
-      const sliceH=uw*(sourceH/sourceCanvas.width);
-      if(hasPdfPage)pdf.addPage();
-      hasPdfPage=true;
-      pdf.addImage(slice.toDataURL('image/jpeg',.94),'JPEG',mg,mg,uw,sliceH);
-    };
-    const capturePage=async(html)=>{
+    const capturePage=async(html,isFirst)=>{
       resEl.innerHTML=html;resEl.style.display='block';
       const cv=await html2canvas(resEl,{scale:2.5,useCORS:true,backgroundColor:'#ffffff',logging:false});
       resEl.style.display='none';resEl.innerHTML='';
-      const maxSliceH=Math.floor((pageH/uw)*cv.width);
-      for(let y=0;y<cv.height;y+=maxSliceH){
-        addCanvasSlice(cv,y,Math.min(maxSliceH,cv.height-y));
-      }
+      if(!isFirst)pdf.addPage();
+      pdf.addImage(cv.toDataURL('image/jpeg',.94),'JPEG',mg,mg,uw,pageH);
     };
     const pages=buildPDFPages(n,code,topCodeMeta(n));
-    await capturePage(pages[0]);
-    await capturePage(pages[1]);
+    for(let i=0;i<pages.length;i++) await capturePage(pages[i],i===0);
     actions.style.display='';
     pdf.save(`RIASOC_${S.name.replace(/\s+/g,'_')||'profiel'}_${new Date().toISOString().slice(0,10)}.pdf`);
     toast('📥 PDF opgeslagen!');
