@@ -116,6 +116,9 @@ De profielen komen uit de kwalificatiedossiers. Voor een aantal groepen legt `ap
 | Creatief/media | A voorop, met I en C |
 | Ambacht | Smalle R/A/C-profielen |
 | Vastgoed/advies | O en C voorop |
+| Defensie | R voorop (praktisch en fysiek), daarna C en O |
+| Beveiliging | Dossierprofiel, met R van 2 naar 5 |
+| Marketing | O voorop, met A en S; geen administratieprofiel |
 
 Staat ondernemen of leidinggeven in de naam (ondernemer, manager, leidinggevende, teamleider, retailer), dan krijgt Ondernemend minstens een 8, ook bij een creatieve of technische opleiding. Zo is "Ondernemer Creatieve Sector" zowel Artistiek als Ondernemend.
 

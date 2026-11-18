@@ -925,6 +925,15 @@ function applyMboModelCorrections(){
       }else{
         cat=setMboScores(m,{R:4,I:9,A:5,S:3,O:5,C:7},'ict-software-development');
       }
+    }else if(/militair|onderofficier/.test(txt)){
+      // Defensie: praktisch en fysiek werk voorop, daarna vaste regels en leiding.
+      cat=setMboScores(m,{R:8,I:3,A:2,S:5,O:6,C:7},'defensie-praktisch');
+    }else if(/beveiliger/.test(txt)){
+      // Alleen Realistisch omhoog: surveilleren en ingrijpen is ook praktisch werk.
+      cat=setMboScores(m,{R:5},'veiligheid-beveiliging');
+    }else if(/marketing/.test(txt)){
+      // Marketing is overtuigen en vormgeven, geen administratie.
+      cat=setMboScores(m,{R:2,I:5,A:6,S:6,O:9,C:5},'marketing-commercieel-creatief');
     }else if(/verpleeg|verzorgende|verzorgkundige|dokter|apothek|pedagog|onderwijsassistent|maatschappelijke zorg|sociaal werker|helpende|begeleider/.test(txt)){
       cat=setMboScores(m,{R:3,I:4,A:3,S:10,O:4,C:6},'zorg-welzijn-contact');
     }else if(/hospitality|gastheer|gastvrouw|toerisme|tourism|leisure|luchtvaart|facilitair|schoonheid|kapper|hairstylist|barbier|beautystylist|\bsport|buurtsport|leefstijlcoach|recreatie|retailmedewerker|retail medewerker|verkoopspecialist|\bbar\b|hotel|event academy/.test(txt)){
@@ -1342,7 +1351,7 @@ function sectorFamily(m){
   if(/commerc|account|sales|marketing|retail|intercedent|ondernemer|manager|leidinggevende|transport en logistiek/.test(text)) return 'Commercieel & ondernemend';
   if(/administr|jurid|business services|office|finance|hr|control|secretar/.test(text)) return 'Administratie & juridisch';
   if(/logistiek|transport|chauffeur|warehouse|voorraad/.test(text)) return 'Logistiek & transport';
-  if(/veilig|beveil|handhaver|militair|veva|defensie/.test(text)) return 'Veiligheid & defensie';
+  if(/veilig|beveil|handhaver|militair|onderofficier|veva|defensie/.test(text)) return 'Veiligheid & defensie';
   if(/labor|analist|onderzoek|research|instrumentmaker/.test(text)) return 'Laboratorium & onderzoek';
   return 'Overig';
 }
@@ -1356,6 +1365,9 @@ function opleidingStam(m){
   const rules=[
     [/software developer|applicatieontwikkelaar|creative software/,'software developer'],
     [/decorbouwer/,'decorbouwer'],
+    [/aankomend militair/,'aankomend militair'],
+    [/aankomend onderofficier/,'aankomend onderofficier'],
+    [/beveiliger/,'beveiliger'],
     [/fashion tailor/,'fashion tailor'],
     [/salonmanager/,'salonmanager'],
     [/hairstylist|kapper/,'kapper'],

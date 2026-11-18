@@ -85,11 +85,11 @@ crebo,opleiding,school,sector,categorie,R,I,A,S,O,C,code
 25686,Fashion Tailor,"ROC van Amsterdam; Zadkine",Uiterlijke verzorging,creatief-media-ontwerp,3,7,9,4,5,6,AIC
 25688,Fashion Product Coordinator,"ROC van Amsterdam; Zadkine",Uiterlijke verzorging,creatief-media-ontwerp,3,7,9,4,5,6,AIC
 25689,Basismedewerker Fashion,"ROC van Amsterdam; Zadkine",Uiterlijke verzorging,creatief-media-ontwerp,3,7,9,4,5,6,AIC
-25690,Beveiliger,"MBO Rijnland; ROC Mondriaan",Veiligheid & defensie,,2,3,5,7,8,8,OCS
-25690,Beveiliger 2,"MBO Rijnland; ROC Mondriaan",Veiligheid & defensie,,2,3,5,7,8,8,OCS
-25690,"Beveiliger, orientatie Koninklijke Marechaussee","MBO Rijnland; ROC Mondriaan",Veiligheid & defensie,,2,3,5,7,8,8,OCS
-25691,Beveiliger 3,"MBO Rijnland; ROC Mondriaan",Veiligheid & defensie,,2,3,5,7,8,8,OCS
-25691,Beveiliger niveau 3,"MBO Rijnland; ROC Mondriaan",Veiligheid & defensie,,2,3,5,7,8,8,OCS
+25690,Beveiliger,"MBO Rijnland; ROC Mondriaan",Veiligheid & defensie,veiligheid-beveiliging,5,3,5,7,8,8,OCS
+25690,Beveiliger 2,"MBO Rijnland; ROC Mondriaan",Veiligheid & defensie,veiligheid-beveiliging,5,3,5,7,8,8,OCS
+25690,"Beveiliger, orientatie Koninklijke Marechaussee","MBO Rijnland; ROC Mondriaan",Veiligheid & defensie,veiligheid-beveiliging,5,3,5,7,8,8,OCS
+25691,Beveiliger 3,"MBO Rijnland; ROC Mondriaan",Veiligheid & defensie,veiligheid-beveiliging,5,3,5,7,8,8,OCS
+25691,Beveiliger niveau 3,"MBO Rijnland; ROC Mondriaan",Veiligheid & defensie,veiligheid-beveiliging,5,3,5,7,8,8,OCS
 25695,Doktersassistent,MBO Rijnland,Zorg & welzijn,zorg-welzijn-contact,3,4,3,10,4,6,SCI
 25696,Pedagogisch medewerker kinderopvang,"ROC Da Vinci College; ROC Mondriaan; Zadkine",Zorg & welzijn,zorg-welzijn-contact,3,4,3,10,4,6,SCI
 25696,Pedagogisch medewerker kinderopvang praktijkroute,"ROC Da Vinci College; ROC Mondriaan; Zadkine",Zorg & welzijn,zorg-welzijn-contact,3,4,3,10,4,6,SCI
@@ -113,10 +113,10 @@ crebo,opleiding,school,sector,categorie,R,I,A,S,O,C,code
 25725,Financieel administratief medewerker,"ROC Da Vinci College; ROC van Amsterdam; Zadkine",Administratie & juridisch,,3,4,2,8,8,10,CSO
 25726,HR professional,"ROC Da Vinci College; ROC Mondriaan; Zadkine",Administratie & juridisch,,3,4,2,8,8,10,CSO
 25726,MBO Rechten,"ROC Da Vinci College; ROC Mondriaan; Zadkine",Administratie & juridisch,,3,4,2,8,8,10,CSO
-25727,Brede opleiding: Marketing & Sales,"Euro College; MBO Rijnland; ROC Da Vinci College; ROC Mondriaan; ROC van Amsterdam; Zadkine",Commercieel & ondernemend,,3,4,2,8,8,10,CSO
-25727,E-Commerce & Marketing,"Euro College; MBO Rijnland; ROC Da Vinci College; ROC Mondriaan; ROC van Amsterdam; Zadkine",Commercieel & ondernemend,,3,4,2,8,8,10,CSO
-25727,Marketing & Communicatie,"Euro College; MBO Rijnland; ROC Da Vinci College; ROC Mondriaan; ROC van Amsterdam; Zadkine",Commercieel & ondernemend,,3,4,2,8,8,10,CSO
-25727,Marketing & Communication Specialist,"Euro College; MBO Rijnland; ROC Da Vinci College; ROC Mondriaan; ROC van Amsterdam; Zadkine",Commercieel & ondernemend,,3,4,2,8,8,10,CSO
+25727,Brede opleiding: Marketing & Sales,"Euro College; MBO Rijnland; ROC Da Vinci College; ROC Mondriaan; ROC van Amsterdam; Zadkine",Commercieel & ondernemend,marketing-commercieel-creatief,2,5,6,6,9,5,OAS
+25727,E-Commerce & Marketing,"Euro College; MBO Rijnland; ROC Da Vinci College; ROC Mondriaan; ROC van Amsterdam; Zadkine",Commercieel & ondernemend,marketing-commercieel-creatief,2,5,6,6,9,5,OAS
+25727,Marketing & Communicatie,"Euro College; MBO Rijnland; ROC Da Vinci College; ROC Mondriaan; ROC van Amsterdam; Zadkine",Commercieel & ondernemend,marketing-commercieel-creatief,2,5,6,6,9,5,OAS
+25727,Marketing & Communication Specialist,"Euro College; MBO Rijnland; ROC Da Vinci College; ROC Mondriaan; ROC van Amsterdam; Zadkine",Commercieel & ondernemend,marketing-commercieel-creatief,2,5,6,6,9,5,OAS
 25728,Management Assistant,"ROC Mondriaan; Zadkine",Administratie & juridisch,,3,4,2,8,8,10,CSO
 25728,Office & Management Support Specialist,"ROC Mondriaan; Zadkine",Administratie & juridisch,,3,4,2,8,8,10,CSO
 25730,Dier en management,"Lentiz; Yuverta MBO","Voeding, natuur & dier",,9,3,3,8,8,6,RSO
@@ -218,7 +218,7 @@ crebo,opleiding,school,sector,categorie,R,I,A,S,O,C,code
 25874,Commercieel medewerker,"ROC Mondriaan; ROC van Amsterdam; Zadkine",Commercieel & ondernemend,,3,6,4,8,10,5,OSI
 25874,Junior accountmanager,"ROC Mondriaan; ROC van Amsterdam; Zadkine",Commercieel & ondernemend,,3,6,4,8,10,5,OSI
 25876,010 E-com Academy,"Euro College; MBO Rijnland; ROC Da Vinci College; ROC van Amsterdam; Zadkine",Commercieel & ondernemend,,3,6,4,8,10,5,OSI
-25876,E-Commerce & Marketing,"Euro College; MBO Rijnland; ROC Da Vinci College; ROC van Amsterdam; Zadkine",Commercieel & ondernemend,,3,6,4,8,10,5,OSI
+25876,E-Commerce & Marketing,"Euro College; MBO Rijnland; ROC Da Vinci College; ROC van Amsterdam; Zadkine",Commercieel & ondernemend,marketing-commercieel-creatief,2,5,6,6,9,5,OAS
 25876,E-commerce Specialist,"Euro College; MBO Rijnland; ROC Da Vinci College; ROC van Amsterdam; Zadkine",Commercieel & ondernemend,,3,6,4,8,10,5,OSI
 25877,Accountmanager,"ROC Da Vinci College; ROC Mondriaan; ROC van Amsterdam; Zadkine",Commercieel & ondernemend,,3,6,4,8,10,5,OSI
 25877,Junior accountmanager,"ROC Da Vinci College; ROC Mondriaan; ROC van Amsterdam; Zadkine",Commercieel & ondernemend,,3,6,4,8,10,5,OSI
@@ -361,16 +361,16 @@ crebo,opleiding,school,sector,categorie,R,I,A,S,O,C,code
 27111,Technisch specialist voertuigen en mobiele werktuigen BOL (Bedrijfsauto's),"ROC Da Vinci College; ROC Mondriaan; ROC van Amsterdam",Techniek & maken,techniek-r-i-c-analyse,9,8,2,4,5,8,RIC
 27111,Technisch specialist voertuigen en mobiele werktuigen BOL (Personenauto's),"ROC Da Vinci College; ROC Mondriaan; ROC van Amsterdam",Techniek & maken,techniek-r-i-c-analyse,9,8,2,4,5,8,RIC
 27121,Ondernemer handel en/of diensten,"ROC Da Vinci College; ROC Mondriaan; ROC van Amsterdam",Commercieel & ondernemend,,2,5,3,8,10,7,OSC
-27122,Beveiliger 2,"ROC Da Vinci College; ROC van Amsterdam; Zadkine",Veiligheid & defensie,,2,3,5,7,8,8,OCS
-27122,Beveiliger 2 Koninklijke luchtmacht,"ROC Da Vinci College; ROC van Amsterdam; Zadkine",Veiligheid & defensie,,2,3,5,7,8,8,OCS
-27122,Beveiliger 2 Oriëntatiejaar Koninklijke Marechaussee,"ROC Da Vinci College; ROC van Amsterdam; Zadkine",Veiligheid & defensie,,2,3,5,7,8,8,OCS
-27123,Beveiliger 3,Zadkine,Veiligheid & defensie,,2,3,5,7,8,8,OCS
-27124,Aankomend militair grondoptreden,"ROC Mondriaan; Zadkine",Veiligheid & defensie,,2,3,2,8,6,7,SCO
+27122,Beveiliger 2,"ROC Da Vinci College; ROC van Amsterdam; Zadkine",Veiligheid & defensie,veiligheid-beveiliging,5,3,5,7,8,8,OCS
+27122,Beveiliger 2 Koninklijke luchtmacht,"ROC Da Vinci College; ROC van Amsterdam; Zadkine",Veiligheid & defensie,veiligheid-beveiliging,5,3,5,7,8,8,OCS
+27122,Beveiliger 2 Oriëntatiejaar Koninklijke Marechaussee,"ROC Da Vinci College; ROC van Amsterdam; Zadkine",Veiligheid & defensie,veiligheid-beveiliging,5,3,5,7,8,8,OCS
+27123,Beveiliger 3,Zadkine,Veiligheid & defensie,veiligheid-beveiliging,5,3,5,7,8,8,OCS
+27124,Aankomend militair grondoptreden,"ROC Mondriaan; Zadkine",Veiligheid & defensie,defensie-praktisch,8,3,2,5,6,7,RCO
 27124,VeVa Bedrijfsautotechnicus,"ROC Mondriaan; Zadkine",Veiligheid & defensie,techniek-r-i-c-analyse,9,8,2,4,5,8,RIC
-27125,Aankomend militair maritiem,Zadkine,Veiligheid & defensie,,2,3,2,8,6,7,SCO
-27126,Aankomend onderofficier grondoptreden,"ROC Mondriaan; ROC van Amsterdam; Zadkine",Overig,,2,3,2,8,6,7,SCO
+27125,Aankomend militair maritiem,Zadkine,Veiligheid & defensie,defensie-praktisch,8,3,2,5,6,7,RCO
+27126,Aankomend onderofficier grondoptreden,"ROC Mondriaan; ROC van Amsterdam; Zadkine",Veiligheid & defensie,defensie-praktisch,8,3,2,5,6,7,RCO
 27126,VeVa ICT Support Technician,"ROC Mondriaan; ROC van Amsterdam; Zadkine",ICT & data,ict-beheer-support,6,8,3,4,4,8,ICR
-27127,Aankomend onderofficier Maritiem,Zadkine,Overig,,2,3,2,8,6,7,SCO
+27127,Aankomend onderofficier Maritiem,Zadkine,Veiligheid & defensie,defensie-praktisch,8,3,2,5,6,7,RCO
 27128,010 Academy Beautystylist,"ROC Da Vinci College; ROC Mondriaan; ROC van Amsterdam; Zadkine",Uiterlijke verzorging,hospitality-contact-uitvoerend,5,3,4,9,7,6,SOC
 27128,Baangarantie Junior Hairstylist i.s.m. PVNL,"ROC Da Vinci College; ROC Mondriaan; ROC van Amsterdam; Zadkine",Uiterlijke verzorging,hospitality-contact-uitvoerend,5,3,4,9,7,6,SOC
 27128,Junior Hairstylist (Kapper),"ROC Da Vinci College; ROC Mondriaan; ROC van Amsterdam; Zadkine",Uiterlijke verzorging,hospitality-contact-uitvoerend,5,3,4,9,7,6,SOC

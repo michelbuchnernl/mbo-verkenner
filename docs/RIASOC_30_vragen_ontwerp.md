@@ -181,6 +181,6 @@ De halvering kost dus iets aan trefzekerheid: de sterkste letter wordt 7 tot 10 
 ## 9. Aanbevolen vervolg
 
 1. **Een getekend A-O-plaatje.** Plaatje 64 is samengesteld uit twee bestaande helften. Een nieuw getekend plaatje met één onderwerp (bijvoorbeeld T-shirts verkopen tegenover een T-shirt ontwerpen) kan het vervangen: zelfde bestandsnaam of één regel in `index.html`.
-2. **Dossierprofielen nalopen.** Een aantal opleidingen heeft een eigen profiel dat niet logisch oogt en dat ik niet heb aangepast: Aankomend militair (Realistisch 2, Sociaal 8), Beveiliger (Realistisch 2), Marketing & Communicatie (Conventioneel 10, Artistiek 2). `tests/output/riasoc_classificatie_dump.csv` geeft het volledige overzicht.
+2. **Dossierprofielen nalopen.** Drie groepen zijn op 18 november 2026 gecorrigeerd omdat het dossierprofiel niet logisch was: defensie (Realistisch was 2, Sociaal 8; nu Realistisch 8 voorop), beveiliging (Realistisch van 2 naar 5) en marketing (had het profiel van een administratief medewerker; nu Ondernemend en Artistiek voorop). Ruim 90 opleidingen hebben nog hun eigen dossierprofiel. `tests/output/riasoc_classificatie_dump.csv` geeft het volledige overzicht om na te lopen.
 3. **Beslisvraag bij gelijke stand.** De reserveplaatjes kunnen dienen als één extra vraag wanneer plek 3 en 4 na 30 vragen gelijk staan.
 4. **Meer Intellectueel-opleidingen.** Maar 18 van de 400 opleidingen hebben Intellectueel als hoofdletter. Leerlingen met een I-profiel krijgen daardoor vaak dezelfde ICT-, laboratorium- en mediaopleidingen.

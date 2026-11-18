@@ -92,14 +92,14 @@ Fijnmeting met 60.000 willekeurige klikkers (alleen de telling): plek 1 = R 17.0
 | Meting | Uitkomst |
 |---|---|
 | Verschillende opleidingen getoond | 313 van 400 |
-| Verschillende zestallen | 587 op 600 leerlingen |
+| Verschillende zestallen | 588 op 600 leerlingen |
 | Meest getoonde opleiding | 27037 Standbouwer (14% van de leerlingen) |
 | Aandeel van de 10 meest getoonde | 17% |
 | Sectoren per leerling (van 6) | 3.9 |
 | Scholen per leerling (van 6) | 4.2 |
 | Gemiddelde profielmatch | 62% |
-| Elke sterke letter van de leerling heeft een opleiding | 78% |
-| Hoofdletter opleiding zit in top 3 van leerling | 91% |
+| Elke sterke letter van de leerling heeft een opleiding | 81% |
+| Hoofdletter opleiding zit in top 3 van leerling | 90% |
 | Hoofdletter opleiding zit in top 2 van leerling | 77% |
 | Hoofdletter opleiding hoort bij de 2 laagste letters | 3% |
 
@@ -107,17 +107,17 @@ Verdeling over sectoren (aandeel van alle getoonde opleidingen):
 
 | Sector | Getoond | Aandeel in aanbod |
 |---|---|---|
-| Techniek & maken | 19% | 40% |
+| Techniek & maken | 18% | 40% |
 | Creatief & media | 12% | 7% |
 | Uiterlijke verzorging | 11% | 6% |
+| Commercieel & ondernemend | 11% | 9% |
 | Horeca & toerisme | 10% | 7% |
-| Commercieel & ondernemend | 10% | 9% |
-| Overig | 9% | 4% |
+| Overig | 8% | 4% |
 | ICT & data | 6% | 5% |
 | Voeding, natuur & dier | 5% | 3% |
-| Zorg & welzijn | 4% | 7% |
+| Zorg & welzijn | 5% | 7% |
 | Laboratorium & onderzoek | 4% | 2% |
-| Veiligheid & defensie | 4% | 4% |
+| Veiligheid & defensie | 3% | 4% |
 | Administratie & juridisch | 3% | 4% |
 | Logistiek & transport | 2% | 3% |
 | Onderwijs & sport | 2% | 2% |
@@ -129,12 +129,12 @@ Vaakst getoond:
 | 27037 Standbouwer | 14% |
 | 25717 AV-Specialist | 11% |
 | 25685 Fashion Retailer | 10% |
-| 25688 Fashion Product Coordinator | 10% |
 | 25798 Podium- en evenemententechnicus | 10% |
-| 27005 Specialist Restauratie & Decoratie | 10% |
-| 25686 Fashion Tailor | 10% |
 | 25689 Basismedewerker Fashion | 10% |
+| 25688 Fashion Product Coordinator | 10% |
+| 25686 Fashion Tailor | 10% |
 | 27036 Specialist Decorbouwer | 9% |
+| 27005 Specialist Restauratie & Decoratie | 9% |
 | 25882 Redactiemedewerker | 8% |
 | 25276 Werkvoorbereider elektro | 8% |
 | 27101 Allround interieurvakman (M/V) (woningstofferen) | 8% |
@@ -175,16 +175,16 @@ Elke gesimuleerde leerling heeft verborgen voorkeuren voor de zes letters (met d
 
 | Meting | Uitkomst |
 |---|---|
-| Verschillende opleidingen getoond | 319 van 400 |
-| Verschillende zestallen | 580 op 600 leerlingen |
+| Verschillende opleidingen getoond | 318 van 400 |
+| Verschillende zestallen | 584 op 600 leerlingen |
 | Meest getoonde opleiding | 27037 Standbouwer (14% van de leerlingen) |
 | Aandeel van de 10 meest getoonde | 16% |
 | Sectoren per leerling (van 6) | 3.9 |
 | Scholen per leerling (van 6) | 4.2 |
 | Gemiddelde profielmatch | 66% |
-| Elke sterke letter van de leerling heeft een opleiding | 89% |
+| Elke sterke letter van de leerling heeft een opleiding | 90% |
 | Hoofdletter opleiding zit in top 3 van leerling | 94% |
-| Hoofdletter opleiding zit in top 2 van leerling | 81% |
+| Hoofdletter opleiding zit in top 2 van leerling | 80% |
 | Hoofdletter opleiding hoort bij de 2 laagste letters | 1% |
 
 ## 5. Oude en nieuwe vragenset naast elkaar
@@ -216,16 +216,19 @@ Alleen de telling van de vragen, zonder opleidingen. Gelijke stand is hier met h
 | ict-beheer-support | 12 |
 | hospitality-contact-leiding | 11 |
 | entree-breed-contact-dienstverlening | 11 |
+| veiligheid-beveiliging | 9 |
 | entree-breed-techniek-logistiek | 9 |
 | creatief-media-technisch | 6 |
+| marketing-commercieel-creatief | 5 |
 | ambacht-precisie-vormgeving | 5 |
 | ambacht-materiaal-vormgeving | 4 |
 | vastgoed-organisatie-advies | 4 |
+| defensie-praktisch | 4 |
 | entree-breed-orienterend | 3 |
 | ict-software-development | 3 |
 | ict-software-creatief | 3 |
 | ambacht-service-techniek | 2 |
-| eigen dossierprofiel (geen correctie) | 102 |
+| eigen dossierprofiel (geen correctie) | 84 |
 
-Verschillende RIASOC-profielen in de dataset: 50 op 400 opleidingen. Zie `riasoc_classificatie_dump.csv`.
+Verschillende RIASOC-profielen in de dataset: 51 op 400 opleidingen. Zie `riasoc_classificatie_dump.csv`.
 
