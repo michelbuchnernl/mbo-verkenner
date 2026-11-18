@@ -162,14 +162,14 @@
   <p class="start-sub">Ontdek welke beroepen en MBO-opleidingen bij jou kunnen passen. Kies tijdens de vragen telkens de situatie die jou het meest aanspreekt in het plaatje.</p>
   <div class="start-form"><input type="text" id="inp-name-start" placeholder="Jouw voornaam (optioneel)" autocomplete="given-name"></div>
   <button class="btn btn-primary" onclick="startQuiz()">Start de verkenner →</button>
-  <p class="hint">62 vragen · ca. 10 minuten · er zijn geen goede of foute antwoorden</p>
+  <p class="hint">30 vragen · ca. 5 minuten · er zijn geen goede of foute antwoorden</p>
 </div>
 
 <div id="screen-question" class="screen">
   <div class="q-hdr">
     <div class="prog-bg"><div class="prog-fill" id="prog-fill" style="width:0%"></div></div>
     <div class="prog-info">
-      <span>Vraag <strong id="q-num">1</strong> van 62</span>
+      <span>Vraag <strong id="q-num">1</strong> van <span id="q-total">30</span></span>
       <span style="font-size:.62rem;letter-spacing:.12em;text-transform:uppercase;color:var(--lb)">RIASOC</span>
     </div>
   </div>
@@ -287,139 +287,52 @@
 const DB_URL = '';
 
 // ============================================================
-// Lokale vraagafbeeldingen uit Work/RIASOC/repo 62.
-// De HTML kan naast assets/riasoc draaien zonder Google Drive.
+// 30 vragen, gekozen uit de 62 bestaande plaatjes (assets/riasoc).
+//
+// Ontwerp (zie docs/RIASOC_30_vragen_ontwerp.md):
+// - elke RIASOC-letter komt precies 10x voor: 5x links (A) en 5x rechts (B);
+// - elk lettertweetal komt 2x voor, behalve A-O en S-C (1x, er is maar een
+//   bruikbaar plaatje) en A-S en O-C (3x) om dat te compenseren;
+// - vraag 1-15 en vraag 16-30 zijn elk een complete ronde, zodat geen letter
+//   in twee opeenvolgende vragen voorkomt;
+// - een keuze telt als 1 punt voor de gekozen letter, zonder bijpunten.
+// `src` is het nummer van het plaatje in de oorspronkelijke scenebank van 62.
 const IMG_BASE = 'assets/riasoc/';
-const IMG = [
-  null,
-  /* Q01 */ "01-fiets-repareren-of-fiets-uitleggen.png",
-  /* Q02 */ "02-evenement-opbouwen-of-bezoekers-ontvangen.png",
-  /* Q03 */ "03-machine-repareren-of-gebruiker-helpen.png",
-  /* Q04 */ "04-bankje-bouwen-of-ruzie-helpen-oplossen.png",
-  /* Q05 */ "05-speeltoestel-repareren-of-op-kinderen-letten.png",
-  /* Q06 */ "06-robot-analyseren-of-team-aansturen.png",
-  /* Q07 */ "07-oplossingen-vergelijken-of-een-oplossing-presenteren.png",
-  /* Q08 */ "08-website-bestuderen-of-website-pitchen.png",
-  /* Q09 */ "09-data-lezen-of-keuze-leiden.png",
-  /* Q10 */ "10-probleem-observeren-of-team-in-beweging-krijgen.png",
-  /* Q11 */ "11-vrije-poster-maken-of-template-volgen.png",
-  /* Q12 */ "12-creatieve-presentatie-of-materiaal-sorteren.png",
-  /* Q13 */ "13-kostuum-verzinnen-of-kostuums-beheren.png",
-  /* Q14 */ "14-website-experimenteren-of-website-structureren.png",
-  /* Q15 */ "15-tentoonstelling-improviseren-of-labels-controleren.png",
-  /* Q16 */ "16-stevig-krukje-of-bijzonder-krukje.png",
-  /* Q17 */ "17-lamp-repareren-of-lamp-transformeren.png",
-  /* Q18 */ "18-wand-bouwen-of-kamer-stylen.png",
-  /* Q19 */ "19-praktische-haak-of-expressieve-haak.png",
-  /* Q20 */ "20-geluid-aansluiten-of-opbouw-leiden.png",
-  /* Q21 */ "21-pomp-repareren-of-tuinproject-coordineren.png",
-  /* Q22 */ "22-stand-bouwen-of-stand-presenteren.png",
-  /* Q23 */ "23-machine-draaien-of-team-aanjagen.png",
-  /* Q24 */ "24-water-onderzoeken-of-bewoner-te-woord-staan.png",
-  /* Q25 */ "25-app-analyseren-of-app-begeleiden.png",
-  /* Q26 */ "26-storing-onderzoeken-of-gebruiker-geruststellen.png",
-  /* Q27 */ "27-verklaring-opbouwen-of-persoon-begeleiden.png",
-  /* Q28 */ "28-oorzaak-zoeken-of-stappen-controleren.png",
-  /* Q29 */ "29-data-verkennen-of-data-sorteren.png",
-  /* Q30 */ "30-ideeen-testen-of-procedure-volgen.png",
-  /* Q31 */ "31-machine-diagnosticeren-of-machine-monitoren.png",
-  /* Q32 */ "32-schoolfotoreeks-of-leerling-ondersteunen.png",
-  /* Q33 */ "33-buurtmuur-of-buurtkring.png",
-  /* Q34 */ "34-scene-maken-of-conflict-oplossen.png",
-  /* Q35 */ "35-verhaal-voor-bezoekers-of-bezoekers-helpen.png",
-  /* Q36 */ "36-kraam-leiden-of-kraam-beheren.png",
-  /* Q37 */ "37-sponsor-winnen-of-formulieren-afronden.png",
-  /* Q38 */ "38-kans-grijpen-of-plan-vasthouden.png",
-  /* Q39 */ "39-gedurfd-voorstel-of-duidelijke-planning.png",
-  /* Q40 */ "40-motor-openmaken-of-schema-bestuderen.png",
-  /* Q41 */ "41-snel-bouwen-of-eerst-nadenken.png",
-  /* Q42 */ "42-leren-door-doen-of-leren-door-vergelijken.png",
-  /* Q43 */ "43-storing-oplossen-of-oorzaak-achterhalen.png",
-  /* Q44 */ "44-wind-uitleggen-of-wind-verbeelden.png",
-  /* Q45 */ "45-juiste-antwoord-of-originele-interpretatie.png",
-  /* Q46 */ "46-technische-tekening-of-emotionele-beleving.png",
-  /* Q47 */ "47-schema-begrijpen-of-idee-verbeelden.png",
-  /* Q48 */ "48-soundtrack-maken-of-makers-ondersteunen.png",
-  /* Q49 */ "49-campagne-ontwerpen-of-gesprek-leiden.png",
-  /* Q50 */ "50-een-coachen-of-velen-leiden.png",
-  /* Q51 */ "51-goed-luisteren-of-snel-overtuigen.png",
-  /* Q52 */ "52-mensen-ondersteunen-of-team-motiveren.png",
-  /* Q53 */ "53-stap-voor-stap-helpen-of-team-in-actie-zetten.png",
-  /* Q54 */ "54-kans-najagen-of-proces-bewaken.png",
-  /* Q55 */ "55-met-energie-leiden-of-met-zorg-controleren.png",
-  /* Q56 */ "56-voorraad-ordenen-of-opstelling-bouwen.png",
-  /* Q57 */ "57-codes-controleren-of-apparatuur-installeren.png",
-  /* Q58 */ "58-logboek-bijwerken-of-onderhoud-doen.png",
-  /* Q59 */ "59-data-structureren-of-betekenis-zoeken.png",
-  /* Q60 */ "60-resultaten-archiveren-of-patronen-zoeken.png",
-  /* Q61 */ "61-verzoek-verwerken-of-persoon-helpen.png",
-  /* Q62 */ "62-bij-een-blijven-of-de-groep-organiseren.png",
-];
-
 const QS=[
-  {n:1,t:"Fiets maken of fiets uitleggen",lA:"Fiets maken",lB:"Fiets uitleggen",wA:{R:3,C:1},wB:{S:3,O:1}},
-  {n:2,t:"Evenement klaarzetten of bezoekers helpen",lA:"Evenement klaarzetten",lB:"Bezoekers helpen",wA:{R:3,C:1},wB:{S:3,O:1}},
-  {n:3,t:"Machine maken of gebruiker helpen",lA:"Machine maken",lB:"Gebruiker helpen",wA:{R:3,C:1},wB:{S:3,O:1}},
-  {n:4,t:"Bankje maken of ruzie helpen oplossen",lA:"Bankje maken",lB:"Ruzie oplossen",wA:{R:3,C:1},wB:{S:3,O:1}},
-  {n:5,t:"Speeltoestel maken of op kinderen letten",lA:"Speeltoestel maken",lB:"Op kinderen letten",wA:{R:3,C:1},wB:{S:3,O:1}},
-  {n:6,t:"Robot onderzoeken of team leiden",lA:"Robot onderzoeken",lB:"Team leiden",wA:{I:3,A:1,C:1},wB:{S:1,O:3,C:1}},
-  {n:7,t:"Oplossingen vergelijken of een keuze uitleggen",lA:"Oplossingen vergelijken",lB:"Keuze uitleggen",wA:{I:3,A:1,C:1},wB:{S:1,O:3,C:1}},
-  {n:8,t:"Website bekijken of website idee verkopen",lA:"Website bekijken",lB:"Website idee verkopen",wA:{I:3,A:1,C:1},wB:{S:1,O:3,C:1}},
-  {n:9,t:"Gegevens bekijken of keuze leiden",lA:"Gegevens bekijken",lB:"Keuze leiden",wA:{I:3,A:1,C:1},wB:{S:1,O:3,C:1}},
-  {n:10,t:"Probleem bekijken of team aan het werk zetten",lA:"Probleem bekijken",lB:"Team aan het werk",wA:{I:3,A:1,C:1},wB:{S:1,O:3,C:1}},
-  {n:11,t:"Eigen poster maken of voorbeeld volgen",lA:"Eigen poster maken",lB:"Voorbeeld volgen",wA:{I:1,A:3},wB:{O:1,C:3}},
-  {n:12,t:"Creatieve presentatie maken of materiaal sorteren",lA:"Creatieve presentatie",lB:"Materiaal sorteren",wA:{I:1,A:3},wB:{O:1,C:3}},
-  {n:13,t:"Kostuum bedenken of kostuums bijhouden",lA:"Kostuum bedenken",lB:"Kostuums bijhouden",wA:{I:1,A:3},wB:{O:1,C:3}},
-  {n:14,t:"Website uitproberen of website netjes indelen",lA:"Website uitproberen",lB:"Website indelen",wA:{I:1,A:3},wB:{O:1,C:3}},
-  {n:15,t:"Tentoonstelling snel inrichten of kaartjes controleren",lA:"Snel inrichten",lB:"Kaartjes controleren",wA:{I:1,A:3},wB:{O:1,C:3}},
-  {n:16,t:"Stevig krukje maken of apart krukje maken",lA:"Stevig krukje",lB:"Apart krukje",wA:{R:3,C:1},wB:{I:1,A:3}},
-  {n:17,t:"Lamp maken of lamp omtoveren",lA:"Lamp maken",lB:"Lamp omtoveren",wA:{R:3,C:1},wB:{I:1,A:3}},
-  {n:18,t:"Wand maken of kamer mooi inrichten",lA:"Wand maken",lB:"Kamer inrichten",wA:{R:3,C:1},wB:{I:1,A:3}},
-  {n:19,t:"Handige haak maken of opvallende haak maken",lA:"Handige haak",lB:"Opvallende haak",wA:{R:3,C:1},wB:{I:1,A:3}},
-  {n:20,t:"Geluid aansluiten of opbouw leiden",lA:"Geluid aansluiten",lB:"Opbouw leiden",wA:{R:3,C:1},wB:{S:1,O:3}},
-  {n:21,t:"Pomp maken of tuinproject regelen",lA:"Pomp maken",lB:"Tuinproject regelen",wA:{R:3,C:1},wB:{S:1,O:3}},
-  {n:22,t:"Stand maken of stand presenteren",lA:"Stand maken",lB:"Stand presenteren",wA:{R:3,C:1},wB:{S:1,O:3}},
-  {n:23,t:"Machine bedienen of team motiveren",lA:"Machine bedienen",lB:"Team motiveren",wA:{R:3,C:1},wB:{S:1,O:3}},
-  {n:24,t:"Water onderzoeken of met bewoner praten",lA:"Water onderzoeken",lB:"Bewoner praten",wA:{I:3,C:1},wB:{S:3,O:1}},
-  {n:25,t:"App onderzoeken of iemand met app helpen",lA:"App onderzoeken",lB:"App helpen",wA:{I:3,C:1},wB:{S:3,O:1}},
-  {n:26,t:"Storing zoeken of gebruiker rustig helpen",lA:"Storing zoeken",lB:"Gebruiker helpen",wA:{I:3,C:1},wB:{S:3,O:1}},
-  {n:27,t:"Uitleg ontwerpen of stap voor stap begeleiden",lA:"Uitleg ontwerpen",lB:"Stap voor stap begeleiden",wA:{I:3,C:1},wB:{S:3,O:1}},
-  {n:28,t:"Oorzaak zoeken of stappen checken",lA:"Oorzaak zoeken",lB:"Stappen checken",wA:{I:3,A:1},wB:{R:1,C:3}},
-  {n:29,t:"Gegevens bekijken of gegevens sorteren",lA:"Gegevens bekijken",lB:"Gegevens sorteren",wA:{I:3,A:1},wB:{R:1,C:3}},
-  {n:30,t:"Ideeen uitproberen of stappenplan volgen",lA:"Ideeen uitproberen",lB:"Stappenplan volgen",wA:{I:3,A:1},wB:{R:1,C:3}},
-  {n:31,t:"Machineprobleem zoeken of machine in de gaten houden",lA:"Probleem zoeken",lB:"Machine in de gaten",wA:{I:3,A:1},wB:{R:1,C:3}},
-  {n:32,t:"Schoolfotoserie maken of leerling helpen",lA:"Fotoserie maken",lB:"Leerling helpen",wA:{I:1,A:3},wB:{S:3,O:1}},
-  {n:33,t:"Buurtmuur maken of buurtgesprek houden",lA:"Buurtmuur maken",lB:"Buurtgesprek houden",wA:{I:1,A:3},wB:{S:3,O:1}},
-  {n:34,t:"Toneelscene maken of ruzie oplossen",lA:"Toneelscene maken",lB:"Ruzie oplossen",wA:{I:1,A:3},wB:{S:3,O:1}},
-  {n:35,t:"Verhaal maken of bezoekers helpen",lA:"Verhaal maken",lB:"Bezoekers helpen",wA:{I:1,A:3},wB:{S:3,O:1}},
-  {n:36,t:"Kraam leiden of kraam bijhouden",lA:"Kraam leiden",lB:"Kraam bijhouden",wA:{S:1,O:3},wB:{R:1,C:3}},
-  {n:37,t:"Sponsor overtuigen of formulieren invullen",lA:"Sponsor overtuigen",lB:"Formulieren invullen",wA:{S:1,O:3},wB:{R:1,C:3}},
-  {n:38,t:"Kans pakken of plan volhouden",lA:"Kans pakken",lB:"Plan volhouden",wA:{S:1,O:3},wB:{R:1,C:3}},
-  {n:39,t:"Spannend idee voorstellen of duidelijk plan maken",lA:"Spannend idee",lB:"Duidelijk plan",wA:{S:1,O:3},wB:{R:1,C:3}},
-  {n:40,t:"Motor openmaken of schema bekijken",lA:"Motor openmaken",lB:"Schema bekijken",wA:{R:2,I:1,C:1},wB:{R:1,I:2,A:1}},
-  {n:41,t:"Snel bouwen of eerst nadenken",lA:"Snel bouwen",lB:"Eerst nadenken",wA:{R:2,I:1,C:1},wB:{R:1,I:2,A:1}},
-  {n:42,t:"Leren door doen of leren door vergelijken",lA:"Leren door doen",lB:"Leren door vergelijken",wA:{R:2,I:1,C:1},wB:{R:1,I:2,A:1}},
-  {n:43,t:"Storing oplossen of oorzaak vinden",lA:"Storing oplossen",lB:"Oorzaak vinden",wA:{R:2,I:1,C:1},wB:{R:1,I:2,A:1}},
-  {n:44,t:"Wind uitleggen of wind in beeld brengen",lA:"Wind uitleggen",lB:"Wind verbeelden",wA:{I:2,A:1,C:1},wB:{I:1,A:2,S:1}},
-  {n:45,t:"Goed antwoord zoeken of eigen uitleg maken",lA:"Goed antwoord zoeken",lB:"Eigen uitleg maken",wA:{I:2,A:1,C:1},wB:{I:1,A:2,S:1}},
-  {n:46,t:"Technische tekening maken of gevoel laten zien",lA:"Technische tekening",lB:"Gevoel laten zien",wA:{I:2,A:1,C:1},wB:{I:1,A:2,S:1}},
-  {n:47,t:"Schema begrijpen of idee verbeelden",lA:"Schema begrijpen",lB:"Idee verbeelden",wA:{I:2,A:1,C:1},wB:{I:1,A:2,S:1}},
-  {n:48,t:"Muziek maken of makers helpen",lA:"Muziek maken",lB:"Makers helpen",wA:{A:3,I:1},wB:{S:3,A:1}},
-  {n:49,t:"Campagne maken of gesprek leiden",lA:"Campagne maken",lB:"Gesprek leiden",wA:{A:3,O:1},wB:{A:1,S:2,O:1}},
-  {n:50,t:"Een persoon helpen of groep leiden",lA:"Een persoon helpen",lB:"Groep leiden",wA:{S:3,A:1},wB:{O:3,S:1}},
-  {n:51,t:"Goed luisteren of snel overtuigen",lA:"Goed luisteren",lB:"Snel overtuigen",wA:{S:3,A:1},wB:{O:3,S:1}},
-  {n:52,t:"Mensen helpen of team motiveren",lA:"Mensen helpen",lB:"Team motiveren",wA:{S:3,A:1},wB:{O:3,S:1}},
-  {n:53,t:"Stap voor stap helpen of team in actie zetten",lA:"Stap voor stap helpen",lB:"Team in actie zetten",wA:{S:3,C:1},wB:{O:3,S:1}},
-  {n:54,t:"Kans najagen of werkproces in de gaten houden",lA:"Kans najagen",lB:"Werkproces bewaken",wA:{O:3,S:1},wB:{C:3,R:1}},
-  {n:55,t:"Energiek leiden of zorgvuldig controleren",lA:"Energiek leiden",lB:"Zorgvuldig controleren",wA:{O:3,S:1},wB:{C:3,I:1}},
-  {n:56,t:"Voorraad netjes leggen of opstelling bouwen",lA:"Voorraad leggen",lB:"Opstelling bouwen",wA:{C:3,R:1},wB:{R:3,I:1}},
-  {n:57,t:"Codes checken of apparatuur plaatsen",lA:"Codes checken",lB:"Apparatuur plaatsen",wA:{C:3,I:1},wB:{R:3,I:1}},
-  {n:58,t:"Logboek bijwerken of onderhoud doen",lA:"Logboek bijwerken",lB:"Onderhoud doen",wA:{C:3,R:1},wB:{R:3,I:1}},
-  {n:59,t:"Gegevens netjes zetten of betekenis zoeken",lA:"Gegevens zetten",lB:"Betekenis zoeken",wA:{C:3,I:1},wB:{I:3,A:1}},
-  {n:60,t:"Resultaten opbergen of patronen zoeken",lA:"Resultaten opbergen",lB:"Patronen zoeken",wA:{C:3,R:1},wB:{I:3,A:1}},
-  {n:61,t:"Hulpvraag afhandelen of persoon helpen",lA:"Hulpvraag afhandelen",lB:"Persoon helpen",wA:{C:3,O:1},wB:{S:3,O:1}},
-  {n:62,t:"Bij een persoon blijven of groep regelen",lA:"Bij een persoon blijven",lB:"Groep regelen",wA:{S:3,A:1},wB:{O:3,S:1}}
+  {n:1, src:5, a:'R',b:'S',lA:"Speeltoestel maken",lB:"Op kinderen letten",t:"Speeltoestel maken of op kinderen letten",img:"05-speeltoestel-repareren-of-op-kinderen-letten.png"},
+  {n:2, src:28,a:'I',b:'C',lA:"Oorzaak zoeken",lB:"Stappen checken",t:"Oorzaak zoeken of stappen checken",img:"28-oorzaak-zoeken-of-stappen-controleren.png"},
+  {n:3, src:49,a:'A',b:'O',lA:"Campagne ontwerpen",lB:"Mensen meekrijgen",t:"Campagne ontwerpen of mensen meekrijgen",img:"49-campagne-ontwerpen-of-gesprek-leiden.png"},
+  {n:4, src:56,a:'C',b:'R',lA:"Voorraad ordenen",lB:"Opstelling bouwen",t:"Voorraad ordenen of opstelling bouwen",img:"56-voorraad-ordenen-of-opstelling-bouwen.png"},
+  {n:5, src:32,a:'A',b:'S',lA:"Fotoserie maken",lB:"Leerling helpen",t:"Fotoserie maken of leerling helpen",img:"32-schoolfotoreeks-of-leerling-ondersteunen.png"},
+  {n:6, src:6, a:'I',b:'O',lA:"Robot onderzoeken",lB:"Team leiden",t:"Robot onderzoeken of team leiden",img:"06-robot-analyseren-of-team-aansturen.png"},
+  {n:7, src:11,a:'C',b:'A',lA:"Voorbeeld volgen",lB:"Eigen poster maken",t:"Voorbeeld volgen of eigen poster maken",img:"11-template-volgen-of-vrije-poster-maken.png",swapped:true},
+  {n:8, src:50,a:'S',b:'O',lA:"Eén persoon helpen",lB:"Groep leiden",t:"Eén persoon helpen of groep leiden",img:"50-een-coachen-of-velen-leiden.png"},
+  {n:9, src:40,a:'R',b:'I',lA:"Motor openmaken",lB:"Schema bekijken",t:"Motor openmaken of schema bekijken",img:"40-motor-openmaken-of-schema-bestuderen.png"},
+  {n:10,src:61,a:'C',b:'S',lA:"Hulpvraag verwerken",lB:"Persoon helpen",t:"Hulpvraag verwerken of persoon helpen",img:"61-verzoek-verwerken-of-persoon-helpen.png"},
+  {n:11,src:44,a:'I',b:'A',lA:"Wind uitleggen",lB:"Wind verbeelden",t:"Wind uitleggen of wind in beeld brengen",img:"44-wind-uitleggen-of-wind-verbeelden.png"},
+  {n:12,src:20,a:'O',b:'R',lA:"Opbouw leiden",lB:"Geluid aansluiten",t:"Opbouw leiden of geluid aansluiten",img:"20-opbouw-leiden-of-geluid-aansluiten.png",swapped:true},
+  {n:13,src:24,a:'S',b:'I',lA:"Met bewoner praten",lB:"Water onderzoeken",t:"Met bewoner praten of water onderzoeken",img:"24-bewoner-te-woord-staan-of-water-onderzoeken.png",swapped:true},
+  {n:14,src:36,a:'O',b:'C',lA:"Kraam leiden",lB:"Kraam bijhouden",t:"Kraam leiden of kraam bijhouden",img:"36-kraam-leiden-of-kraam-beheren.png"},
+  {n:15,src:16,a:'A',b:'R',lA:"Apart krukje maken",lB:"Stevig krukje maken",t:"Apart krukje maken of stevig krukje maken",img:"16-bijzonder-krukje-of-stevig-krukje.png",swapped:true},
+  {n:16,src:25,a:'I',b:'S',lA:"App onderzoeken",lB:"Iemand met app helpen",t:"App onderzoeken of iemand met de app helpen",img:"25-app-analyseren-of-app-begeleiden.png"},
+  {n:17,src:37,a:'O',b:'C',lA:"Sponsor overtuigen",lB:"Formulieren invullen",t:"Sponsor overtuigen of formulieren invullen",img:"37-sponsor-winnen-of-formulieren-afronden.png"},
+  {n:18,src:18,a:'R',b:'A',lA:"Wand bouwen",lB:"Kamer inrichten",t:"Wand bouwen of kamer mooi inrichten",img:"18-wand-bouwen-of-kamer-stylen.png"},
+  {n:19,src:51,a:'S',b:'O',lA:"Goed luisteren",lB:"Groep overtuigen",t:"Goed luisteren of groep overtuigen",img:"51-goed-luisteren-of-snel-overtuigen.png"},
+  {n:20,src:59,a:'C',b:'I',lA:"Gegevens invoeren",lB:"Betekenis zoeken",t:"Gegevens invoeren of betekenis zoeken",img:"59-data-structureren-of-betekenis-zoeken.png"},
+  {n:21,src:33,a:'A',b:'S',lA:"Buurtmuur schilderen",lB:"Buurtgesprek houden",t:"Buurtmuur schilderen of buurtgesprek houden",img:"33-buurtmuur-of-buurtkring.png"},
+  {n:22,src:21,a:'R',b:'O',lA:"Pomp maken",lB:"Tuinproject regelen",t:"Pomp maken of tuinproject regelen",img:"21-pomp-repareren-of-tuinproject-coordineren.png"},
+  {n:23,src:45,a:'I',b:'A',lA:"Goed antwoord zoeken",lB:"Eigen kunstwerk maken",t:"Goed antwoord zoeken of eigen kunstwerk maken",img:"45-juiste-antwoord-of-originele-interpretatie.png"},
+  {n:24,src:57,a:'C',b:'R',lA:"Codes checken",lB:"Apparatuur plaatsen",t:"Codes checken of apparatuur plaatsen",img:"57-codes-controleren-of-apparatuur-installeren.png"},
+  {n:25,src:34,a:'S',b:'A',lA:"Ruzie oplossen",lB:"Toneelscène spelen",t:"Ruzie oplossen of toneelscène spelen",img:"34-conflict-oplossen-of-scene-maken.png",swapped:true},
+  {n:26,src:8, a:'O',b:'I',lA:"Website-idee verkopen",lB:"Website onderzoeken",t:"Website-idee verkopen of website onderzoeken",img:"08-website-pitchen-of-website-bestuderen.png",swapped:true},
+  {n:27,src:13,a:'A',b:'C',lA:"Kostuum bedenken",lB:"Kostuums bijhouden",t:"Kostuum bedenken of kostuums bijhouden",img:"13-kostuum-verzinnen-of-kostuums-beheren.png"},
+  {n:28,src:42,a:'R',b:'I',lA:"Leren door doen",lB:"Leren door vergelijken",t:"Leren door doen of leren door vergelijken",img:"42-leren-door-doen-of-leren-door-vergelijken.png"},
+  {n:29,src:55,a:'O',b:'C',lA:"Energiek leiden",lB:"Zorgvuldig controleren",t:"Energiek leiden of zorgvuldig controleren",img:"55-met-energie-leiden-of-met-zorg-controleren.png"},
+  {n:30,src:1, a:'S',b:'R',lA:"Fiets uitleggen",lB:"Fiets maken",t:"Fiets uitleggen of fiets maken",img:"01-fiets-uitleggen-of-fiets-repareren.png",swapped:true}
 ];
+// Een keuze is 1 punt voor de letter van de gekozen kant.
+QS.forEach(q=>{q.wA={[q.a]:1};q.wB={[q.b]:1};});
+const QS_BY_N=Object.fromEntries(QS.map(q=>[q.n,q]));
 
 
 const D=['R','I','A','S','O','C'];
@@ -499,31 +412,58 @@ function hexDistance(a,b){
 }
 function enrichQuestions(){
   QS.forEach(q=>{
-    const a=primaryDims(q.wA), b=primaryDims(q.wB);
-    q.pair = a[0]+'-'+b[0];
-    q.pairType = PAIR_TYPE_BY_DISTANCE[hexDistance(a[0],b[0])] || 'unknown';
+    q.pair = q.a+'-'+q.b;
+    q.pairType = PAIR_TYPE_BY_DISTANCE[hexDistance(q.a,q.b)] || 'unknown';
     q.expectedType = q.pairType;
-    q.id = IMG[q.n] || '';
+    q.id = q.img || '';
   });
 }
 function validateQuestions(){
-  return QS.map(q=>{
+  return QS.map((q,i)=>{
     const a=primaryDims(q.wA), b=primaryDims(q.wB);
     const pair=a[0]+'-'+b[0];
     const expectedType=PAIR_TYPE_BY_DISTANCE[hexDistance(a[0],b[0])] || 'unknown';
     const problems=[];
-    if(q.n<1||q.n>62) problems.push('nummer buiten 1-62');
+    if(q.n!==i+1) problems.push('nummer klopt niet met volgorde');
     if(!q.id) problems.push('afbeelding ontbreekt');
+    if(!D.includes(q.a)||!D.includes(q.b)||q.a===q.b) problems.push('ongeldig lettertweetal '+q.a+'/'+q.b);
     if(a.length!==1) problems.push('A heeft geen unieke hoofddimensie: '+a.join('/'));
     if(b.length!==1) problems.push('B heeft geen unieke hoofddimensie: '+b.join('/'));
     if(q.pair!==pair) problems.push('pair mismatch '+q.pair+' != '+pair);
     if(q.pairType!==expectedType) problems.push('pairType mismatch '+q.pairType+' != '+expectedType);
     if(q.expectedType!==expectedType) problems.push('expectedType mismatch '+q.expectedType+' != '+expectedType);
-    return {n:q.n,pair:q.pair,pairType:q.pairType,expectedType:q.expectedType,img:q.id,status:problems.length?'error':'ok',problems};
+    return {n:q.n,src:q.src,pair:q.pair,pairType:q.pairType,expectedType:q.expectedType,img:q.id,status:problems.length?'error':'ok',problems};
   });
+}
+// Controleert de balans van de hele vragenset, niet van een losse vraag.
+function validateDesign(){
+  const count=()=>Object.fromEntries(D.map(d=>[d,0]));
+  const total=count(),left=count(),right=count(),pairs={},types={adjacent:0,'skip-one':0,opposite:0};
+  const problems=[];
+  let sharedNeighbours=0;
+  QS.forEach((q,i)=>{
+    total[q.a]++;total[q.b]++;left[q.a]++;right[q.b]++;
+    const key=[q.a,q.b].sort((x,y)=>D.indexOf(x)-D.indexOf(y)).join('-');
+    pairs[key]=(pairs[key]||0)+1;
+    types[q.pairType]=(types[q.pairType]||0)+1;
+    const prev=QS[i-1];
+    if(prev&&[prev.a,prev.b].some(d=>d===q.a||d===q.b)) sharedNeighbours++;
+  });
+  const perDim=QS.length*2/D.length;
+  D.forEach(d=>{
+    if(total[d]!==perDim) problems.push(d+' komt '+total[d]+'x voor in plaats van '+perDim+'x');
+    if(left[d]!==right[d]) problems.push(d+' staat '+left[d]+'x links en '+right[d]+'x rechts');
+  });
+  const missing=[];
+  D.forEach((x,i)=>D.slice(i+1).forEach(y=>{if(!pairs[x+'-'+y]) missing.push(x+'-'+y);}));
+  if(missing.length) problems.push('tweetal ontbreekt: '+missing.join(', '));
+  if(new Set(QS.map(q=>q.src)).size!==QS.length) problems.push('een plaatje wordt dubbel gebruikt');
+  if(sharedNeighbours) problems.push(sharedNeighbours+'x dezelfde letter in twee opeenvolgende vragen');
+  return {questions:QS.length,total,left,right,pairs,types,problems,ok:problems.length===0};
 }
 enrichQuestions();
 window.validateQuestions = validateQuestions;
+window.validateDesign = validateDesign;
 
 const MBO=[
   {o:"Management transport en logistiek",c:"23310",s:"Zadkine",l:"Zadkine Prins Alexanderlaan &#8211; Rotterdam Oost",n:"4",lw:"BOL; BBL",code:"",url:"https://www.zadkine.nl/opleidingen/logistiek/management-transport-en-logistiek-bol-niveau-4",sc:{R:7,I:3,A:2,S:6,O:8,C:8},b:["Specialist transport en logistiek","Logistiek supervisor"]},
@@ -936,8 +876,11 @@ function stripHtml(s){
   div.innerHTML=String(s||'');
   return div.textContent || div.innerText || '';
 }
-function mboText(m){
-  return stripHtml([m.o,m.s,m.l,m.n,m.lw,m.url,(m.b||[]).join(' ')].join(' ')).toLowerCase();
+// De correctie kijkt alleen naar de naam van de opleiding. Schoolnaam, adres en
+// URL doen niet mee: daarin zitten toevallige treffers ("Marten Meesweg" is geen
+// wegenbouw, "transport" is geen sport).
+function mboName(m){
+  return stripHtml(m.o).toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'');
 }
 function setMboScores(m, scores, category){
   m.sc = {...m.sc, ...scores};
@@ -948,10 +891,10 @@ function applyMboModelCorrections(){
   const summary={};
   const count=cat=>summary[cat]=(summary[cat]||0)+1;
   MBO.forEach(m=>{
-    const txt=mboText(m);
+    const txt=mboName(m);
     const levels=extractNiveaus(m.n);
     let cat='';
-    const isEntree=levels.includes(1)||/\bassistent\b/.test(txt)&&(/entree|niveau\s*1|\b1\/2\b/.test(txt));
+    const isEntree=/^assistent\b/.test(txt)||(levels.length===1&&levels[0]===1);
     if(isEntree){
       if(/bouw|metaal|elektro|installatie|mobiliteit|logistiek|techniek|onderhoud/.test(txt)){
         cat=setMboScores(m,{R:7,I:3,A:2,S:5,O:4,C:6},'entree-breed-techniek-logistiek');
@@ -960,7 +903,7 @@ function applyMboModelCorrections(){
       }else{
         cat=setMboScores(m,{R:5,I:4,A:3,S:6,O:4,C:6},'entree-breed-orienterend');
       }
-    }else if(/software|applicatie|ict|it systems|system engineer|support technician|cyber|mediatechnologie/.test(txt)){
+    }else if(/software|applicatie|\bict\b|system engineer|support technician|cyber|mediatechnologie/.test(txt)){
       if(/creative|mediatechnologie|immersive|media technology/.test(txt)){
         cat=setMboScores(m,{R:4,I:8,A:7,S:3,O:5,C:6},'ict-software-creatief');
       }else if(/support|beheer|system engineer|cyber|medewerker ict|ict-medewerker/.test(txt)){
@@ -968,30 +911,32 @@ function applyMboModelCorrections(){
       }else{
         cat=setMboScores(m,{R:4,I:9,A:5,S:3,O:5,C:7},'ict-software-development');
       }
-    }else if(/verpleeg|verzorg|dokter|apotheek|pedagog|maatschappelijke zorg|sociaal werker|helpende|begeleider/.test(txt)){
+    }else if(/verpleeg|verzorgende|verzorgkundige|dokter|apothek|pedagog|onderwijsassistent|maatschappelijke zorg|sociaal werker|helpende|begeleider/.test(txt)){
       cat=setMboScores(m,{R:3,I:4,A:3,S:10,O:4,C:6},'zorg-welzijn-contact');
-    }else if(/hospitality|gastheer|gastvrouw|toerisme|leisure|luchtvaart|facilitair|schoonheid|kapper|barbier|sport|recreatie|retailmedewerker|verkoopspecialist/.test(txt)){
-      if(/leidinggevende|manager|storemanager|ondernemer/.test(txt)){
+    }else if(/hospitality|gastheer|gastvrouw|toerisme|tourism|leisure|luchtvaart|facilitair|schoonheid|kapper|hairstylist|barbier|beautystylist|\bsport|buurtsport|leefstijlcoach|recreatie|retailmedewerker|retail medewerker|verkoopspecialist|\bbar\b|hotel|event academy/.test(txt)){
+      if(/leidinggevende|manager|management|storemanager|ondernemer/.test(txt)){
         cat=setMboScores(m,{R:4,I:4,A:4,S:8,O:9,C:6},'hospitality-contact-leiding');
       }else{
         cat=setMboScores(m,{R:5,I:3,A:4,S:9,O:7,C:6},'hospitality-contact-uitvoerend');
       }
     }else if(/juwelier|goudsmid|zilversmid|uurwerk/.test(txt)){
       cat=setMboScores(m,{R:8,I:3,A:6,S:3,O:4,C:7},'ambacht-precisie-vormgeving');
-    }else if(/meubelstoffeerder/.test(txt)){
+    }else if(/stoffeerder|woningstoffer/.test(txt)){
       cat=setMboScores(m,{R:9,I:4,A:6,S:3,O:4,C:8},'ambacht-materiaal-vormgeving');
     }else if(/pianotechnicus|keukenmonteur/.test(txt)){
       cat=setMboScores(m,{R:10,I:5,A:5,S:4,O:5,C:8},'ambacht-service-techniek');
     }else if(/vastgoedadviseur|ondernemer vastgoed|regisseur vastgoed|vastgoedonderhoud|projectmanager/.test(txt)){
       cat=setMboScores(m,{R:6,I:6,A:3,S:4,O:8,C:8},'vastgoed-organisatie-advies');
-    }else if(/media|vormgev|sign|styling|fotografie|av-specialist|podium|decor|immersive|muziek|dance|musical|acteur|creatief|fashion|interieuradviseur/.test(txt)){
-      if(/av-specialist|podium|evenemententechnicus|standbouwer/.test(txt)){
+    }else if(/media|vormgev|\bsign|signmak|styling|fotografie|av-specialist|podium|decor|standbouw|immersive|immersieve|muziek|dance|musical|acteur|creatief|creatieve|fashion|interieuradviseur/.test(txt)){
+      if(/av-specialist|podium|evenemententechnicus|standbouw|decorbouwer/.test(txt)){
         cat=setMboScores(m,{R:6,I:6,A:8,S:3,O:4,C:6},'creatief-media-technisch');
       }else{
         cat=setMboScores(m,{R:3,I:7,A:9,S:4,O:5,C:6},'creatief-media-ontwerp');
       }
-    }else if(/bouw|timmer|metsel|infra|grond|weg|water|elektro|installatie|monteur|mechatronica|werktuig|metaal|lassen|laborant|analist|voertuig|automonteur|fietstechnicus|operator|technicus|engineering/.test(txt)){
-      if(/laborant|analist|engineering|mechatronica|werkvoorbereider|technicus/.test(txt)){
+    }else if(/leidinggevende|middenkader|uitvoerder|werkvoorbereider/.test(txt)){
+      // Leiding en planning in de techniek: het eigen dossierprofiel blijft staan.
+    }else if(/bouw|timmer|metsel|infra|grond-|asfalt|straatmaker|stukadoor|tegelzetter|schilder|machinist|elektro|installat|monteur|mechatronica|werktuig|metaal|lassen|laborant|analist|voertuig|fietstechnicus|fietsenmaker|operator|technicus|engineering|spanning|leidingen|autospuiter|autoschade|instrumentmaker|productietechniek|klusbedrijf|servicemedewerker gebouwen|smart building/.test(txt)){
+      if(/laborant|analist|engineering|mechatronica|technicus|technisch specialist|instrumentmaker|operator|smart building/.test(txt)){
         cat=setMboScores(m,{R:9,I:8,A:2,S:4,O:5,C:8},'techniek-r-i-c-analyse');
       }else{
         cat=setMboScores(m,{R:10,I:6,A:2,S:3,O:5,C:8},'techniek-r-i-c-uitvoering');
@@ -1032,12 +977,110 @@ function topCodeMeta(scores){
   return {code:selected.join(''),groups,selected,primary:groups[0]?.dims.slice()||[],exactTies,nearTies,hasTie:exactTies.length>0||nearTies.length>0};
 }
 function topCode(n){return topCodeMeta(n).code;}
+
+// --- Profiel van de leerling -------------------------------------------
+// Elke letter speelt 10 "duels". De rangorde is het aantal gewonnen duels.
+// Staan letters gelijk, dan beslist achtereenvolgens:
+//   1. het onderlinge duel tussen de gelijkstaande letters;
+//   2. de sterkte van de tegenstanders die een letter versloeg;
+//   3. niets meer: de letters staan echt gelijk. De volgorde is dan neutraal
+//      (afgeleid van het antwoordpatroon, niet van de vaste volgorde RIASOC)
+//      en de gelijke stand wordt aan de leerling gemeld.
+function hash32(str){
+  let h=2166136261;
+  for(let i=0;i<str.length;i++){h^=str.charCodeAt(i);h=Math.imul(h,16777619);}
+  return h>>>0;
+}
+function answerKey(answers){
+  const byQ=Object.fromEntries((answers||[]).map(a=>[a.q,a.c]));
+  return QS.map(q=>byQ[q.n]||'-').join('');
+}
+function duelStats(answers){
+  const wins={},duel={};
+  D.forEach(a=>{wins[a]=0;duel[a]={};D.forEach(b=>duel[a][b]=0);});
+  (answers||[]).forEach(ans=>{
+    const q=QS_BY_N[ans.q];
+    if(!q) return;
+    const win=ans.c==='A'?q.a:q.b, lose=ans.c==='A'?q.b:q.a;
+    wins[win]++;duel[win][lose]++;
+  });
+  return {wins,duel};
+}
+function rankProfile(answers){
+  const {wins,duel}=duelStats(answers);
+  const key=answerKey(answers);
+  const info={};
+  D.forEach(d=>{
+    info[d]={
+      wins:wins[d],
+      duels:D.reduce((sum,e)=>sum+(e!==d&&wins[e]===wins[d]?duel[d][e]:0),0),
+      strength:D.reduce((sum,e)=>sum+duel[d][e]*wins[e],0),
+      neutral:hash32(key+'|'+d)
+    };
+  });
+  const order=D.slice().sort((x,y)=>
+    info[y].wins-info[x].wins || info[y].duels-info[x].duels ||
+    info[y].strength-info[x].strength || info[x].neutral-info[y].neutral);
+  const decidedBy=(x,y)=>info[x].wins!==info[y].wins?'punten':info[x].duels!==info[y].duels?'duel':info[x].strength!==info[y].strength?'sterkte':'gelijk';
+  const pct=norm(wins);
+  const groups=[];
+  order.forEach(d=>{
+    let group=groups.find(g=>g.score===pct[d]);
+    if(!group){group={score:pct[d],dims:[]};groups.push(group);}
+    group.dims.push(d);
+  });
+  const selected=order.slice(0,3);
+  const exactTies=groups.filter(g=>g.dims.length>1).map(g=>({score:g.score,dims:g.dims.slice()}));
+  const edge=wins[order[2]];
+  const boundary={
+    tied:wins[order[3]]===edge,
+    score:pct[order[2]],
+    inside:selected.filter(d=>wins[d]===edge),
+    outside:order.slice(3).filter(d=>wins[d]===edge),
+    decidedBy:decidedBy(order[2],order[3])
+  };
+  const insideTies=exactTies.filter(g=>g.dims.filter(d=>selected.includes(d)).length>1);
+  return {code:selected.join(''),selected,order,wins,pct,info,groups,primary:groups[0]?.dims.slice()||[],exactTies,nearTies:[],boundary,insideTies,hasTie:boundary.tied||insideTies.length>0};
+}
+function profileQuality(n,answers){
+  const vals=D.map(d=>n[d]||0);
+  const total=(answers||[]).length;
+  const left=(answers||[]).filter(a=>a.c==='A').length;
+  return {
+    spread:Math.max(...vals)-Math.min(...vals),
+    flat:Math.max(...vals)-Math.min(...vals)<=20,
+    oneSided:total>=10&&Math.max(left,total-left)/total>=0.9
+  };
+}
+function namesOf(dims){
+  const names=dims.map(d=>META[d].naam);
+  return names.length>1?names.slice(0,-1).join(', ')+' en '+names[names.length-1]:names[0]||'';
+}
 function tieNotice(meta){
   if(!meta||!meta.hasTie)return '';
-  const exact=meta.exactTies.map(g=>g.dims.join('/')+' ('+g.score+'%)');
-  const near=meta.nearTies.map(g=>g.dims.join('/')+' ('+g.score+'%)');
-  return '<br><br><strong>Let op:</strong> er zijn gelijke of bijna gelijke scores. '+[exact.length?'Gelijk: '+exact.join(', '):'',near.length?'Dichtbij: '+near.join(', '):''].filter(Boolean).join('. ')+' De code toont daarom een top 3, maar de volledige scorebalken blijven leidend.';
+  const parts=[];
+  if(meta.boundary&&meta.boundary.tied){
+    const b=meta.boundary;
+    const why={
+      duel:'Voor de code gaf het onderlinge duel de doorslag: bij de plaatjes waar je tussen deze richtingen koos.',
+      sterkte:'Voor de code gaf de doorslag tegen welke andere richtingen je deze keuzes maakte.',
+      gelijk:'Ze staan precies gelijk; welke van de twee in de code staat is hier toeval.'
+    }[b.decidedBy]||'';
+    parts.push(namesOf(b.outside)+' scoort even hoog als '+namesOf(b.inside)+' ('+b.score+'%). '+why+' Bekijk '+namesOf(b.outside)+' dus ook.');
+  }
+  (meta.insideTies||[]).forEach(g=>{
+    const dims=g.dims.filter(d=>meta.selected.includes(d));
+    parts.push(namesOf(dims)+' scoren even hoog ('+g.score+'%). Hun volgorde in de code zegt dus weinig.');
+  });
+  return '<br><br><strong>Let op:</strong> '+parts.join(' ');
 }
+function qualityNotice(n,answers){
+  const q=profileQuality(n,answers);
+  if(q.oneSided) return '<br><br><strong>Let op:</strong> je koos bijna steeds dezelfde kant van het plaatje. Daardoor zegt deze uitslag weinig. Doe de verkenner nog eens en kijk bij elk plaatje wat je het leukst lijkt.';
+  if(q.flat) return '<br><br><strong>Let op:</strong> je scores liggen heel dicht bij elkaar. Er komt nog geen duidelijke richting uit; zie de opleidingen hieronder als een brede greep om over te praten.';
+  return '';
+}
+
 function show(id){document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));document.getElementById(id).classList.add('active');window.scrollTo(0,0);}
 function toast(m){const t=document.getElementById('toast');t.textContent=m;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),3000);}
 
@@ -1051,12 +1094,13 @@ function renderQ(){
   const q=QS[S.cur];
   document.getElementById('prog-fill').style.width=(S.cur/QS.length*100)+'%';
   document.getElementById('q-num').textContent=q.n;
+  document.getElementById('q-total').textContent=QS.length;
   document.getElementById('q-title').textContent=q.t;
   document.getElementById('q-la').textContent=q.lA;
   document.getElementById('q-lb').textContent=q.lB;
   const wrap=document.getElementById('q-img-wrap');
   wrap.innerHTML='';
-  const imgId=q.id || IMG[q.n];
+  const imgId=q.id;
   if(imgId){
     const img=document.createElement('img');
     img.style.cssText='width:100%;height:auto;display:block;max-height:50vh;object-fit:contain;background:#fff;';
@@ -1120,7 +1164,7 @@ function toResults(){
   }
   emailEl.classList.remove('err');
   S.name=name; S.email=email;
-  const n=norm(S.scores),meta=topCodeMeta(n),code=meta.code;
+  const n=norm(S.scores),meta=rankProfile(S.answers),code=meta.code;
   buildResults(n,code,meta); saveDB(n,code,meta); show('screen-results');
 }
 function buildResults(n,code,meta){
@@ -1149,7 +1193,7 @@ function buildProfile(n,code,meta){
   const d0=dims[0],d1=dims[1],d2=dims[2];
   const mix=`Samen laat deze combinatie zien waar je waarschijnlijk energie van krijgt. Je eerste type zegt iets over je sterkste voorkeur, maar de tweede en derde kleur geven nuance: ze laten zien in welke omgeving of rol die voorkeur goed tot zijn recht kan komen. Gebruik dit dus niet als hokje, maar als taal om over jezelf te praten.`;
   const action=`Kijk bij opleidingen vooral naar de praktijk: welke opdrachten doe je, met wie werk je samen, hoeveel vrijheid of structuur is er, en welke stages horen erbij? Bespreek met je mentor of decaan welke voorbeelden je herkent en welke juist niet. Dat gesprek is minstens zo belangrijk als de score zelf.`;
-  document.getElementById('profile-text').innerHTML=`Je keuzes wijzen het sterkst naar <strong>${top3}</strong>. ${PROFIEL[d0]} ${PROFIEL_DUIDING[d0]}${d1?' '+PROFIEL[d1]+' '+PROFIEL_DUIDING[d1]:''}${d2?' Je derde richting, '+META[d2].naam.toLowerCase()+', vult dit profiel aan en kan helpen om opleidingen beter te vergelijken.':''} ${mix} ${action}${tieNotice(meta)}`;
+  document.getElementById('profile-text').innerHTML=`Je keuzes wijzen het sterkst naar <strong>${top3}</strong>. ${PROFIEL[d0]} ${PROFIEL_DUIDING[d0]}${d1?' '+PROFIEL[d1]+' '+PROFIEL_DUIDING[d1]:''}${d2?' Je derde richting, '+META[d2].naam.toLowerCase()+', vult dit profiel aan en kan helpen om opleidingen beter te vergelijken.':''} ${mix} ${action}${qualityNotice(n,S.answers)||tieNotice(meta)}`;
 }
 
 function topDims(code){return code.split('').filter(d=>D.includes(d)).slice(0,3);}
@@ -1199,7 +1243,14 @@ function validateNiveauMatchCases(){
 }
 window.validateNiveauMatchCases = validateNiveauMatchCases;
 
+// De letter waarop leerling en opleiding elkaar het sterkst vinden:
+// allebei bovengemiddeld, met het grootste gezamenlijke uitschot.
 function mboDomainForSelection(m,n){
+  const mean=obj=>D.reduce((sum,d)=>sum+(obj[d]||0),0)/D.length;
+  const mn=mean(n||{}),mm=mean(m.sc||{});
+  const shared=D.filter(d=>(n[d]||0)>mn&&(m.sc[d]||0)>mm)
+    .sort((x,y)=>((n[y]-mn)*(m.sc[y]-mm))-((n[x]-mn)*(m.sc[x]-mm))||D.indexOf(x)-D.indexOf(y));
+  if(shared.length) return shared[0];
   const primary=m.codeMeta?.primary?.length?m.codeMeta.primary:D.filter(d=>m.sc[d]===Math.max(...D.map(x=>m.sc[x]||0)));
   return primary.slice().sort((a,b)=>(n[b]||0)-(n[a]||0)||D.indexOf(a)-D.indexOf(b))[0]||'R';
 }
@@ -1250,9 +1301,9 @@ function plainText(value){
 }
 function sectorFamily(m){
   const text=plainText(`${m.o} ${(m.b||[]).join(' ')} ${m.s}`).toLowerCase();
-  if(/dier|paraveterinair|groen|hovenier|natuur|water|voeding|vapro|agrar/.test(text)) return 'Voeding, natuur & dier';
+  if(/dier|paraveterinair|groen|hovenier|natuur|voeding|vapro|agrar/.test(text)) return 'Voeding, natuur & dier';
   if(/verpleeg|verzorg|dokters|apotheek|apothekers|pedagog|onderwijsassistent|kinderopvang|sociaal werker|maatschappelijke zorg|begeleider|zorg en welzijn|helpende/.test(text)) return 'Zorg & welzijn';
-  if(/sport|bewegings|buurtsport|leefstijlcoach|onderwijs/.test(text)) return 'Onderwijs & sport';
+  if(/\bsport|bewegings|buurtsport|leefstijlcoach|onderwijs/.test(text)) return 'Onderwijs & sport';
   if(/bouw|infra|asfalt|autoschade|timmer|metsel|install|elektro|metaal|monteur|technicus elektrotechn|technicus gas|technicus elektric|engineering|mechatronica|voertuig|fiets|hout|meubel|schilder|stukadoor|juwelier|goudsmid|uurwerk|piano|keuken|smart building|productietechniek/.test(text)) return 'Techniek & maken';
   if(/schoonheid|kapper|barbier|hairstylist|beauty|fashion|tailor/.test(text)) return 'Uiterlijke verzorging';
   if(/software|developer|applicatie|ict|cyber|system engineer|support technician|beheerder|data/.test(text)) return 'ICT & data';
@@ -1315,22 +1366,6 @@ function dedupeScored(scored){
   }
   return out;
 }
-const FAMILY_BY_LETTER={
-  R:['Techniek & maken','Voeding, natuur & dier','Logistiek & transport'],
-  I:['ICT & data','Laboratorium & onderzoek','Techniek & maken'],
-  A:['Creatief & media','Uiterlijke verzorging'],
-  S:['Zorg & welzijn','Onderwijs & sport','Uiterlijke verzorging'],
-  O:['Commercieel & ondernemend','Horeca & toerisme'],
-  C:['Administratie & juridisch','Logistiek & transport','Veiligheid & defensie']
-};
-function reservedFamilies(n,code){
-  const letters=D.slice().sort((a,b)=>(n[b]||0)-(n[a]||0)||D.indexOf(a)-D.indexOf(b));
-  const res=[];
-  if(letters[0]) res.push({letter:letters[0],families:FAMILY_BY_LETTER[letters[0]]||[]});
-  if(letters[1]&&n[letters[1]]>=60) res.push({letter:letters[1],families:FAMILY_BY_LETTER[letters[1]]||[]});
-  if(letters[2]&&n[letters[2]]>=70) res.push({letter:letters[2],families:FAMILY_BY_LETTER[letters[2]]||[],soft:true});
-  return res.slice(0,3);
-}
 function countBy(selected,key){
   return selected.reduce((acc,m)=>{const v=key(m);acc[v]=(acc[v]||0)+1;return acc;},{});
 }
@@ -1346,61 +1381,39 @@ function addPick(selected,m,dim){
   selected.push({...m,dim:dim||m.dim||mboDomainForSelection(m,{})});
   return true;
 }
-function selectSuggestions(n,code,count=6){
-  const scored=MBO.filter(m=>niveauMatch(m.n)).map(m=>({...m,sim:D.reduce((a,d)=>a+(n[d]/100)*(m.sc[d]/10),0),dim:mboDomainForSelection(m,n)})).sort((a,b)=>b.sim-a.sim);
+// Hoe sterk lijkt de vorm van het leerlingprofiel op die van de opleiding?
+// Pearson-correlatie over de zes letters: -1 (tegengesteld) tot 1 (zelfde vorm).
+// Anders dan een optelsom bevoordeelt dit geen opleidingen die op alles hoog
+// scoren, en het werkt ook als een leerling over de hele linie laag of hoog zit.
+function profileCorrelation(n,sc){
+  const a=D.map(d=>n[d]||0),b=D.map(d=>sc[d]||0);
+  const ma=a.reduce((x,y)=>x+y,0)/a.length,mb=b.reduce((x,y)=>x+y,0)/b.length;
+  let num=0,da=0,db=0;
+  a.forEach((_,i)=>{num+=(a[i]-ma)*(b[i]-mb);da+=(a[i]-ma)**2;db+=(b[i]-mb)**2;});
+  return da>0&&db>0?num/Math.sqrt(da*db):0;
+}
+// Veel opleidingen delen hetzelfde RIASOC-profiel en passen dus precies even
+// goed. `key` (het antwoordpatroon) bepaalt welke daarvan vooraan komt, zodat
+// niet steeds de eerste opleiding uit de lijst wordt getoond. Dezelfde
+// antwoorden geven altijd dezelfde suggesties.
+function selectSuggestions(n,code,count=6,key=answerKey(S.answers)){
+  const scored=MBO.filter(m=>niveauMatch(m.n))
+    .map(m=>({...m,sim:profileCorrelation(n,m.sc),rot:hash32(key+'|'+m.c+'|'+m.o),dim:mboDomainForSelection(m,n)}))
+    .sort((a,b)=>Math.round(b.sim*1000)-Math.round(a.sim*1000)||a.rot-b.rot);
   const deduped=dedupeScored(scored);
   const selected=[];
-  const top1=deduped[0];
-  if(top1) addPick(selected,top1,top1.dim);
-  const floor=(top1?.sim||0)*0.70;
-  for(const res of reservedFamilies(n,code)){
-    if(selected.length>=count) break;
-    if(selected.some(m=>res.families.includes(m.family))) continue;
-    let candidate=null;
-    for(const family of res.families){
-      candidate=deduped.find(m=>
-        !selected.includes(m) &&
-        m.family===family &&
-        (m.dim===res.letter || (m.codeMeta?.primary||[]).includes(res.letter) || (m.dominantLetters||[]).includes(res.letter)) &&
-        m.sim>=floor &&
-        canPickSuggestion(m,selected)
-      );
-      if(candidate) break;
-    }
-    if(candidate) addPick(selected,candidate,res.letter);
-    else if(!res.soft){
-      let fallback=null;
-      for(const family of res.families){
-        fallback=deduped.find(m=>!selected.includes(m)&&m.family===family&&m.sim>=floor&&canPickSuggestion(m,selected));
-        if(fallback) break;
-      }
-      if(fallback) addPick(selected,fallback,res.letter);
-    }
-  }
-  for(const dim of topDims(code)){
+  // Eerst hooguit 2 per sector en per school; alleen als dat geen 6 oplevert ruimer.
+  for(const caps of [{familyCap:2,schoolCap:2},{familyCap:3,schoolCap:3},{familyCap:99,schoolCap:99}]){
     for(const m of deduped){
       if(selected.length>=count) break;
-      if(selected.filter(x=>x.dim===dim).length>=2) break;
-      if(!(m.dim===dim || (m.codeMeta?.primary||[]).includes(dim) || (m.dominantLetters||[]).includes(dim))) continue;
-      if(!canPickSuggestion(m,selected)) continue;
-      addPick(selected,m,dim);
+      if(!canPickSuggestion(m,selected,caps)) continue;
+      addPick(selected,m,m.dim);
     }
   }
-  for(const m of deduped){
-    if(selected.length>=count) break;
-    if(!canPickSuggestion(m,selected)) continue;
-    addPick(selected,m,m.dim);
-  }
-  for(const m of deduped){
-    if(selected.length>=count) break;
-    if(selected.some(s=>s.c===m.c||s.stem===m.stem)) continue;
-    if(!canPickSuggestion(m,selected,{familyCap:3,schoolCap:3})) continue;
-    addPick(selected,m,m.dim);
-  }
-  return selected.slice(0,count);
+  return selected.sort((a,b)=>b.sim-a.sim).slice(0,count);
 }
 function matchPct(m){
-  return Math.min(100,Math.round((m.sim/D.length)*100));
+  return Math.max(0,Math.min(100,Math.round((m.sim||0)*100)));
 }
 
 function buildSuggestions(n,code){
@@ -1440,7 +1453,7 @@ function buildPDFPages(n,code,meta){
   const dims=topDims(code);
   const top3=dims.map(dx=>META[dx].naam).join(', ');
   const d0=dims[0],d1=dims[1],d2=dims[2];
-  const profileHTML=`Je keuzes wijzen het sterkst naar <strong style="color:#1464c8;">${top3}</strong>. ${PROFIEL[d0]} ${PROFIEL_DUIDING[d0]}${d1?' '+PROFIEL[d1]+' '+PROFIEL_DUIDING[d1]:''}${d2?' Je derde richting, '+META[d2].naam.toLowerCase()+', vult dit profiel aan en kan helpen om opleidingen beter te vergelijken.':''} Gebruik dit niet als hokje, maar als taal voor een gesprek met je mentor of decaan.${tieNotice(meta)}`;
+  const profileHTML=`Je keuzes wijzen het sterkst naar <strong style="color:#1464c8;">${top3}</strong>. ${PROFIEL[d0]} ${PROFIEL_DUIDING[d0]}${d1?' '+PROFIEL[d1]+' '+PROFIEL_DUIDING[d1]:''}${d2?' Je derde richting, '+META[d2].naam.toLowerCase()+', vult dit profiel aan en kan helpen om opleidingen beter te vergelijken.':''} Gebruik dit niet als hokje, maar als taal voor een gesprek met je mentor of decaan.${qualityNotice(n,S.answers)||tieNotice(meta)}`;
   const suggestions=selectSuggestions(n,code,6);
   const sugCard=(m,i)=>{
     const beroepen=(m.b||[]).slice(0,2).map(b=>`<span style="font-size:8px;font-weight:600;padding:2px 6px;border-radius:3px;background:#dde8ff;color:#1464c8;border:1px solid #c0d0f0;white-space:nowrap;">${b}</span>`).join(' ');
@@ -1460,7 +1473,7 @@ ${beroepen?`<div style="display:flex;flex-wrap:wrap;gap:4px;margin-bottom:5px;">
   const careerPdfCard=(dx)=>`<div style="background:#e8f0ff;border-radius:9px;padding:15px 17px;border:1px solid #dde8ff;border-left:3px solid ${META[dx].k};"><div style="display:flex;align-items:center;gap:10px;margin-bottom:10px;"><span style="display:inline-grid;place-items:center;width:30px;height:30px;border-radius:50%;background:${META[dx].k};color:#140037;font-weight:800;">${dx}</span><div><div style="font-size:13px;font-weight:800;color:#140037;">${META[dx].naam}</div><div style="font-size:8.5px;font-weight:800;color:#1464c8;text-transform:uppercase;letter-spacing:.08em;">${META[dx].kort}</div></div></div><ul style="margin:0;padding-left:18px;color:#333;font-size:11px;line-height:1.65;">${(CAREER_IDEAS[dx]||[]).map(x=>`<li>${x}</li>`).join('')}</ul></div>`;
   const careerPage=`<div style="font-size:7.5px;font-weight:800;letter-spacing:.18em;text-transform:uppercase;color:#1464c8;margin-bottom:8px;">Breed verkennen</div><div style="font-size:19px;font-weight:800;color:#140037;margin-bottom:8px;">12 beroepideeën om over te praten</div><p style="font-size:11.5px;line-height:1.65;color:#333;margin:0 0 16px;">Deze voorbeelden zijn bewust breed. Ze zijn bedoeld om woorden te geven aan richtingen die je kunt onderzoeken, niet om meteen één beroep vast te zetten.</p><div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;">${dims.map(careerPdfCard).join('')}</div>${footer}`;
   const compactSugCard=(m)=>{const provider=selectedProvider(m);const domain=provider.url?provider.url.replace(/https?:\/\/(?:www\.)?/,"").split("/")[0]:'';return `<div style="background:#e8f0ff;border-radius:8px;padding:12px 14px;border:1px solid #dde8ff;border-left:3px solid ${META[m.dim].k};"><div style="font-size:12px;font-weight:800;color:#140037;line-height:1.25;margin-bottom:4px;">${m.o}</div><div style="font-size:9.5px;color:#555;line-height:1.35;margin-bottom:5px;">${provider.school}${provider.location?' · '+provider.location:''}</div><div style="font-size:9px;color:#2a5aa0;font-style:italic;line-height:1.35;margin-bottom:6px;">${makeMotivation(m,n)}</div>${domain?`<a href="${provider.url}" style="font-size:8.5px;color:#1464c8;font-weight:700;text-decoration:none;">${domain}</a>`:''}<div style="display:flex;gap:4px;flex-wrap:wrap;margin-top:6px;"><span style="font-size:8px;font-weight:700;padding:2px 6px;border-radius:3px;background:#dde8ff;color:#1464c8;">${META[m.dim].naam}</span><span style="font-size:8px;font-weight:700;padding:2px 6px;border-radius:3px;background:#eef0f4;color:#444;">Niveau ${provider.level||m.n}</span><span style="font-size:8px;font-weight:500;padding:2px 6px;border-radius:3px;background:#f0f0f0;color:#666;">CREBO ${m.c}</span></div></div>`;};
-  const sugPage=`${sugHeader}<p style="font-size:11px;line-height:1.55;color:#333;margin:0 0 12px;">Per topdimensie zijn twee concrete opleidingen gekozen waar mogelijk. Gebruik de links om open dagen, toelating en inhoud verder te bekijken.</p><div style="display:grid;grid-template-columns:1fr 1fr;gap:9px;">${suggestions.map(compactSugCard).join('')}</div>${footer}`;
+  const sugPage=`${sugHeader}<p style="font-size:11px;line-height:1.55;color:#333;margin:0 0 12px;">Deze zes opleidingen lijken het meest op de vorm van jouw hele profiel, verdeeld over verschillende sectoren en scholen. Gebruik de links om open dagen, toelating en inhoud verder te bekijken.</p><div style="display:grid;grid-template-columns:1fr 1fr;gap:9px;">${suggestions.map(compactSugCard).join('')}</div>${footer}`;
   const typeCard=(dx,text)=>`<div style="background:#f0f4ff;border-radius:8px;padding:13px 15px;border:1px solid #dde8ff;border-left:3px solid ${META[dx].k};"><div style="display:flex;align-items:center;gap:9px;margin-bottom:6px;"><span style="display:inline-grid;place-items:center;width:28px;height:28px;border-radius:50%;background:${META[dx].k};color:#140037;font-size:13px;font-weight:800;">${dx}</span><div><div style="font-size:12.5px;font-weight:800;color:#140037;">${META[dx].naam}</div><div style="font-size:8.5px;font-weight:800;color:#1464c8;text-transform:uppercase;letter-spacing:.08em;">${META[dx].kort}</div></div></div><div style="font-size:10.5px;line-height:1.55;color:#333;">${text}</div></div>`;
   const comboCard=(label,title,example)=>`<div style="display:grid;grid-template-columns:48px 1fr;gap:10px;align-items:center;background:#eef3ff;border-radius:8px;padding:10px 12px;border:1px solid #dde8ff;"><div style="font-size:10px;font-weight:800;color:#1464c8;background:#dde8ff;border-radius:5px;text-align:center;padding:5px 0;">${label}</div><div style="font-size:10.5px;line-height:1.45;color:#333;"><strong style="color:#140037;">${title}</strong> - ${example}</div></div>`;
   const explanationHeader=`<div style="text-align:center;margin-bottom:22px;"><div style="font-size:7.5px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:#1464c8;margin-bottom:7px;">Corbulo Tech &amp; Design College — MBO Opleidingen Verkenner</div><div style="font-size:24px;font-weight:700;color:#140037;margin-bottom:5px;">Wat betekent jouw uitslag?</div><div style="font-size:10.5px;color:#666;">Een toelichting op de zes types en hoe je ze kunt lezen</div></div><div style="height:2px;background:#1464c8;margin-bottom:24px;"></div>`;
@@ -1482,7 +1495,7 @@ async function dlPDF(){
   btn.innerHTML='<div class="spinner"></div>&nbsp;Maken…';btn.disabled=true;
   const actions=document.getElementById('action-btns');actions.style.display='none';
   try{
-    const n=norm(S.scores),code=topCode(n);
+    const n=norm(S.scores),meta=rankProfile(S.answers),code=meta.code;
     const{jsPDF}=window.jspdf,pdf=new jsPDF('p','mm','a4');
     const pw=pdf.internal.pageSize.getWidth(),ph=pdf.internal.pageSize.getHeight();
     const mg=8,uw=pw-mg*2,pageH=ph-mg*2;
@@ -1506,7 +1519,7 @@ async function dlPDF(){
       pdf.addImage(cv.toDataURL('image/jpeg',.94),'JPEG',mg,mg,uw,pageH);
       if(onPageReady) onPageReady();
     };
-    const pages=buildPDFPages(n,code,topCodeMeta(n));
+    const pages=buildPDFPages(n,code,meta);
     for(let i=0;i<pages.length;i++) await capturePage(pages[i],i===0,i===2?()=>addSuggestionLinks(selectSuggestions(n,code,6)):null);
     actions.style.display='';
     pdf.save(`RIASOC_${S.name.replace(/\s+/g,'_')||'profiel'}_${new Date().toISOString().slice(0,10)}.pdf`);

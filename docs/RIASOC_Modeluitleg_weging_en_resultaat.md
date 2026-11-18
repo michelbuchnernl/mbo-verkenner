@@ -7,44 +7,29 @@ tags:
   - verkenner
 status: concept
 created: 2026-05-01
+updated: 2026-11-18
 ---
 
 # RIASOC Modeluitleg - weging en resultaatberekening
 
-Deze notitie beschrijft hoe de RIASOC/MBO Opleidingen Verkenner keuzes omzet naar een profiel en daarna naar passende MBO-suggesties. De verkenner is bedoeld als orienterend hulpmiddel: hij laat zien welke richtingen aansluiten bij voorkeuren, maar vervangt geen loopbaangesprek, intake of advies van mentor/decaan.
+Deze notitie beschrijft hoe de MBO Opleidingen Verkenner keuzes omzet naar een profiel en daarna naar passende MBO-suggesties. De verkenner is een oriënterend hulpmiddel: hij laat zien welke richtingen aansluiten bij voorkeuren, maar vervangt geen loopbaangesprek, intake of advies van mentor of decaan.
 
-## 0. Projectmap en bronnen
+Sinds november 2026 heeft de verkenner 30 vragen in plaats van 62. Waarom, en welke plaatjes zijn gekozen, staat in [RIASOC_30_vragen_ontwerp.md](RIASOC_30_vragen_ontwerp.md).
 
-De RIASOC-werkmap is opgeschoond rond de huidige hoofdstructuur van de Verkenner:
+## 0. Bronnen
 
 | Pad | Inhoud |
 |---|---|
-| `RIASOC Wiki.md` | Hoofdingang voor de RIASOC-werkmap. |
-| `RIASOC_Modeluitleg_weging_en_resultaat.md` | Deze uitleg: model, weging, resultaatlogica en auditmethode. |
-| `02_Model_en_Data/Overzicht_Totaal_Riasoc.md` | Masterdocument met totaaloverzicht en modelinhoud. |
-| `03_Scenebank/RIASOC_AB_scenebank_werkdocument.md` | Werkdocument voor A/B-scenes en vraagbank. |
-| `04_Prompts/RIASOC_Nano_Banana_prompts.md` | Promptlaag voor beeldgeneratie. |
-| `05_Assets/Quiz_62/` | Definitieve lokale PNG-set voor Q01-Q62 plus Corbulo-logo's. |
-| `05_Assets/Conceptbeelden_v1/` | Oudere/conceptuele gegenereerde beeldreeks. |
-| `06_Backups/` | Backups van eerdere model- en datacorrecties. |
-| `07_Archive/` | Oud visueel materiaal en superseded previews. |
+| `index.html` | De hele verkenner: vragen, telling, opleidingen en uitslag. |
+| `assets/riasoc/` | De 62 plaatjes uit de scènebank, 7 omgewisselde varianten en de logo's. |
+| `docs/RIASOC_30_vragen_ontwerp.md` | Keuze van de 30 plaatjes en onderbouwing. |
+| `docs/RIASOC_Beeldaudit_62_plaatjes.md` | Beeldaudit van alle 62 plaatjes (mei 2026). |
+| `tests/riasoc_model_audit.js` | Simulatie en controle van het model. |
+| `tools/swap_sides.py` | Wisselt de linker- en rechterscène van een plaatje om. |
 
-De softwarebron staat in de GitHub/local repo:
-
-```text
-/Users/michelbuchner/mbo-verkenner/index.html
-```
-
-De model-audit in de repo staat hier:
-
-```text
-/Users/michelbuchner/mbo-verkenner/tests/riasoc_model_audit.js
-/Users/michelbuchner/mbo-verkenner/tests/output/riasoc_model_audit.md
-```
+De scènebank, de beeldprompts en het masterdocument met opleidingen staan in de RIASOC-map van de Obsidian-vault.
 
 ## 1. Wat wordt gepeild?
-
-De vragen peilen voorkeuren langs de zes RIASOC-dimensies:
 
 | Code | Dimensie | In gewone taal |
 |---|---|---|
@@ -55,157 +40,97 @@ De vragen peilen voorkeuren langs de zes RIASOC-dimensies:
 | O | Ondernemend | Leiden, overtuigen, organiseren |
 | C | Conventioneel | Ordenen, controleren, structureren |
 
-Elke vraag toont twee situaties. De leerling kiest niet wat "beter" is, maar wat meer aanspreekt. Daarmee wordt voorkeur gemeten, geen vaardigheid.
+Elke vraag toont twee situaties. De leerling kiest wat meer aanspreekt. Daarmee wordt voorkeur gemeten, geen vaardigheid.
 
-## 2. Waarom 62 vragen?
+## 2. Waarom 30 vragen?
 
-De vragen zijn opgebouwd rond de hexagon-volgorde:
+Zes letters geven 15 mogelijke tweetallen. Met 30 vragen staat elk tweetal (bijna) 2 keer tegenover elkaar en komt elke letter precies 10 keer voor. Dat is een toernooi waarin elke letter evenveel wedstrijden speelt.
 
-```text
-R - I - A - S - O - C - terug naar R
-```
+De letters staan in een zeshoek: R - I - A - S - O - C - terug naar R. Buren lijken op elkaar, letters tegenover elkaar verschillen het meest.
 
-Die volgorde komt uit het RIASOC-model: naast elkaar liggende dimensies zijn inhoudelijk verwant, tegenoverliggende dimensies verschillen sterker.
+| Type | Betekenis | Voorbeeld | Aantal vragen |
+|---|---|---|---|
+| adjacent | buren | I-A, S-O | 14 |
+| skip-one | één ertussen | R-A, I-S | 10 |
+| opposite | tegenover elkaar | R-S, I-O, A-C | 6 |
 
-De set bevat meerdere typen vergelijkingen:
+Twee afwijkingen van het volmaakte schema, omdat de plaatjes er niet zijn: A-O en S-C komen 1 keer voor, A-S en O-C 3 keer.
 
-| Type | Betekenis | Voorbeeld |
-|---|---|---|
-| adjacent | Vergelijking tussen verwante buren | I-A, S-O |
-| skip-one | Vergelijking met een tussenstap | A-O, C-I |
-| opposite | Vergelijking met maximale afstand | R-S, I-O, A-C |
+Verder geldt:
 
-In de software krijgt elke vraag daarom metadata:
+- elke letter staat 5 keer links en 5 keer rechts;
+- vraag 1-15 en vraag 16-30 zijn elk een complete ronde;
+- geen letter komt in twee opeenvolgende vragen voor.
 
-```js
-pair: "I-A"
-pairType: "adjacent"
-expectedType: "adjacent"
-```
-
-`validateQuestions()` controleert of deze metadata klopt met de hexagon-volgorde, of alle 62 afbeeldingen gevuld zijn, en of elke antwoordkant een duidelijke hoofddimensie heeft.
+`validateDesign()` controleert dit alles. `validateQuestions()` controleert elke vraag afzonderlijk.
 
 ## 3. Hoe telt een antwoord mee?
 
-Elke antwoordoptie heeft een kleine scoreverdeling. De hoofddimensie krijgt meestal 3 punten. Een ondersteunende dimensie krijgt meestal 1 punt.
-
-Voorbeeld:
+Een keuze is 1 punt voor de letter van de gekozen kant. Er zijn geen bijpunten voor andere letters.
 
 ```js
-wA: { R: 3, C: 1 }
-wB: { S: 3, O: 1 }
+{n:1, src:5, a:'R', b:'S', lA:"Speeltoestel maken", lB:"Op kinderen letten", img:"05-...png"}
 ```
 
-Als een leerling A kiest, krijgt het profiel:
+`a` is de letter van de linkerkant, `b` van de rechterkant, `src` het nummer van het plaatje in de oude reeks van 62.
 
-- R +3
-- C +1
+De eerdere versie gaf 3 punten aan de hoofdletter en 1 punt aan een vaste buurletter. Dat liet R en C, I en A, en S en O samen stijgen, waardoor profielen in drie hoeken belandden.
 
-Als een leerling B kiest:
+## 4. Van punten naar percentage
 
-- S +3
-- O +1
-
-Deze 3/1-weging voorkomt dat een keuze te plat wordt. Een praktische scene kan bijvoorbeeld vooral Realistisch zijn, maar ook iets Conventioneels hebben omdat nauwkeurig werken belangrijk is. Een helpende scene kan vooral Sociaal zijn, maar ook iets Ondernemends hebben als iemand uitleg geeft of anderen activeert.
-
-## 4. Van ruwe score naar percentage
-
-Niet elke dimensie komt exact even vaak en even zwaar in alle vraagkanten terug. Daarom gebruikt de software normalisatie.
-
-Voor elke dimensie wordt eerst berekend wat de maximaal haalbare score is:
-
-```js
-maxScore[dimensie] = som van de hoogste haalbare score per vraag
-```
-
-Daarna wordt de score omgezet naar een percentage:
-
-```text
-percentage = afgerond(ruweScore / maxScore * 100)
-```
-
-Daardoor betekent 70 procent bij Sociaal hetzelfde soort signaal als 70 procent bij Realistisch: de leerling heeft relatief vaak gekozen voor situaties waarin die dimensie belangrijk was.
+Elke letter kan 10 punten halen. Het percentage is het aantal punten maal 10. Samen hebben de zes letters altijd 30 punten: wie veel voor de ene letter kiest, kiest minder voor de andere.
 
 ## 5. Hoe ontstaat de profielcode?
 
-De profielcode bestaat uit de drie hoogste dimensies, bijvoorbeeld:
+De code bestaat uit de drie hoogste letters, bijvoorbeeld `SIC`.
 
-```text
-SIC
-```
+Omdat de scores in stappen van 10 lopen, staan letters geregeld gelijk. `rankProfile()` beslist dan zo:
 
-Dat betekent: Sociaal staat het sterkst, daarna Intellectueel, daarna Conventioneel.
+1. **Onderling duel.** Wie won bij de plaatjes waar deze letters tegenover elkaar stonden?
+2. **Sterkte.** Welke letter versloeg de sterkste andere letters?
+3. **Echt gelijk.** De volgorde is dan neutraal: ze hangt af van het antwoordpatroon en niet van de vaste volgorde R-I-A-S-O-C.
 
-De oude versie koos bij gelijke scores stilzwijgend volgens de vaste volgorde R-I-A-S-O-C. Dat is aangepast. De software gebruikt nu `topCodeMeta()`:
+Staan plek 3 en 4 gelijk, dan krijgt de leerling een melding dat de vierde letter even hoog scoort en dus ook het bekijken waard is. Staan letters binnen de top 3 gelijk, dan meldt de uitslag dat hun volgorde weinig zegt.
 
-- dimensies worden gegroepeerd per score;
-- exacte gelijke scores worden zichtbaar vastgelegd;
-- bijna-gelijke scores rond de grens worden gemeld;
-- de code toont nog steeds een top 3, maar de scorebalken en tie-melding blijven leidend.
+Twee extra meldingen:
 
-Belangrijk: bij gelijke of bijna gelijke scores moet de code niet worden gelezen als harde rangorde. Dan is het profiel breder.
+- **Zelfde kant.** Wie bij 90% of meer van de vragen dezelfde kant kiest, krijgt het advies de verkenner opnieuw te doen.
+- **Vlak profiel.** Ligt de hoogste letter hooguit 20 punten boven de laagste, dan staat erbij dat er nog geen duidelijke richting uit komt.
 
 ## 6. Hoe worden MBO-opleidingen gewogen?
 
-Elke MBO-record heeft zelf ook een RIASOC-profiel:
+Elke opleiding heeft een eigen RIASOC-profiel:
 
 ```js
 sc: { R: 4, I: 9, A: 5, S: 3, O: 5, C: 7 }
 ```
 
-Deze scores beschrijven wat de opleiding of beroepsrichting vooral vraagt. Een softwareopleiding krijgt bijvoorbeeld expliciet I/C/R of I/A/C, afhankelijk van de inhoud. Een zorgopleiding krijgt S als primaire dimensie. Techniek wordt niet meer als een brede klomp behandeld, maar gescheiden in R/I/C: uitvoeren, analyseren en nauwkeurig werken.
-
-De huidige correctielagen zijn:
+De profielen komen uit de kwalificatiedossiers. Voor een aantal groepen legt `applyMboModelCorrections()` er een vast profiel overheen:
 
 | Categorie | Correctieprincipe |
 |---|---|
-| Entree breed/orienterend | Niet doen alsof een brede entreeopleiding een scherpe RIASOC-code heeft |
+| Entree breed | Geen scherpe code voor een brede entreeopleiding |
 | ICT/software | I, C en R expliciet; creatieve software krijgt extra A |
-| Techniek | R/I/C gescheiden naar uitvoeren, analyse en nauwkeurigheid |
-| Zorg/welzijn/contact | S primair als helpen, begeleiden of contact de kern is |
-| Hospitality/contact | S primair bij gastcontact; O hoger bij leiding/ondernemen |
-| Creatief/media | A/I/C inhoudelijk gewogen, niet door tie-volgorde |
-| Ambacht/precisie | Smalle R/A/C-profielen voor niche-ambachten, zodat ze niet als algemene match domineren |
-| Vastgoed/advies | O/C/I/R gescheiden voor organiseren, adviseren en projectmatig werken |
+| Techniek | R/I/C gescheiden naar uitvoeren en analyseren |
+| Zorg/welzijn | S voorop als helpen en begeleiden de kern is |
+| Hospitality/contact | S voorop bij gastcontact; O hoger bij leiding |
+| Creatief/media | A voorop, met I en C |
+| Ambacht | Smalle R/A/C-profielen |
+| Vastgoed/advies | O en C voorop |
 
-Na die correctie krijgt elk MBO-record een expliciete `codeMeta` en `code`. De selectie is dus niet meer afhankelijk van lege `code:""` velden of toevallige volgorde in de data.
+De correctie kijkt alleen naar de **naam van de opleiding**. Eerder deden ook schoolnaam, adres en URL mee. Dat gaf toevalstreffers: een opleiding aan de Marten Meesweg werd wegenbouw, en alles met "transport" werd sport.
 
-Daarnaast is de vraaglaag visueel gecontroleerd. De 62 plaatjes zijn niet alleen illustraties, maar het meetinstrument zelf. Na de beeldaudit zijn geen beelden vervangen; wel zijn labels en secundaire gewichten aangescherpt waar het beeld duidelijker was dan de oude weging:
-
-- Q22 is aangescherpt van "stand uitleggen" naar "stand presenteren", zodat de O-component beter klopt met het beeld.
-- Q27 gebruikt nu "uitleg ontwerpen" en "stap voor stap begeleiden", omdat beide beelden met uitleg/documenten werken en het gedragsverschil scherper moest worden benoemd.
-- Q48-Q62 zijn inhoudelijk herwogen waar de oude A/S/O- en S/O/C-mixen te veel ruis gaven. Vooral Q50-Q53 en Q62 meten nu scherper Sociaal helpen tegenover Ondernemend leiden.
-- Q56-Q60 zijn dichter bij C/R/I gezet: ordenen, controleren, bouwen, onderhouden en betekenis zoeken.
-
-Deze aanpassing verandert dus niet de MBO-records, maar de bronmeting: de punten die uit de leerlingkeuzes komen sluiten beter aan op wat het plaatje daadwerkelijk vertelt.
+Opleidingen die in geen categorie vallen houden hun eigen dossierprofiel. Dat zijn er ruim 100, vooral administratie, commercie, logistiek, horeca-keuken, dier en veiligheid.
 
 ## 7. Hoe wordt de match berekend?
 
-De match tussen leerling en opleiding is een gewogen overeenkomst tussen twee profielen.
+De match is de **correlatie** tussen de zes scores van de leerling en de zes scores van de opleiding (`profileCorrelation()`). Die loopt van -1 (tegengestelde vorm) tot 1 (zelfde vorm). Het matchpercentage op het scherm is de correlatie maal 100, met 0 als ondergrens.
 
-Voor elke dimensie:
+Het gaat dus om de vorm van het profiel: waar zitten de pieken en dalen? Een opleiding die op alles redelijk hoog scoort heeft geen voordeel.
 
-```text
-leerlingPercentage / 100 * opleidingScore / 10
-```
-
-Daarna worden de zes bijdragen bij elkaar opgeteld:
-
-```text
-match = som over R, I, A, S, O, C
-```
-
-Een opleiding scoort dus hoog als zij sterk is op dimensies waarop de leerling ook hoog scoort.
-
-Voorbeeld in woorden:
-
-- Leerling scoort hoog op S en C.
-- Een opleiding met S=10 en C=6 krijgt veel matchbijdrage.
-- Een opleiding met vooral R en weinig S krijgt minder matchbijdrage, ook als die opleiding op zichzelf een duidelijke beroepsrichting heeft.
+Voorbeeld: een leerling met hoge S en O en lage R en I past goed bij een opleiding met hoge S en O. Een techniekopleiding met hoge R en lage S krijgt een negatieve correlatie en komt niet in beeld.
 
 ## 8. Niveau-filter
-
-Voor de suggesties wordt ook gekeken naar de gekozen vooropleiding:
 
 | Keuze leerling | Toegestane MBO-niveaus |
 |---|---|
@@ -216,189 +141,80 @@ Voor de suggesties wordt ook gekeken naar de gekozen vooropleiding:
 | Havo | 4 |
 | Anders | 2, 3 en 4 |
 
-`niveauMatch()` leest nu ook samengestelde strings goed, bijvoorbeeld:
+`niveauMatch()` leest ook samengestelde notaties zoals `MBO 3; 3; 4` en `3; 2 / 3`.
 
-```text
-MBO 3; 3; 4
-2, 3, 4; 4
-3; 2 / 3
-```
+## 9. Waarom 12 beroepideeën en 6 opleidingen?
 
-Daarmee vallen opleidingen niet weg door rommelige niveau-notatie.
+De uitslag begint breed: voor elk van de drie hoogste letters vier beroepideeën, samen 12 voorbeelden om over te praten.
 
-## 9. Waarom ziet de leerling 12 beroepideeën en 6 opleidingen?
+Daarna kiest `selectSuggestions()` 6 concrete opleidingen:
 
-De uitslag begint breed. Voor de hoogste drie RIASOC-dimensies toont de verkenner telkens vier beroepideeën. Dat geeft samen 12 voorbeelden om over te praten. Die voorbeelden zijn bewust niet te smal: ze helpen een leerling woorden te geven aan mogelijke richtingen voordat er meteen een concrete opleiding wordt gekozen.
+1. alle opleidingen van het juiste niveau worden gesorteerd op match;
+2. dubbele CREBO's en varianten van dezelfde opleiding vallen af;
+3. van boven naar beneden worden er 6 gekozen, met hooguit 2 per sector en 2 per school. Lukt dat niet, dan wordt de grens verruimd naar 3.
 
-Daarna berekent de software voor alle passende MBO-records een matchscore. Uit die lijst worden 6 concrete opleidingen gekozen met een extra diversiteitslaag:
+Veel opleidingen delen hetzelfde RIASOC-profiel en passen dus precies even goed. Welke daarvan vooraan komt hangt af van het antwoordpatroon van de leerling. Zo krijgt niet iedereen met een techniekprofiel dezelfde twee techniekopleidingen. Dezelfde antwoorden geven altijd dezelfde zes.
 
-- de beste pure match blijft altijd zichtbaar;
-- dubbele CREBO's en dubbele opleidingsstammen worden uit dezelfde uitslag geweerd;
-- per sectorfamilie geldt in de hoofdselectie een maximum van 2;
-- per school geldt in de hoofdselectie een maximum van 2, met alleen in de fallback ruimte voor een derde;
-- de hoogste RIASOC-dimensie reserveert een passende sectorfamilie;
-- de tweede dimensie reserveert ook een familie als die score 60 procent of hoger is;
-- een derde dimensie kan zacht meewegen als die 70 procent of hoger is;
-- gereserveerde opleidingen moeten minimaal 70 procent van de topmatch halen.
+De kaart toont opleiding, school en locatie (met voorkeur voor Zuid-Holland), een korte motivatie, beroepen, niveau, leerweg, matchpercentage en een link.
 
-Zo ontstaat spreiding: niet zes bijna dezelfde opleidingen uit één dominante categorie, maar een compacte set die de breedte van het profiel laat zien.
-
-De suggestiekaart toont:
-
-- opleiding;
-- één gekozen school en locatie, met voorkeur voor Zuid-Holland als er meerdere aanbieders in één record staan;
-- korte motivatie;
-- beroepsrollen;
-- niveau en leerweg;
-- matchpercentage;
-- link naar de opleiding als die bekend is.
-
-De motivatie wordt automatisch opgebouwd uit de overlap tussen het leerlingprofiel en het opleidingsprofiel. Daardoor staat er niet alleen "past bij jou", maar ook waarom.
-
-De matchscore is een overeenkomstsscore over zes dimensies. In de interface wordt die score genormaliseerd naar een begrijpelijke 0-100 procent, zodat er geen percentages boven 100 procent verschijnen.
-
-## 10. Datastroom in het kort
+## 10. Datastroom
 
 ```mermaid
 flowchart TD
-    A["Leerling kiest A of B per vraag"] --> B["Ruwe RIASOC-punten optellen"]
-    B --> C["Normaliseren naar percentages"]
-    C --> D["Topcode + tie-informatie bepalen"]
-    C --> E["MBO-records filteren op niveau"]
-    E --> F["MBO-scores inhoudelijk corrigeren"]
-    F --> G["Matchscore per opleiding berekenen"]
-    G --> H["Dedupe, sectorcaps, schoolcaps en reserveringen"]
-    H --> J["12 beroepideeën + 6 opleidingen met spreiding tonen"]
-    D --> I["Profieltekst, radar en PDF"]
+    A["Leerling kiest A of B bij 30 plaatjes"] --> B["1 punt per keuze voor de gekozen letter"]
+    B --> C["Percentage per letter (punten x 10)"]
+    B --> D["Rangorde: punten, onderling duel, sterkte"]
+    D --> K["Code van 3 letters + melding bij gelijke stand"]
+    C --> E["Opleidingen filteren op niveau"]
+    E --> G["Match = correlatie tussen leerling- en opleidingsprofiel"]
+    G --> H["Ontdubbelen, max. 2 per sector en per school"]
+    H --> J["12 beroepideeën + 6 opleidingen"]
+    K --> I["Profieltekst, radar en PDF"]
     J --> I
 ```
 
 ## 11. Wat is belangrijk om erbij te vertellen?
 
-De uitslag is een gesprekstarter. Een hoge score betekent: "dit soort situaties sprak je vaak aan". Het betekent niet automatisch dat iemand daar al goed in is of dat andere richtingen niet kunnen.
+De uitslag is een gespreksstarter. Een hoge score betekent: dit soort situaties sprak je vaak aan. Het zegt niet dat iemand daar al goed in is of dat andere richtingen niet kunnen.
 
-Gebruik de uitkomst daarom zo:
+- Kijk eerst naar de hoogste drie letters en naar de laagste.
+- Let op de melding bij gelijke stand: de vierde letter kan net zo belangrijk zijn.
+- Vraag naar herkenning: klopt dit met wat jij leuk vindt?
+- Gebruik de opleidingen als startpunt voor open dagen en proeflessen. Twee leerlingen met hetzelfde profiel kunnen andere voorbeelden zien; dat is de bedoeling.
 
-- Kijk eerst naar de hoogste drie dimensies.
-- Kijk daarna naar bijna-gelijke scores.
-- Bespreek herkenning: "Klopt dit met wat jij leuk vindt?"
-- Gebruik de MBO-suggesties als startpunt voor open dagen, proeflessen en gesprekken.
-- Laat leerlingen ook opleidingen bekijken die net buiten de 6 getoonde opties vallen als ze nieuwsgierig zijn.
-
-## 12. Kwaliteitscontrole
-
-De software controleert op dit moment:
-
-- precies 62 vragen;
-- alle vragen hebben een afbeelding;
-- Q32-Q62 zijn gevuld;
-- elke vraag heeft `pair`, `pairType` en `expectedType`;
-- vraagmetadata klopt met de R-I-A-S-O-C hexagon;
-- MBO-records hebben expliciete codes;
-- niveaufilters herkennen samengestelde notaties;
-- PDF gebruikt dezelfde berekening als het schermresultaat.
-
-Bij nieuwe data of nieuwe afbeeldingen moet opnieuw `validateQuestions()` worden uitgevoerd en moeten enkele vaste niveau-testcases slagen.
-
-## 13. Geautomatiseerde model-audit
-
-Naast de handmatige controle is er nu een audit-tool:
+## 12. Model-audit
 
 ```bash
 node tests/riasoc_model_audit.js
 ```
 
-Deze tool draait rechtstreeks op `index.html`. Hij laadt de bestaande vragen, MBO-records en functies in een Node VM-context en gebruikt dus dezelfde logica als de website:
+De audit draait op `index.html` zelf en simuleert per groep 600 leerlingen:
 
-- `norm()` voor normalisatie;
-- `topCodeMeta()` voor topcode en tie-informatie;
-- `selectSuggestions()` voor de 6 opleidingen;
-- `selectedProvider()` voor school- en locatiekeuze;
-- `validateQuestions()` en `validateNiveauMatchCases()` voor basale datakwaliteit.
+1. **Willekeurige klikkers.** Heeft elke letter evenveel kans om bovenaan te komen? Plus een fijnmeting met 60.000 klikkers.
+2. **Kant-klikkers.** Altijd links, altijd rechts, om en om, en een voorkeur van 70% voor links.
+3. **Leerlingen met een echte voorkeur.** Elke leerling heeft verborgen voorkeuren met de samenhang van de zeshoek en kiest daar met enige ruis naar. Vindt de test die voorkeur terug?
 
-De audit simuleert:
+Bij elke groep meet de audit ook de opleidingen: hoeveel verschillende er in beeld komen, hoe vaak de meest getoonde verschijnt, en of de hoofdletter van de opleiding bij de sterkste letters van de leerling hoort.
 
-- 6 zuivere profielen, één per RIASOC-dimensie;
-- alle 15 combinaties van twee dimensies;
-- alle 20 combinaties van drie dimensies;
-- vaste patronen zoals alle A, alle B en om-en-om;
-- 5 seeded random profielen voor de 50-simulatie-tabel;
-- 1000 random antwoordreeksen.
+De audit eindigt met een fout als de vragenset scheef is, als altijd-links geen vlak profiel geeft, of als één opleiding bij meer dan een kwart van de willekeurige klikkers verschijnt.
 
-Per scenario worden vastgelegd:
+Uitvoer in `tests/output/`:
 
-- ruwe en genormaliseerde RIASOC-scores;
-- topcode;
-- verschillen tussen plek 1-2, 2-3 en 3-4;
-- aantal beroepideeën;
-- de 6 concrete opleidingen;
-- aantal unieke scholen;
-- dimensies die in de opleidingenset terugkomen;
-- sectorfamilies, herhaalde CREBO's en dominante scholen.
+| Bestand | Inhoud |
+|---|---|
+| `riasoc_model_audit.md` | Het rapport. |
+| `riasoc_simulatie_600_willekeurig.csv` | Per willekeurige klikker: antwoorden, scores, code en de 6 opleidingen. |
+| `riasoc_classificatie_dump.csv` | Per opleiding: sector, correctiecategorie, profiel en code. |
 
-De audit schrijft het rapport naar:
-
-```text
-tests/output/riasoc_model_audit.md
-```
-
-De 50-simulatie-tabel staat als CSV in:
-
-```text
-tests/output/riasoc_50_simulaties.csv
-```
-
-De classificatie-dump voor handmatige controle staat in:
-
-```text
-tests/output/riasoc_classificatie_dump.csv
-```
-
-### Laatste auditresultaat
-
-Auditdatum: 2026-05-01.
+### Laatste uitkomst (2026-11-18)
 
 | Controle | Uitkomst |
-|---|---:|
-| Vraagvalidatie | 0 fouten |
-| Niveau-testcases | geslaagd |
-| Scenario's getest | 50 |
-| Random simulaties | 1000 |
-| Unieke topcodes in random simulaties | 114 |
-| Unieke sets van 6 opleidingen | 443 |
-| Scenario's met kleine verschillen of ties | 25 |
-| Scenario's met lage variatie in 6 opleidingen | 0 |
-| Classificatie-waarschuwingen | 0 |
-| Gemiddelde verhouding positie 6 / positie 1 | 0,95 |
-| Random cases positie 6 onder 65% van positie 1 | 0 |
-| S-top2 dekking zorg/welzijn | 192 van 192 |
-
-Interpretatie: de scoreberekening, topcode-spreiding en concrete opleidingsselectie zijn nu op hoofdlijnen gezond. Kleine verschillen blijven zichtbaar via de tie/gap-informatie, maar leiden niet meer tot één vaste standaarduitkomst. In de 50 scenario's is geen enkele uitslag meer gemarkeerd als lage variatie.
-
-Ter controle is de vorige versie (`27be48b`) opnieuw gemeten met dezelfde gefixte audit. Die eerlijke baseline gaf 240 unieke opleidingensets in 1000 random simulaties. De winst naar 443 unieke sets komt dus niet alleen door de audit-fix.
-
-De belangrijkste frequenties in 50 simulaties:
-
-| Type | Meest voorkomend | Aantal |
-|---|---|---:|
-| Opleiding | Creatief vakman (ontwerpen en maken met hout) | 23 |
-| Opleiding | Intercedent | 19 |
-| Opleiding | Administratief Medewerker | 18 |
-| CREBO | 25548 | 23 |
-| CREBO | 25136 | 19 |
-| CREBO | 25723 | 18 |
-| School | ROC Mondriaan | 64 |
-| School | HMC | 48 |
-| School | MBO Rijnland | 47 |
-| Sectorfamilie | Techniek & maken | 62 |
-| Sectorfamilie | Horeca & toerisme | 46 |
-| Sectorfamilie | Commercieel & ondernemend | 40 |
-
-Belangrijkste verbetering: de concrete selectie gebruikt nu deduplicatie, sectorcaps, schoolcaps en reserveringen per dominante dimensie. Daardoor krijgt een sociaal profiel bijvoorbeeld zichtbaar ruimte voor zorg/welzijn als de match boven de minimale scorevloer komt, zonder dat commerciele of administratieve S/O/C-overlap de hele set vult.
-
-Resterend aandachtspunt: de topfrequenties zijn nog niet volledig vlak. Dat hoeft ook niet; sommige opleidingen passen nu eenmaal bij veel samengestelde profielen. De volgende verfijning kan gericht kijken naar sectorfamilies die structureel ondervertegenwoordigd zijn, vooral onderwijs/sport en logistiek/transport, en naar uitbreiding of betere tagging van de onderliggende dataset. In de laatste run is S-top2 goed gedekt via zorg/welzijn, maar onderwijs/sport blijft vrijwel afwezig in de concrete 6-pack.
-
-De audit bracht ook twee praktische verbeterpunten aan het licht:
-
-- De matchscore werd eerst als percentage getoond zonder normalisatie, waardoor waarden boven 100 procent mogelijk waren. Dit is gecorrigeerd naar een 0-100 procentweergave.
-- Locaties met HTML-entiteiten, zoals `B&#232;taplein`, konden verkeerd worden gesplitst op de puntkomma in de entiteit. `splitField()` beschermt HTML-entiteiten nu voordat velden worden gesplitst.
+|---|---|
+| Ontwerp en plaatjes | 0 fouten |
+| Willekeurig: letter op plek 1 | tussen 15,0% en 18,8% bij 600; tussen 16,3% en 16,9% bij 60.000 |
+| Altijd links of rechts | alle letters 50%, met melding |
+| Echte voorkeur: sterkste letter goed | 66% |
+| Echte voorkeur: overlap top 3 | 2,47 van 3 |
+| Verschillende opleidingen in beeld | 316 van 400 |
+| Meest getoonde opleiding | bij 12% van de leerlingen |
+| Hoofdletter opleiding in top 3 van leerling | 94% |

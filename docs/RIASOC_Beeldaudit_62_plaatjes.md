@@ -4,6 +4,8 @@ Datum: 2026-05-01
 
 Status: verwerkt in `index.html` op 2026-05-01. De plaatjes zijn behouden; labels en wegingen zijn aangescherpt bij Q22, Q27 en Q48-Q62. Daarna is `tests/riasoc_model_audit.js` opnieuw gedraaid met 0 vraagvalidatiefouten en 443 unieke opleidingensets in 1000 random simulaties.
 
+> Update 2026-11-18: de verkenner gebruikt nu 30 van deze 62 plaatjes, met 1 punt per keuze in plaats van de weging hieronder. Zie `RIASOC_30_vragen_ontwerp.md`. Deze audit blijft de beeldbeoordeling van de volledige reeks.
+
 Deze audit beoordeelt de 62 lokale PNG's in `assets/riasoc` als meetinstrument. De kernvraag per plaatje is:
 
 > Geeft dit plaatje duidelijk aan wat de vraag en de RIASOC-weging bedoelen?
