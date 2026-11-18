@@ -1571,7 +1571,7 @@ ${beroepen?`<div style="display:flex;flex-wrap:wrap;gap:4px;margin-bottom:5px;">
 function fitPdfPage(wrap){
   if(!wrap) return;
   const texts=[...wrap.querySelectorAll('p,li')];
-  for(let step=0;step<16&&wrap.scrollHeight>wrap.clientHeight;step++){
+  for(let step=0;step<60&&wrap.scrollHeight>wrap.clientHeight;step++){
     texts.forEach(el=>{
       const size=parseFloat(el.style.fontSize)||11.5;
       if(size>7.5) el.style.fontSize=(size-0.5)+'px';
