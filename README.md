@@ -2,25 +2,27 @@
 
 RIASOC/MBO Opleidingen Verkenner voor het Corbulo Tech & Design College.
 
-De app is een zelfstandige HTML/JS-tool waarmee leerlingen 62 visuele A/B-keuzes maken. Op basis daarvan berekent de app een RIASOC-profiel en toont hij passende MBO-suggesties.
+De app is een zelfstandige HTML/JS-tool waarmee leerlingen 30 visuele A/B-keuzes maken. Op basis daarvan berekent de app een RIASOC-profiel en toont hij passende MBO-suggesties.
 
 ## In deze versie
 
-- 1 schoon HTML-document: `index.html`
-- 62 lokale vraagafbeeldingen in `assets/riasoc/`
-- geen Google Drive image-afhankelijkheid voor de quizbeelden
-- question metadata: `pair`, `pairType`, `expectedType`
-- `validateQuestions()` voor controle van de R-I-A-S-O-C hexagon
-- tie-aware profielcode via `topCodeMeta()`
-- verbeterde `niveauMatch()` voor samengestelde niveauvelden
-- PDF-export zonder verticale samendrukking: vaste A4-pagina's met klikbare opleidingslinks
-- 12 brede beroepideeën en 6 concrete MBO-opleidingen met deduplicatie, sectorcaps en schoolspreiding
-- terugknop tijdens de 62 vragen, zodat een leerling een vorige keuze kan herstellen
-- beeldaudit op de 62 vraagbeelden en aangescherpte labels/wegingen bij Q22, Q27 en Q48-Q62
-- geautomatiseerde model-audit in `tests/riasoc_model_audit.js`
-- classificatie-dump in `tests/output/riasoc_classificatie_dump.csv`
-- MBO-records krijgen expliciete codes en inhoudelijke RIASOC-herwegingen
-- modeluitleg in `docs/RIASOC_Modeluitleg_weging_en_resultaat.md`
+- 1 HTML-document: `index.html`, zonder build-stap
+- 30 vragen: 28 uit de oorspronkelijke 62 plaatjes, 1 nieuw en 1 samengesteld plaatje
+- elk tweetal letters staat 2 keer tegenover elkaar; elke letter komt 10 keer voor, 5 keer links en 5 keer rechts
+- 1 punt per keuze voor de gekozen letter, zonder bijpunten
+- gelijke stand wordt beslist door het onderlinge duel en gemeld aan de leerling
+- melding bij een vlak profiel of als iemand steeds dezelfde kant kiest
+- opleidingsmatch op profielvorm (correlatie), met wisseling tussen opleidingen die even goed passen
+- elke sterke letter van de leerling krijgt minstens één opleiding
+- invulvelden voor voornaam, achternaam en klas; die staan op de uitslag en in de PDF
+- 12 brede beroepideeën en 6 concrete MBO-opleidingen, hooguit 2 per sector en per school
+- profielcorrectie van opleidingen kijkt alleen naar de opleidingsnaam
+- alle teksten voor leerlingen op taalniveau 2F: korte zinnen en gewone woorden
+- terugknop tijdens de vragen
+- PDF-export met klikbare opleidingslinks
+- model-audit met 600 gesimuleerde leerlingen per groep in `tests/riasoc_model_audit.js`
+
+Waarom deze 30 plaatjes en deze telling: [docs/RIASOC_30_vragen_ontwerp.md](docs/RIASOC_30_vragen_ontwerp.md).
 
 ## Starten
 
@@ -32,18 +34,20 @@ Open `index.html` in een browser. Er is geen build-stap en geen server nodig.
 mbo-verkenner/
 ├── index.html
 ├── assets/
-│   └── riasoc/
-│       ├── 01-fiets-repareren-of-fiets-uitleggen.png
-│       ├── ...
-│       └── 62-bij-een-blijven-of-de-groep-organiseren.png
+│   └── riasoc/                  alle plaatjes en de logo's
 ├── docs/
+│   ├── RIASOC_30_vragen_ontwerp.md
 │   ├── RIASOC_Modeluitleg_weging_en_resultaat.md
 │   ├── RIASOC_Beeldaudit_62_plaatjes.md
-│   └── RIASOC_Claude_Beeldaudit_Reviewpakket.md
+│   ├── RIASOC_Claude_Beeldaudit_Reviewpakket.md
+│   └── riasoc_30_plaatjes_overzicht.jpg
 ├── tests/
 │   ├── riasoc_model_audit.js
+│   ├── fixtures/vragen_62_oud.json
 │   └── output/
-│       └── riasoc_model_audit.md
+├── tools/
+│   ├── swap_sides.py            wisselt linker- en rechterscène van een plaatje
+│   └── combine_sides.py         maakt één plaatje uit twee bestaande scènes
 └── README.md
 ```
 
@@ -64,22 +68,17 @@ Lees de volledige uitleg in [docs/RIASOC_Modeluitleg_weging_en_resultaat.md](doc
 
 ## Validatie
 
-Voer de model-audit uit met:
-
 ```bash
 node tests/riasoc_model_audit.js
 ```
 
-De laatste lokale validatie gaf:
+De audit draait op `index.html` zelf, schrijft een rapport naar `tests/output/riasoc_model_audit.md` en eindigt met een fout als de vragenset scheef is. Laatste uitkomst (2026-11-18):
 
-- `<!DOCTYPE html>`: 1
-- `</html>`: 1
-- IMG-items: 62
-- Q32-Q62 gevuld: ja
-- `validateQuestions()`: 62 vragen, 0 fouten
-- `niveauMatch()` testcases: geslaagd
-- model-audit: 50 scenario's, 1000 random simulaties, 114 unieke topcodes, 443 unieke opleidingensets, 0 lage-variatiescenario's, 0 classificatie-waarschuwingen
-- CSV-analyse: `tests/output/riasoc_50_simulaties.csv`
+- ontwerp: 30 vragen, 0 fouten, elk tweetal 2 keer, elke letter 10 keer en 5/5 links/rechts
+- 600 willekeurige klikkers: elke letter 14-20% kans op plek 1; bij 60.000 klikkers 16,4-17,0%
+- altijd links of rechts: vlak profiel met melding
+- 600 leerlingen met een echte voorkeur: sterkste letter in 63% goed, overlap top 3 gemiddeld 2,53 van 3
+- opleidingen: 313 van de 400 komen in beeld, de meest getoonde bij 12% van de leerlingen
 
 ## Doel
 
