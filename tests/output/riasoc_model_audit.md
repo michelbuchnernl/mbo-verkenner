@@ -91,24 +91,25 @@ Fijnmeting met 60.000 willekeurige klikkers (alleen de telling): plek 1 = R 17.0
 
 | Meting | Uitkomst |
 |---|---|
-| Verschillende opleidingen getoond | 314 van 400 |
-| Verschillende zestallen | 578 op 600 leerlingen |
-| Meest getoonde opleiding | 25798 Podium- en evenemententechnicus (12% van de leerlingen) |
+| Verschillende opleidingen getoond | 313 van 400 |
+| Verschillende zestallen | 587 op 600 leerlingen |
+| Meest getoonde opleiding | 27037 Standbouwer (14% van de leerlingen) |
 | Aandeel van de 10 meest getoonde | 17% |
-| Sectoren per leerling (van 6) | 3.7 |
-| Scholen per leerling (van 6) | 4.1 |
+| Sectoren per leerling (van 6) | 3.9 |
+| Scholen per leerling (van 6) | 4.2 |
 | Gemiddelde profielmatch | 62% |
-| Hoofdletter opleiding zit in top 3 van leerling | 92% |
-| Hoofdletter opleiding zit in top 2 van leerling | 79% |
-| Hoofdletter opleiding hoort bij de 2 laagste letters | 2% |
+| Elke sterke letter van de leerling heeft een opleiding | 78% |
+| Hoofdletter opleiding zit in top 3 van leerling | 91% |
+| Hoofdletter opleiding zit in top 2 van leerling | 77% |
+| Hoofdletter opleiding hoort bij de 2 laagste letters | 3% |
 
 Verdeling over sectoren (aandeel van alle getoonde opleidingen):
 
 | Sector | Getoond | Aandeel in aanbod |
 |---|---|---|
-| Techniek & maken | 18% | 40% |
-| Uiterlijke verzorging | 12% | 6% |
-| Creatief & media | 11% | 7% |
+| Techniek & maken | 19% | 40% |
+| Creatief & media | 12% | 7% |
+| Uiterlijke verzorging | 11% | 6% |
 | Horeca & toerisme | 10% | 7% |
 | Commercieel & ondernemend | 10% | 9% |
 | Overig | 9% | 4% |
@@ -125,18 +126,18 @@ Vaakst getoond:
 
 | Opleiding | Bij % van de leerlingen |
 |---|---|
-| 25798 Podium- en evenemententechnicus | 12% |
-| 25717 AV-Specialist | 12% |
-| 27037 Standbouwer | 12% |
-| 27036 Specialist Decorbouwer | 11% |
-| 27005 Specialist Restauratie & Decoratie | 11% |
-| 25686 Fashion Tailor | 11% |
-| 25688 Fashion Product Coordinator | 9% |
-| 25685 Fashion Retailer | 9% |
-| 25689 Basismedewerker Fashion | 9% |
-| 25684 Assistant Fashion Tailor | 9% |
-| 25614 Boulanger | 9% |
+| 27037 Standbouwer | 14% |
+| 25717 AV-Specialist | 11% |
+| 25685 Fashion Retailer | 10% |
+| 25688 Fashion Product Coordinator | 10% |
+| 25798 Podium- en evenemententechnicus | 10% |
+| 27005 Specialist Restauratie & Decoratie | 10% |
+| 25686 Fashion Tailor | 10% |
+| 25689 Basismedewerker Fashion | 10% |
+| 27036 Specialist Decorbouwer | 9% |
 | 25882 Redactiemedewerker | 8% |
+| 25276 Werkvoorbereider elektro | 8% |
+| 27101 Allround interieurvakman (M/V) (woningstofferen) | 8% |
 
 ## 3. Kant-klikkers en vaste patronen
 
@@ -168,21 +169,22 @@ Elke gesimuleerde leerling heeft verborgen voorkeuren voor de zes letters (met d
 | Gelijke stand op de grens plek 3/4 | 25% |
 | ... daarvan na tie-break nog gelijk | 4% |
 | Verschillende codes (120 mogelijk) | 115 |
-| Hoofdletter opleiding zit in echte top 3 van leerling | 91% |
+| Hoofdletter opleiding zit in echte top 3 van leerling | 90% |
 
 ### Opleidingen bij deze groep
 
 | Meting | Uitkomst |
 |---|---|
 | Verschillende opleidingen getoond | 319 van 400 |
-| Verschillende zestallen | 583 op 600 leerlingen |
-| Meest getoonde opleiding | 25798 Podium- en evenemententechnicus (13% van de leerlingen) |
-| Aandeel van de 10 meest getoonde | 17% |
-| Sectoren per leerling (van 6) | 3.8 |
-| Scholen per leerling (van 6) | 4.1 |
+| Verschillende zestallen | 580 op 600 leerlingen |
+| Meest getoonde opleiding | 27037 Standbouwer (14% van de leerlingen) |
+| Aandeel van de 10 meest getoonde | 16% |
+| Sectoren per leerling (van 6) | 3.9 |
+| Scholen per leerling (van 6) | 4.2 |
 | Gemiddelde profielmatch | 66% |
-| Hoofdletter opleiding zit in top 3 van leerling | 95% |
-| Hoofdletter opleiding zit in top 2 van leerling | 82% |
+| Elke sterke letter van de leerling heeft een opleiding | 89% |
+| Hoofdletter opleiding zit in top 3 van leerling | 94% |
+| Hoofdletter opleiding zit in top 2 van leerling | 81% |
 | Hoofdletter opleiding hoort bij de 2 laagste letters | 1% |
 
 ## 5. Oude en nieuwe vragenset naast elkaar
@@ -210,6 +212,7 @@ Alleen de telling van de vragen, zonder opleidingen. Gelijke stand is hier met h
 | hospitality-contact-uitvoerend | 41 |
 | creatief-media-ontwerp | 31 |
 | zorg-welzijn-contact | 26 |
+| leiding-ondernemen (+O) | 15 |
 | ict-beheer-support | 12 |
 | hospitality-contact-leiding | 11 |
 | entree-breed-contact-dienstverlening | 11 |
@@ -224,5 +227,5 @@ Alleen de telling van de vragen, zonder opleidingen. Gelijke stand is hier met h
 | ambacht-service-techniek | 2 |
 | eigen dossierprofiel (geen correctie) | 102 |
 
-Verschillende RIASOC-profielen in de dataset: 43 op 400 opleidingen. Zie `riasoc_classificatie_dump.csv`.
+Verschillende RIASOC-profielen in de dataset: 50 op 400 opleidingen. Zie `riasoc_classificatie_dump.csv`.
 

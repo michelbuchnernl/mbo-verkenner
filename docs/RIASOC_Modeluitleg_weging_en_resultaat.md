@@ -117,6 +117,8 @@ De profielen komen uit de kwalificatiedossiers. Voor een aantal groepen legt `ap
 | Ambacht | Smalle R/A/C-profielen |
 | Vastgoed/advies | O en C voorop |
 
+Staat ondernemen of leidinggeven in de naam (ondernemer, manager, leidinggevende, teamleider, retailer), dan krijgt Ondernemend minstens een 8, ook bij een creatieve of technische opleiding. Zo is "Ondernemer Creatieve Sector" zowel Artistiek als Ondernemend.
+
 De correctie kijkt alleen naar de **naam van de opleiding**. Eerder deden ook schoolnaam, adres en URL mee. Dat gaf toevalstreffers: een opleiding aan de Marten Meesweg werd wegenbouw, en alles met "transport" werd sport.
 
 Opleidingen die in geen categorie vallen houden hun eigen dossierprofiel. Dat zijn er ruim 100, vooral administratie, commercie, logistiek, horeca-keuken, dier en veiligheid.
@@ -149,8 +151,11 @@ De uitslag begint breed: voor elk van de drie hoogste letters vier beroepideeën
 Daarna kiest `selectSuggestions()` 6 concrete opleidingen:
 
 1. alle opleidingen van het juiste niveau worden gesorteerd op match;
-2. dubbele CREBO's en varianten van dezelfde opleiding vallen af;
-3. van boven naar beneden worden er 6 gekozen, met hooguit 2 per sector en 2 per school. Lukt dat niet, dan wordt de grens verruimd naar 3.
+2. dubbele CREBO's en varianten van dezelfde opleiding vallen af (Allround en Specialist Decorbouwer tellen als één);
+3. elke **sterke letter** van de leerling krijgt eerst één opleiding waarin die letter bij de twee hoogste van de opleiding hoort. Sterk betekent: in de top 3, minstens 50%, en hooguit 20 punten onder de hoogste letter. De opleiding moet zelf ook redelijk passen (match van minstens 30%);
+4. de rest wordt van boven naar beneden aangevuld, met hooguit 2 per sector en 2 per school. Lukt dat niet, dan wordt de grens verruimd naar 3.
+
+Stap 3 voorkomt dat een gedeelde tweede letter helemaal uit beeld raakt. Zonder die stap kreeg iemand met Artistiek 70%, Realistisch 60% en Ondernemend 60% zes opleidingen in de hoek maken en creatief, en niets ondernemends.
 
 Veel opleidingen delen hetzelfde RIASOC-profiel en passen dus precies even goed. Welke daarvan vooraan komt hangt af van het antwoordpatroon van de leerling. Zo krijgt niet iedereen met een techniekprofiel dezelfde twee techniekopleidingen. Dezelfde antwoorden geven altijd dezelfde zes.
 
@@ -214,6 +219,7 @@ Uitvoer in `tests/output/`:
 | Altijd links of rechts | alle letters 50%, met melding |
 | Echte voorkeur: sterkste letter goed | 63% |
 | Echte voorkeur: overlap top 3 | 2,53 van 3 |
-| Verschillende opleidingen in beeld | 314 van 400 |
-| Meest getoonde opleiding | bij 12% van de leerlingen |
-| Hoofdletter opleiding in top 3 van leerling | 92% |
+| Verschillende opleidingen in beeld | 313 van 400 |
+| Meest getoonde opleiding | bij 14% van de leerlingen |
+| Hoofdletter opleiding in top 3 van leerling | 91% |
+| Elke sterke letter heeft een opleiding | 78% (willekeurig), 89% (echte voorkeur) |

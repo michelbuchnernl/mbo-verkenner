@@ -49,7 +49,7 @@ function loadModel() {
   const exportScript = `
     window.__RIASOC_AUDIT__ = {
       QS, D, META, MBO, MBO_CORRECTIONS, IMG_BASE,
-      norm, rankProfile, profileQuality, answerKey, profileCorrelation,
+      norm, rankProfile, profileQuality, answerKey, profileCorrelation, strongLetters,
       validateQuestions, validateDesign, validateNiveauMatchCases,
       selectSuggestions, selectedProvider, sectorFamily, opleidingStam, matchPct,
       setAllowedLevels(levels){ S.allowedLevels = levels.slice(); }
@@ -145,7 +145,7 @@ function summarise(model, students, truths) {
   const programmes = {}, families = {}, suggestionSets = {};
   let boundaryTie = 0, boundaryUnresolved = 0, topTie = 0, flat = 0;
   let simSum = 0, inTop3 = 0, inTop2 = 0, inBottom2 = 0, total = 0, familySum = 0, schoolSum = 0;
-  let hit1 = 0, overlap = 0, rho = 0, sugTrueTop3 = 0;
+  let hit1 = 0, overlap = 0, rho = 0, sugTrueTop3 = 0, covered = 0;
 
   students.forEach((st, k) => {
     const { meta } = st;
@@ -176,6 +176,7 @@ function summarise(model, students, truths) {
       }
     });
     familySum += fams.size; schoolSum += schools.size;
+    if (model.strongLetters(st.pct, meta.code).every(d => st.suggestions.some(m => (m.dominantLetters || []).includes(d)))) covered++;
     const setKey = st.suggestions.map(m => `${m.c} ${m.o}`).sort().join(' | ');
     suggestionSets[setKey] = (suggestionSets[setKey] || 0) + 1;
 
@@ -207,7 +208,7 @@ function summarise(model, students, truths) {
     top10Share: progList.slice(0, 10).reduce((a, x) => a + x[1], 0) / total,
     families, total,
     meanSim: simSum / total, inTop3: inTop3 / total, inTop2: inTop2 / total, inBottom2: inBottom2 / total,
-    meanFamilies: familySum / n, meanSchools: schoolSum / n,
+    meanFamilies: familySum / n, meanSchools: schoolSum / n, covered: covered / n,
     recovery: truths ? { hit1: hit1 / n, overlap: overlap / n, rho: rho / n, sugTrueTop3: sugTrueTop3 / total } : null
   };
 }
@@ -378,6 +379,7 @@ function main() {
     ['Sectoren per leerling (van 6)', s.meanFamilies.toFixed(1)],
     ['Scholen per leerling (van 6)', s.meanSchools.toFixed(1)],
     ['Gemiddelde profielmatch', pctStr(s.meanSim, 0)],
+    ['Elke sterke letter van de leerling heeft een opleiding', pctStr(s.covered, 0)],
     ['Hoofdletter opleiding zit in top 3 van leerling', pctStr(s.inTop3, 0)],
     ['Hoofdletter opleiding zit in top 2 van leerling', pctStr(s.inTop2, 0)],
     ['Hoofdletter opleiding hoort bij de 2 laagste letters', pctStr(s.inBottom2, 0)]

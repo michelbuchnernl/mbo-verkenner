@@ -145,7 +145,9 @@ In alle gevallen krijgt de leerling een melding: welke letter even hoog scoort a
 
 - **Profielvorm in plaats van optelsom.** De match is de correlatie tussen de zes scores van de leerling en de zes scores van de opleiding. Dat is dezelfde aanpak als bij de O*NET Interest Profiler. Een opleiding die op alles hoog scoort heeft geen voordeel meer.
 - **Wisselen bij gelijke match.** Opleidingen met hetzelfde profiel passen precies even goed. Welke daarvan getoond wordt hangt nu af van het antwoordpatroon van de leerling. Dezelfde antwoorden geven altijd dezelfde opleidingen.
-- **Spreiding** blijft: geen dubbele CREBO of opleidingsstam, hooguit 2 per sector en 2 per school.
+- **Elke sterke letter telt.** Een letter in de top 3 met minstens 50% en hooguit 20 punten onder de hoogste krijgt minstens één opleiding waarin die letter bij de twee hoogste hoort. Bij leerlingen met een echte voorkeur stijgt het aandeel waarbij alle sterke letters een opleiding hebben daarmee van 81% naar 89%.
+- **Ondernemen in de naam.** Opleidingen met ondernemer, manager, leidinggevende, teamleider of retailer in de naam krijgen Ondernemend minstens 8.
+- **Spreiding** blijft: geen dubbele CREBO of variant van dezelfde opleiding, hooguit 2 per sector en 2 per school.
 - Het matchpercentage is de correlatie maal 100. De oude reserveringen per sector zijn vervallen; ze waren nodig om de optelsom te corrigeren.
 
 ## 7. Resultaat
@@ -154,12 +156,12 @@ In alle gevallen krijgt de leerling een melding: welke letter even hoog scoort a
 
 | | Oud | Nieuw |
 |---|---|---|
-| Verschillende opleidingen in beeld | 60 van 400 | 314 van 400 |
-| Verschillende zestallen | 345 | 578 |
-| Meest getoonde opleiding | bij 70% van de leerlingen | bij 12% |
+| Verschillende opleidingen in beeld | 60 van 400 | 313 van 400 |
+| Verschillende zestallen | 345 | 587 |
+| Meest getoonde opleiding | bij 70% van de leerlingen | bij 14% |
 | Aandeel van de 10 meest getoonde | 62% | 17% |
-| Hoofdletter opleiding in top 3 van leerling | 79% | 92% |
-| Hoofdletter opleiding bij de 2 laagste letters | 12% | 2% |
+| Hoofdletter opleiding in top 3 van leerling | 79% | 91% |
+| Hoofdletter opleiding bij de 2 laagste letters | 12% | 3% |
 
 Bij 600 leerlingen met een echte, verborgen voorkeur:
 

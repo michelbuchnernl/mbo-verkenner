@@ -13,6 +13,8 @@ De app is een zelfstandige HTML/JS-tool waarmee leerlingen 30 visuele A/B-keuzes
 - gelijke stand wordt beslist door het onderlinge duel en gemeld aan de leerling
 - melding bij een vlak profiel of als iemand steeds dezelfde kant kiest
 - opleidingsmatch op profielvorm (correlatie), met wisseling tussen opleidingen die even goed passen
+- elke sterke letter van de leerling krijgt minstens één opleiding
+- invulvelden voor voornaam, achternaam en klas; die staan op de uitslag en in de PDF
 - 12 brede beroepideeën en 6 concrete MBO-opleidingen, hooguit 2 per sector en per school
 - profielcorrectie van opleidingen kijkt alleen naar de opleidingsnaam
 - terugknop tijdens de vragen
@@ -75,7 +77,7 @@ De audit draait op `index.html` zelf, schrijft een rapport naar `tests/output/ri
 - 600 willekeurige klikkers: elke letter 14-20% kans op plek 1; bij 60.000 klikkers 16,4-17,0%
 - altijd links of rechts: vlak profiel met melding
 - 600 leerlingen met een echte voorkeur: sterkste letter in 63% goed, overlap top 3 gemiddeld 2,53 van 3
-- opleidingen: 314 van de 400 komen in beeld, de meest getoonde bij 12% van de leerlingen
+- opleidingen: 313 van de 400 komen in beeld, de meest getoonde bij 12% van de leerlingen
 
 ## Doel
 

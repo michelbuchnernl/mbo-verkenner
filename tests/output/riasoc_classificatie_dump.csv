@@ -44,7 +44,7 @@ crebo,opleiding,school,sector,categorie,R,I,A,S,O,C,code
 25548,Creatief vakman (ontwerpen en maken met hout),"HMC; Nimeto",Techniek & maken,creatief-media-ontwerp,3,7,9,4,5,6,AIC
 25548,Creatief vakman (ontwerpen en maken met leer/textiel),"HMC; Nimeto",Creatief & media,creatief-media-ontwerp,3,7,9,4,5,6,AIC
 25548,Creatief vakman advanced,"HMC; Nimeto",Creatief & media,creatief-media-ontwerp,3,7,9,4,5,6,AIC
-25548,Ondernemer Creatieve Sector,"HMC; Nimeto",Creatief & media,creatief-media-ontwerp,3,7,9,4,5,6,AIC
+25548,Ondernemer Creatieve Sector,"HMC; Nimeto",Creatief & media,creatief-media-ontwerp,3,7,9,4,8,6,AOI
 25583,Montagemedewerker houttechniek,"HMC; ROC Da Vinci College",Techniek & maken,,10,4,4,4,5,8,RCO
 25585,Allround montagemedewerker houttechniek,"HMC; ROC Da Vinci College",Techniek & maken,,10,4,4,4,5,8,RCO
 25587,Werkvoorbereider houttechniek,"HMC; ROC Da Vinci College",Techniek & maken,,10,4,4,4,5,8,RCO
@@ -81,7 +81,7 @@ crebo,opleiding,school,sector,categorie,R,I,A,S,O,C,code
 25670,Automonteur,"ROC Da Vinci College; Techniek College Rotterdam",Techniek & maken,techniek-r-i-c-uitvoering,10,6,2,3,5,8,RCI
 25671,Chauffeur Wegvervoer,"MBO Rijnland; ROC Mondriaan",Logistiek & transport,,7,3,4,5,4,8,CRS
 25684,Assistant Fashion Tailor,Zadkine,Uiterlijke verzorging,creatief-media-ontwerp,3,7,9,4,5,6,AIC
-25685,Fashion Retailer,"ROC van Amsterdam; Zadkine",Uiterlijke verzorging,creatief-media-ontwerp,3,7,9,4,5,6,AIC
+25685,Fashion Retailer,"ROC van Amsterdam; Zadkine",Uiterlijke verzorging,creatief-media-ontwerp,3,7,9,4,8,6,AOI
 25686,Fashion Tailor,"ROC van Amsterdam; Zadkine",Uiterlijke verzorging,creatief-media-ontwerp,3,7,9,4,5,6,AIC
 25688,Fashion Product Coordinator,"ROC van Amsterdam; Zadkine",Uiterlijke verzorging,creatief-media-ontwerp,3,7,9,4,5,6,AIC
 25689,Basismedewerker Fashion,"ROC van Amsterdam; Zadkine",Uiterlijke verzorging,creatief-media-ontwerp,3,7,9,4,5,6,AIC
@@ -119,7 +119,7 @@ crebo,opleiding,school,sector,categorie,R,I,A,S,O,C,code
 25727,Marketing & Communication Specialist,"Euro College; MBO Rijnland; ROC Da Vinci College; ROC Mondriaan; ROC van Amsterdam; Zadkine",Commercieel & ondernemend,,3,4,2,8,8,10,CSO
 25728,Management Assistant,"ROC Mondriaan; Zadkine",Administratie & juridisch,,3,4,2,8,8,10,CSO
 25728,Office & Management Support Specialist,"ROC Mondriaan; Zadkine",Administratie & juridisch,,3,4,2,8,8,10,CSO
-25730,Dier en management,"Lentiz; Yuverta MBO","Voeding, natuur & dier",,9,3,3,8,7,6,RSO
+25730,Dier en management,"Lentiz; Yuverta MBO","Voeding, natuur & dier",,9,3,3,8,8,6,RSO
 25731,Dierenartsassistent paraveterinair,"Lentiz; Yuverta MBO","Voeding, natuur & dier",,9,3,3,8,7,6,RSO
 25732,Dierverzorging,"Lentiz; ROC van Amsterdam","Voeding, natuur & dier",,9,3,3,8,7,6,RSO
 25734,Dier en gedrag,"Lentiz; Yuverta MBO","Voeding, natuur & dier",,9,3,3,8,7,6,RSO
@@ -167,9 +167,9 @@ crebo,opleiding,school,sector,categorie,R,I,A,S,O,C,code
 25774,Logistiek medewerker,"ROC Da Vinci College; ROC Mondriaan; ROC van Amsterdam; Zadkine",Logistiek & transport,,6,4,2,5,7,8,COR
 25774,Logistiek medewerker - NT2,"ROC Da Vinci College; ROC Mondriaan; ROC van Amsterdam; Zadkine",Logistiek & transport,,6,4,2,5,7,8,COR
 25774,Logistiek medewerker-VeVa/Defensie,"ROC Da Vinci College; ROC Mondriaan; ROC van Amsterdam; Zadkine",Logistiek & transport,,6,4,2,5,7,8,COR
-25775,Logistiek teamleider,"ROC Da Vinci College; ROC Mondriaan; ROC van Amsterdam; STC; Zadkine",Logistiek & transport,,6,4,2,5,7,8,COR
-25775,Logistiek teamleider - Fast-track,"ROC Da Vinci College; ROC Mondriaan; ROC van Amsterdam; STC; Zadkine",Logistiek & transport,,6,4,2,5,7,8,COR
-25775,Logistiek teamleider-VeVa/Defensie,"ROC Da Vinci College; ROC Mondriaan; ROC van Amsterdam; STC; Zadkine",Logistiek & transport,,6,4,2,5,7,8,COR
+25775,Logistiek teamleider,"ROC Da Vinci College; ROC Mondriaan; ROC van Amsterdam; STC; Zadkine",Logistiek & transport,,6,4,2,5,8,8,OCR
+25775,Logistiek teamleider - Fast-track,"ROC Da Vinci College; ROC Mondriaan; ROC van Amsterdam; STC; Zadkine",Logistiek & transport,,6,4,2,5,8,8,OCR
+25775,Logistiek teamleider-VeVa/Defensie,"ROC Da Vinci College; ROC Mondriaan; ROC van Amsterdam; STC; Zadkine",Logistiek & transport,,6,4,2,5,8,8,OCR
 25776,Logistiek supervisor,"ROC Da Vinci College; ROC Mondriaan",Logistiek & transport,,7,3,2,6,8,8,OCR
 25776,Logistiek supervisor - Fast-track,"ROC Da Vinci College; ROC Mondriaan",Logistiek & transport,,7,3,2,6,8,8,OCR
 25777,Specialist transport en logistiek,ROC Mondriaan,Commercieel & ondernemend,,7,3,2,6,8,8,OCR
@@ -209,8 +209,8 @@ crebo,opleiding,school,sector,categorie,R,I,A,S,O,C,code
 25854,Meubelstoffeerder,HMC,Techniek & maken,ambacht-materiaal-vormgeving,9,4,6,3,4,8,RCA
 25855,Allround meubelstoffeerder,HMC,Techniek & maken,ambacht-materiaal-vormgeving,9,4,6,3,4,8,RCA
 25856,Allround Basisgoudsmid,Zadkine,Techniek & maken,ambacht-precisie-vormgeving,8,3,6,3,4,7,RCA
-25857,Ondernemer Goudsmid,Zadkine,Techniek & maken,ambacht-precisie-vormgeving,8,3,6,3,4,7,RCA
-25857,Ondernemer Goudsmid versneld,Zadkine,Techniek & maken,ambacht-precisie-vormgeving,8,3,6,3,4,7,RCA
+25857,Ondernemer Goudsmid,Zadkine,Techniek & maken,ambacht-precisie-vormgeving,8,3,6,3,8,7,ROC
+25857,Ondernemer Goudsmid versneld,Zadkine,Techniek & maken,ambacht-precisie-vormgeving,8,3,6,3,8,7,ROC
 25870,Middenkaderfunctionaris Bouw,"ROC Da Vinci College; ROC Mondriaan; Techniek College Rotterdam",Techniek & maken,,10,5,3,3,6,8,RCO
 25870,Middenkaderfunctionaris bouw,"ROC Da Vinci College; ROC Mondriaan; Techniek College Rotterdam",Techniek & maken,,10,5,3,3,6,8,RCO
 25871,Middenkaderfunctionaris Infra,"ROC Da Vinci College; ROC Mondriaan; Techniek College Rotterdam",Techniek & maken,,10,5,3,3,6,8,RCO
@@ -224,7 +224,7 @@ crebo,opleiding,school,sector,categorie,R,I,A,S,O,C,code
 25877,Junior accountmanager,"ROC Da Vinci College; ROC Mondriaan; ROC van Amsterdam; Zadkine",Commercieel & ondernemend,,3,6,4,8,10,5,OSI
 25879,International Business & Sales,"Euro College; ROC van Amsterdam; Zadkine",Commercieel & ondernemend,,3,6,4,8,10,5,OSI
 25879,Junior manager internationale handel,"Euro College; ROC van Amsterdam; Zadkine",Commercieel & ondernemend,,3,6,4,8,10,5,OSI
-25881,Mediamanager,"Grafisch Lyceum Rotterdam; ROC van Amsterdam",Creatief & media,creatief-media-ontwerp,3,7,9,4,5,6,AIC
+25881,Mediamanager,"Grafisch Lyceum Rotterdam; ROC van Amsterdam",Creatief & media,creatief-media-ontwerp,3,7,9,4,8,6,AOI
 25882,Redactiemedewerker,"Grafisch Lyceum Rotterdam; ROC Da Vinci College; ROC van Amsterdam",Creatief & media,,3,8,8,3,6,8,IAC
 25883,Autoschadehersteller,"MBO Rijnland; ROC Mondriaan; Techniek College Rotterdam",Techniek & maken,techniek-r-i-c-uitvoering,10,6,2,3,5,8,RCI
 25884,Eerste Autoschadehersteller,MBO Rijnland,Techniek & maken,techniek-r-i-c-uitvoering,10,6,2,3,5,8,RCI
@@ -253,8 +253,8 @@ crebo,opleiding,school,sector,categorie,R,I,A,S,O,C,code
 25919,Technicus engineering werkgebied Installatietechniek,"MBO Rijnland; ROC Da Vinci College; ROC Mondriaan; Techniek College Rotterdam",Techniek & maken,techniek-r-i-c-analyse,9,8,2,4,5,8,RIC
 25924,Meubelmaker / (scheeps)interieurbouwer,"HMC; ROC Da Vinci College",Techniek & maken,techniek-r-i-c-uitvoering,10,6,2,3,5,8,RCI
 25927,Werkvoorbereider meubelindustrie / (scheeps)interieurbouw (doorstromers),HMC,Techniek & maken,,10,7,6,4,6,8,RCI
-25928,Ondernemend meubelmaker / (scheeps)interieurbouwer,"HMC; ROC Da Vinci College",Techniek & maken,techniek-r-i-c-uitvoering,10,6,2,3,5,8,RCI
-25928,Ondernemend meubelmaker / (scheeps)interieurbouwer (verkort),"HMC; ROC Da Vinci College",Techniek & maken,techniek-r-i-c-uitvoering,10,6,2,3,5,8,RCI
+25928,Ondernemend meubelmaker / (scheeps)interieurbouwer,"HMC; ROC Da Vinci College",Techniek & maken,techniek-r-i-c-uitvoering,10,6,2,3,8,8,ROC
+25928,Ondernemend meubelmaker / (scheeps)interieurbouwer (verkort),"HMC; ROC Da Vinci College",Techniek & maken,techniek-r-i-c-uitvoering,10,6,2,3,8,8,ROC
 25946,Kaderfunctie afbouw en onderhoud (Vastgoedadviseur),"Nimeto; Techniek College Rotterdam",Techniek & maken,vastgoed-organisatie-advies,6,6,3,4,8,8,OCR
 25946,Ondernemer Vastgoed,"Nimeto; Techniek College Rotterdam",Commercieel & ondernemend,vastgoed-organisatie-advies,6,6,3,4,8,8,OCR
 25946,Regisseur Vastgoedonderhoud,"Nimeto; Techniek College Rotterdam",Overig,vastgoed-organisatie-advies,6,6,3,4,8,8,OCR
@@ -335,8 +335,8 @@ crebo,opleiding,school,sector,categorie,R,I,A,S,O,C,code
 27062,Zelfstandig werkend kok,"ROC Da Vinci College; ROC Mondriaan; ROC van Amsterdam; Zadkine",Horeca & toerisme,,9,4,2,8,7,7,RSO
 27063,Allround medewerker foodservice,"ROC Mondriaan; ROC van Amsterdam",Horeca & toerisme,,9,4,2,8,7,7,RSO
 27064,Gespecialiseerd kok,Zadkine,Horeca & toerisme,,9,4,2,8,7,7,RSO
-27065,Leidinggevende keuken,"ROC Da Vinci College; ROC van Amsterdam; Zadkine",Techniek & maken,,9,4,2,8,7,7,RSO
-27066,Manager foodservice,ROC Mondriaan,Horeca & toerisme,,9,4,2,8,7,7,RSO
+27065,Leidinggevende keuken,"ROC Da Vinci College; ROC van Amsterdam; Zadkine",Techniek & maken,,9,4,2,8,8,7,RSO
+27066,Manager foodservice,ROC Mondriaan,Horeca & toerisme,,9,4,2,8,8,7,RSO
 27074,Airco/warmtepompmonteur,"ROC van Amsterdam; Techniek College Rotterdam",Techniek & maken,techniek-r-i-c-uitvoering,10,6,2,3,5,8,RCI
 27074,Monteur koeltechniek,"ROC van Amsterdam; Techniek College Rotterdam",Techniek & maken,techniek-r-i-c-uitvoering,10,6,2,3,5,8,RCI
 27076,Monteur koeltechniek,Techniek College Rotterdam,Techniek & maken,techniek-r-i-c-uitvoering,10,6,2,3,5,8,RCI
@@ -352,7 +352,7 @@ crebo,opleiding,school,sector,categorie,R,I,A,S,O,C,code
 27101,Allround interieurvakman (M/V) (woningstofferen),HMC,Overig,ambacht-materiaal-vormgeving,9,4,6,3,4,8,RCA
 27105,Creatief professional muziektheater,ROC Mondriaan,Creatief & media,creatief-media-ontwerp,3,7,9,4,5,6,AIC
 27105,Musicalacteur,ROC Mondriaan,Creatief & media,creatief-media-ontwerp,3,7,9,4,5,6,AIC
-27107,"Dance Academy, performer, choreograaf en ondernemer","MBO Rijnland; ROC van Amsterdam",Creatief & media,creatief-media-ontwerp,3,7,9,4,5,6,AIC
+27107,"Dance Academy, performer, choreograaf en ondernemer","MBO Rijnland; ROC van Amsterdam",Creatief & media,creatief-media-ontwerp,3,7,9,4,8,6,AOI
 27108,Mediamaker,Grafisch Lyceum Rotterdam,Creatief & media,creatief-media-ontwerp,3,7,9,4,5,6,AIC
 27109,Allround Mediamaker,"Grafisch Lyceum Rotterdam; MBO Rijnland; ROC Da Vinci College; ROC van Amsterdam",Creatief & media,creatief-media-ontwerp,3,7,9,4,5,6,AIC
 27110,Mediavormgeven,"Grafisch Lyceum Rotterdam; ROC Da Vinci College; ROC van Amsterdam",Creatief & media,creatief-media-ontwerp,3,7,9,4,5,6,AIC
@@ -392,7 +392,7 @@ crebo,opleiding,school,sector,categorie,R,I,A,S,O,C,code
 27137,Junior Boulanger,"ROC van Amsterdam; Zadkine",Horeca & toerisme,,9,3,3,6,6,8,RCS
 27137,Junior Patissier,"ROC van Amsterdam; Zadkine",Horeca & toerisme,,9,3,3,6,6,8,RCS
 27137,Zelfstandig werkend bakker,"ROC van Amsterdam; Zadkine",Horeca & toerisme,,9,3,3,6,6,8,RCS
-27138,Leidinggevende bakkerij,"ROC van Amsterdam; Zadkine",Horeca & toerisme,,9,3,3,6,6,8,RCS
+27138,Leidinggevende bakkerij,"ROC van Amsterdam; Zadkine",Horeca & toerisme,,9,3,3,6,8,8,ROC
 27141,Apothekersassistent,"ROC van Amsterdam; Zadkine",Zorg & welzijn,zorg-welzijn-contact,3,4,3,10,4,6,SCI
 27141,Apothekersassistent versneld,"ROC van Amsterdam; Zadkine",Zorg & welzijn,zorg-welzijn-contact,3,4,3,10,4,6,SCI
 27142,Doktersassistent,"ROC Da Vinci College; Zadkine",Zorg & welzijn,zorg-welzijn-contact,3,4,3,10,4,6,SCI

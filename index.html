@@ -72,6 +72,11 @@
     .form-g input{width:100%;padding:12px 14px;border:1px solid var(--border);border-radius:var(--r);background:rgba(255,255,255,.08);color:var(--white);font-family:'Red Hat Text',sans-serif;font-size:.95rem;outline:none;transition:border-color .2s;}
     .form-g input:focus{border-color:var(--lb);}
     .form-g input.err{border-color:#ff6b6b;}
+    html{-webkit-text-size-adjust:100%;text-size-adjust:100%;}
+    /* Mobiele browsers vergroten lange teksten in brede blokken; in de PDF mag dat niet. */
+    #pdf-results,#pdf-results *{-webkit-text-size-adjust:100%;text-size-adjust:100%;max-height:1000000px;}
+    .form-row{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+    @media(max-width:380px){.form-row{grid-template-columns:1fr;gap:0;}}
     .privacy{font-size:.68rem;font-weight:300;color:var(--muted);margin-top:14px;}
     .track-label{font-size:.68rem;font-weight:700;margin-bottom:8px;color:var(--lb);letter-spacing:.1em;text-transform:uppercase;text-align:left;display:block;}
     .track-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:7px;margin-bottom:14px;}
@@ -195,7 +200,11 @@
     <span class="em">🎯</span>
     <h2>Jouw profiel is klaar!</h2>
     <p>Vul je gegevens in om de resultaten te bekijken en op te slaan als PDF.</p>
-    <div class="form-g"><label for="inp-name">Naam</label><input type="text" id="inp-name" placeholder="Jouw naam" autocomplete="given-name"></div>
+    <div class="form-row">
+      <div class="form-g"><label for="inp-name">Voornaam</label><input type="text" id="inp-name" placeholder="Voornaam" autocomplete="given-name"></div>
+      <div class="form-g"><label for="inp-lastname">Achternaam</label><input type="text" id="inp-lastname" placeholder="Achternaam" autocomplete="family-name"></div>
+    </div>
+    <div class="form-g"><label for="inp-class">Klas</label><input type="text" id="inp-class" placeholder="Bijvoorbeeld 3B" autocomplete="off" maxlength="12"></div>
     <div class="form-g" style="margin-bottom:6px;">
       <span class="track-label">Huidige opleiding *</span>
       <div class="track-grid" id="track-grid">
@@ -280,7 +289,7 @@
 </div>
 
 <div class="toast" id="toast"></div>
-<div id="pdf-results" style="display:none;position:fixed;left:-9999px;top:0;width:680px;background:#ffffff;font-family:'Red Hat Text',sans-serif;color:#1a1a2e;"></div>
+<div id="pdf-results" style="display:none;position:fixed;left:-9999px;top:0;width:680px;-webkit-text-size-adjust:100%;text-size-adjust:100%;background:#ffffff;font-family:'Red Hat Text',sans-serif;color:#1a1a2e;"></div>
 <div id="pdf-uitleg" style="display:none;position:fixed;left:-9999px;top:0;width:680px;background:#ffffff;font-family:'Red Hat Text',sans-serif;color:#1a1a2e;padding:40px 44px;font-size:13px;line-height:1.65;"></div>
 
 <script>
@@ -945,6 +954,13 @@ function applyMboModelCorrections(){
         cat=setMboScores(m,{R:10,I:6,A:2,S:3,O:5,C:8},'techniek-r-i-c-uitvoering');
       }
     }
+    // Staat ondernemen of leidinggeven in de naam, dan hoort Ondernemend hoog te
+    // staan, ook bij een creatieve of technische opleiding.
+    if(!isEntree&&/ondernem|manager|management|leidinggevende|bedrijfsleider|teamleider|supervisor|retailer/.test(txt)&&(m.sc.O||0)<8){
+      m.sc={...m.sc,O:8};
+      m.modelBoost='O';
+      count('leiding-ondernemen (+O)');
+    }
     if(cat) count(cat);
     m.codeMeta = topCodeMeta(m.sc);
     m.code = m.codeMeta.code;
@@ -955,7 +971,7 @@ function applyMboModelCorrections(){
 const MBO_CORRECTIONS = applyMboModelCorrections();
 window.MBO_CORRECTIONS = MBO_CORRECTIONS;
 
-let S={cur:0,scores:{R:0,I:0,A:0,S:0,O:0,C:0},answers:[],name:'',email:'',track:'',allowedLevels:[2,3,4],sid:Date.now().toString(36)+Math.random().toString(36).slice(2,5)};
+let S={cur:0,scores:{R:0,I:0,A:0,S:0,O:0,C:0},answers:[],name:'',lastName:'',klas:'',email:'',track:'',allowedLevels:[2,3,4],sid:Date.now().toString(36)+Math.random().toString(36).slice(2,5)};
 let chart=null;
 
 function maxSc(){const mx={R:0,I:0,A:0,S:0,O:0,C:0};QS.forEach(q=>D.forEach(d=>{mx[d]+=Math.max(q.wA[d]||0,q.wB[d]||0);}));return mx;}
@@ -1167,14 +1183,21 @@ function toResults(){
   }
   emailEl.classList.remove('err');
   S.name=name; S.email=email;
+  S.lastName=document.getElementById('inp-lastname').value.trim();
+  S.klas=document.getElementById('inp-class').value.trim();
   const n=norm(S.scores),meta=rankProfile(S.answers),code=meta.code;
   buildResults(n,code,meta); saveDB(n,code,meta); show('screen-results');
+}
+// Regel onder de titel: volledige naam en klas als die zijn ingevuld, dan datum en leerweg.
+function studentLine(dateText,trackLabel){
+  const full=S.lastName?[S.name==='Jij'?'':S.name,S.lastName].filter(Boolean).join(' '):'';
+  return [full,S.klas?'Klas '+S.klas:'',dateText,trackLabel].filter(Boolean).join(' · ');
 }
 function buildResults(n,code,meta){
   const d=new Date().toLocaleDateString('nl-NL',{day:'numeric',month:'long',year:'numeric'});
   const trackLabel={Basis:'VMBO Basis',Kader:'VMBO Kader',GL:'VMBO Gemengde Leerweg',TL:'VMBO Theoretische Leerweg',Havo:'Havo',Anders:'Overig'}[S.track]||S.track;
   document.getElementById('res-name').textContent=`${S.name}'s Kompas`;
-  document.getElementById('res-date').textContent=`${d} · ${trackLabel}`;
+  document.getElementById('res-date').textContent=studentLine(d,trackLabel);
   document.getElementById('res-code').textContent=code;
   buildChart(n);buildBars(n);buildProfile(n,code,meta);buildCareerIdeas(code);buildSuggestions(n,code);
 }
@@ -1182,7 +1205,7 @@ function buildResults(n,code,meta){
 function buildChart(n){
   const ctx=document.getElementById('radarChart').getContext('2d');
   if(chart)chart.destroy();
-  chart=new Chart(ctx,{type:'radar',data:{labels:D.map(d=>META[d].naam),datasets:[{data:D.map(d=>n[d]),fill:true,backgroundColor:'rgba(115,210,255,.18)',borderColor:'#73d2ff',borderWidth:2,pointBackgroundColor:'#73d2ff',pointBorderColor:'#140037',pointBorderWidth:2,pointRadius:5}]},options:{responsive:true,maintainAspectRatio:false,scales:{r:{min:0,max:100,ticks:{stepSize:25,color:'rgba(241,241,241,.28)',backdropColor:'transparent',font:{size:8,family:'Red Hat Text'}},grid:{color:'rgba(115,210,255,.1)'},angleLines:{color:'rgba(115,210,255,.14)'},pointLabels:{color:'rgba(241,241,241,.82)',font:{size:11,weight:'700',family:'Red Hat Text'}}}},plugins:{legend:{display:false},tooltip:{backgroundColor:'#1464c8',borderColor:'#73d2ff',borderWidth:1,callbacks:{label:c=>`${c.label}: ${c.raw}%`}}}}});
+  chart=new Chart(ctx,{type:'radar',data:{labels:D.map(d=>META[d].naam),datasets:[{data:D.map(d=>n[d]),fill:true,backgroundColor:'rgba(115,210,255,.18)',borderColor:'#73d2ff',borderWidth:2,pointBackgroundColor:'#73d2ff',pointBorderColor:'#140037',pointBorderWidth:2,pointRadius:5}]},options:{responsive:true,maintainAspectRatio:false,scales:{r:{min:0,max:100,ticks:{stepSize:25,color:'rgba(241,241,241,.28)',backdropColor:'transparent',font:{size:8,family:'Red Hat Text'}},grid:{color:'rgba(115,210,255,.1)'},angleLines:{color:'rgba(115,210,255,.14)'},pointLabels:{color:'rgba(241,241,241,.82)',font:{size:window.innerWidth<400?9:11,weight:'700',family:'Red Hat Text'}}}},plugins:{legend:{display:false},tooltip:{backgroundColor:'#1464c8',borderColor:'#73d2ff',borderWidth:1,callbacks:{label:c=>`${c.label}: ${c.raw}%`}}}}});
 }
 
 function buildBars(n){
@@ -1213,8 +1236,10 @@ function makeMotivation(mbo,norm){
   const stuTop=D.slice().sort((a,b)=>norm[b]-norm[a]).slice(0,3);
   const progTop=D.filter(d=>(mbo.sc[d]||0)>=6).sort((a,b)=>mbo.sc[b]-mbo.sc[a]);
   const overlap=progTop.filter(d=>stuTop.includes(d)&&norm[d]>=30);
-  const primary=overlap[0]||progTop[0]||stuTop[0];
-  const secondary=overlap[1]||progTop[1];
+  // De letter waarvoor de opleiding is gekozen gaat voorop in de uitleg.
+  const lead=mbo.dim&&overlap.includes(mbo.dim)?mbo.dim:null;
+  const primary=lead||overlap[0]||progTop[0]||stuTop[0];
+  const secondary=[...overlap,...progTop].find(d=>d!==primary);
   const WHY={R:'je energie krijgt van praktisch werken en aanpakken',I:'analytisch denken en uitzoeken bij jou passen',A:'je creatief bent en eigen ideeën wil uitwerken',S:'mensen helpen jou energie geeft',O:'je graag initiatief neemt en anderen in beweging brengt',C:'structuur en nauwkeurig werken jou liggen'};
   const WHAT={R:'veel praktisch vakwerk en technisch handelen',I:'analyseren, onderzoeken en doorgronden',A:'creatieve ruimte en eigen ontwerp',S:'werken met en voor mensen',O:'organiseren, overtuigen en kansen benutten',C:'precisie, procedures en gestructureerd werken'};
   const pct=norm[primary];
@@ -1328,6 +1353,19 @@ function opleidingStam(m){
     .trim();
   const rules=[
     [/software developer|applicatieontwikkelaar|creative software/,'software developer'],
+    [/decorbouwer/,'decorbouwer'],
+    [/fashion tailor/,'fashion tailor'],
+    [/salonmanager/,'salonmanager'],
+    [/hairstylist|kapper/,'kapper'],
+    [/barbier/,'barbier'],
+    [/\bkok\b/,'kok'],
+    [/\bbakker\b|boulanger/,'bakker'],
+    [/foodservice/,'foodservice'],
+    [/schilder/,'schilder'],
+    [/mechatronica/,'mechatronica'],
+    [/voertuigen en mobiele werktuigen/,'voertuigen en mobiele werktuigen'],
+    [/elektrotechnische installaties/,'elektrotechnische installaties'],
+    [/werktuigkundige installaties/,'werktuigkundige installaties'],
     [/ict support technician|ict medewerker|medewerker ict/,'ict support technician'],
     [/ict system engineer|ict beheerder|ict mediatechnologie/,'ict system engineer'],
     [/interieuradviseur/,'interieuradviseur'],
@@ -1405,7 +1443,16 @@ function selectSuggestions(n,code,count=6,key=answerKey(S.answers)){
     .sort((a,b)=>Math.round(b.sim*1000)-Math.round(a.sim*1000)||a.rot-b.rot);
   const deduped=dedupeScored(scored);
   const selected=[];
-  // Eerst hooguit 2 per sector en per school; alleen als dat geen 6 oplevert ruimer.
+  // Elke sterke letter van de leerling krijgt minstens een opleiding waarin die
+  // letter bij de twee hoogste van de opleiding hoort. Zonder dit kan een
+  // gedeelde tweede letter helemaal uit beeld raken.
+  for(const letter of strongLetters(n,code)){
+    if(selected.some(m=>m.dominantLetters.includes(letter))) continue;
+    const pick=deduped.find(m=>m.sim>=COVER_MIN_SIM&&m.dominantLetters.includes(letter)&&canPickSuggestion(m,selected));
+    if(pick) addPick(selected,pick,letter);
+  }
+  // Daarna aanvullen op match: hooguit 2 per sector en per school, alleen als
+  // dat geen 6 oplevert ruimer.
   for(const caps of [{familyCap:2,schoolCap:2},{familyCap:3,schoolCap:3},{familyCap:99,schoolCap:99}]){
     for(const m of deduped){
       if(selected.length>=count) break;
@@ -1414,6 +1461,13 @@ function selectSuggestions(n,code,count=6,key=answerKey(S.answers)){
     }
   }
   return selected.sort((a,b)=>b.sim-a.sim).slice(0,count);
+}
+// Sterk = in de top 3, minstens 50% en hooguit 20 punten onder de hoogste letter.
+const COVER_MIN_SIM=0.3;
+function strongLetters(n,code){
+  const dims=topDims(code);
+  const top=Math.max(...dims.map(d=>n[d]||0));
+  return dims.filter(d=>(n[d]||0)>=50&&top-(n[d]||0)<=20);
 }
 function matchPct(m){
   return Math.max(0,Math.min(100,Math.round((m.sim||0)*100)));
@@ -1444,11 +1498,29 @@ function buildSuggestions(n,code){
 
 function saveDB(n,code,meta){
   if(!DB_URL)return;
-  fetch(DB_URL,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({sessionId:S.sid,naam:S.name,email:S.email,track:S.track,timestamp:new Date().toISOString(),R:n.R,I:n.I,A:n.A,S:n.S,O:n.O,C:n.C,topCode:code,tieInfo:JSON.stringify(meta||{}),answers:JSON.stringify(S.answers)})}).then(()=>toast('✅ Profiel opgeslagen')).catch(()=>{});
+  fetch(DB_URL,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({sessionId:S.sid,naam:S.name,email:S.email,track:S.track,timestamp:new Date().toISOString(),R:n.R,I:n.I,A:n.A,S:n.S,O:n.O,C:n.C,topCode:code,tieInfo:JSON.stringify(meta||{}),achternaam:S.lastName||'',klas:S.klas||'',answers:JSON.stringify(S.answers)})}).then(()=>toast('✅ Profiel opgeslagen')).catch(()=>{});
 }
 
+// De radar voor de PDF wordt apart getekend op een vaste maat. De radar op het
+// scherm volgt de schermbreedte en is op een telefoon te smal voor de labels.
+function pdfChartImage(n){
+  const canvas=document.createElement('canvas');
+  canvas.width=640;canvas.height=560;
+  canvas.style.cssText='position:fixed;left:-9999px;top:0;width:640px;height:560px;';
+  document.body.appendChild(canvas);
+  let url='';
+  try{
+    const c=new Chart(canvas.getContext('2d'),{type:'radar',data:{labels:D.map(d=>META[d].naam),datasets:[{data:D.map(d=>n[d]),fill:true,backgroundColor:'rgba(115,210,255,.25)',borderColor:'#73d2ff',borderWidth:4,pointBackgroundColor:'#73d2ff',pointBorderColor:'#140037',pointBorderWidth:3,pointRadius:8}]},options:{responsive:false,animation:false,devicePixelRatio:1,layout:{padding:12},scales:{r:{min:0,max:100,ticks:{stepSize:25,color:'rgba(255,255,255,.45)',backdropColor:'transparent',font:{size:15,family:'Red Hat Text'}},grid:{color:'rgba(255,255,255,.22)'},angleLines:{color:'rgba(255,255,255,.25)'},pointLabels:{color:'#ffffff',font:{size:22,weight:'700',family:'Red Hat Text'}}}},plugins:{legend:{display:false},tooltip:{enabled:false}}}});
+    url=canvas.toDataURL('image/png');
+    c.destroy();
+  }catch(e){
+    url=document.getElementById('radarChart').toDataURL('image/png');
+  }
+  canvas.remove();
+  return url;
+}
 function buildPDFPages(n,code,meta){
-  const chartImg=document.getElementById('radarChart').toDataURL('image/png');
+  const chartImg=pdfChartImage(n);
   const d=new Date().toLocaleDateString('nl-NL',{day:'numeric',month:'long',year:'numeric'});
   const trackLabel={Basis:'VMBO Basis',Kader:'VMBO Kader',GL:'VMBO Gemengde Leerweg',TL:'VMBO Theoretische Leerweg',Havo:'Havo',Anders:'Overig'}[S.track]||S.track;
   const sortedD=D.slice().sort((a,b)=>n[b]-n[a]);
@@ -1468,7 +1540,7 @@ function buildPDFPages(n,code,meta){
 ${beroepen?`<div style="display:flex;flex-wrap:wrap;gap:4px;margin-bottom:5px;">${beroepen}</div>`:''}<div style="display:flex;gap:5px;flex-wrap:wrap;"><span style="font-size:8px;font-weight:700;padding:2px 7px;border-radius:3px;background:#dde8ff;color:#1464c8;">Niveau ${m.n}</span><span style="font-size:8px;font-weight:600;padding:2px 7px;border-radius:3px;background:#eef0f4;color:#444;">${m.lw}</span><span style="font-size:8px;font-weight:500;padding:2px 7px;border-radius:3px;background:#f0f0f0;color:#666;">CREBO ${m.c}</span></div></div>`;
   };
   const pageWrap=(content)=>`<div style="width:680px;height:962px;overflow:hidden;background:#ffffff;padding:32px 36px;font-family:'Red Hat Text',sans-serif;color:#1a1a2e;font-size:13px;line-height:1.6;">${content}</div>`;
-  const header=`<div style="text-align:center;margin-bottom:22px;"><div style="font-size:7.5px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:#1464c8;margin-bottom:7px;">Corbulo Tech &amp; Design College — MBO Opleidingen Verkenner</div><div style="font-size:24px;font-weight:700;color:#140037;margin-bottom:5px;">${S.name}'s Kompas</div><div style="font-size:10.5px;color:#666;margin-bottom:11px;">${d} · ${trackLabel}</div><div style="display:inline-block;background:#1464c8;color:#fff;font-size:17px;font-weight:700;letter-spacing:.2em;padding:7px 26px;border-radius:5px;">${code}</div></div><div style="height:1px;background:#dde8ff;margin-bottom:20px;"></div>`;
+  const header=`<div style="text-align:center;margin-bottom:22px;"><div style="font-size:7.5px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:#1464c8;margin-bottom:7px;">Corbulo Tech &amp; Design College — MBO Opleidingen Verkenner</div><div style="font-size:24px;font-weight:700;color:#140037;margin-bottom:5px;">${S.name}'s Kompas</div><div style="font-size:10.5px;color:#666;margin-bottom:11px;">${studentLine(d,trackLabel)}</div><div style="display:inline-block;background:#1464c8;color:#fff;font-size:17px;font-weight:700;letter-spacing:.2em;padding:7px 26px;border-radius:5px;">${code}</div></div><div style="height:1px;background:#dde8ff;margin-bottom:20px;"></div>`;
   const chartScores=`<div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px;"><div style="background:#1464c8;border-radius:9px;padding:18px;"><div style="font-size:7.5px;font-weight:700;letter-spacing:.15em;text-transform:uppercase;color:rgba(255,255,255,.6);text-align:center;margin-bottom:10px;">RIASOC Kompas</div><img src="${chartImg}" style="width:100%;height:auto;display:block;" alt="RIASOC kompas"></div><div style="background:#f0f4ff;border-radius:9px;padding:18px;"><div style="font-size:7.5px;font-weight:700;letter-spacing:.15em;text-transform:uppercase;color:#1464c8;margin-bottom:12px;">Scores per dimensie</div>${barsHTML}</div></div>`;
   const profile=`<div style="background:#eef3ff;border-radius:9px;padding:16px 18px;margin-bottom:16px;border-left:3px solid #1464c8;"><div style="font-size:7.5px;font-weight:700;letter-spacing:.15em;text-transform:uppercase;color:#1464c8;margin-bottom:7px;">Wat dit betekent</div><p style="font-size:11.5px;line-height:1.75;color:#1a1a2e;margin:0;">${profileHTML}</p></div>`;
   const sugHeader=`<div style="display:flex;align-items:baseline;gap:10px;margin-bottom:10px;"><div style="font-size:14px;font-weight:700;color:#140037;">6 concrete MBO-opleidingen</div><div style="font-size:9.5px;color:#666;">Voor ${trackLabel} · NH · ZH · Utrecht</div></div>`;
@@ -1493,6 +1565,19 @@ ${beroepen?`<div style="display:flex;flex-wrap:wrap;gap:4px;margin-bottom:5px;">
   ];
 }
 
+// Vangnet: past een pagina toch niet op de vaste hoogte (bijvoorbeeld doordat
+// een browser de tekst vergroot), dan wordt de lopende tekst stap voor stap
+// kleiner gezet tot alles erop staat. Zo valt er nooit iets van de pagina af.
+function fitPdfPage(wrap){
+  if(!wrap) return;
+  const texts=[...wrap.querySelectorAll('p,li')];
+  for(let step=0;step<16&&wrap.scrollHeight>wrap.clientHeight;step++){
+    texts.forEach(el=>{
+      const size=parseFloat(el.style.fontSize)||11.5;
+      if(size>7.5) el.style.fontSize=(size-0.5)+'px';
+    });
+  }
+}
 async function dlPDF(){
   const btn=document.getElementById('btn-pdf'),orig=btn.innerHTML;
   btn.innerHTML='<div class="spinner"></div>&nbsp;Maken…';btn.disabled=true;
@@ -1516,6 +1601,7 @@ async function dlPDF(){
     };
     const capturePage=async(html,isFirst,onPageReady)=>{
       resEl.innerHTML=html;resEl.style.display='block';
+      fitPdfPage(resEl.firstElementChild);
       const cv=await html2canvas(resEl,{scale:2.5,useCORS:true,backgroundColor:'#ffffff',logging:false});
       resEl.style.display='none';resEl.innerHTML='';
       if(!isFirst)pdf.addPage();
@@ -1525,15 +1611,15 @@ async function dlPDF(){
     const pages=buildPDFPages(n,code,meta);
     for(let i=0;i<pages.length;i++) await capturePage(pages[i],i===0,i===2?()=>addSuggestionLinks(selectSuggestions(n,code,6)):null);
     actions.style.display='';
-    pdf.save(`RIASOC_${S.name.replace(/\s+/g,'_')||'profiel'}_${new Date().toISOString().slice(0,10)}.pdf`);
+    pdf.save(`RIASOC_${[S.name,S.lastName,S.klas].filter(Boolean).join('_').replace(/[^\p{L}\p{N}]+/gu,'_')||'profiel'}_${new Date().toISOString().slice(0,10)}.pdf`);
     toast('📥 PDF opgeslagen!');
   }catch(e){document.getElementById('action-btns').style.display='';toast('⚠️ PDF maken mislukt');console.error(e);}
   btn.innerHTML=orig;btn.disabled=false;
 }
 
 function restart(){
-  S={cur:0,scores:{R:0,I:0,A:0,S:0,O:0,C:0},answers:[],name:'',email:'',track:'',allowedLevels:[2,3,4],sid:Date.now().toString(36)+Math.random().toString(36).slice(2,5)};
-  ['inp-name-start','inp-name','inp-email'].forEach(id=>document.getElementById(id).value='');
+  S={cur:0,scores:{R:0,I:0,A:0,S:0,O:0,C:0},answers:[],name:'',lastName:'',klas:'',email:'',track:'',allowedLevels:[2,3,4],sid:Date.now().toString(36)+Math.random().toString(36).slice(2,5)};
+  ['inp-name-start','inp-name','inp-lastname','inp-class','inp-email'].forEach(id=>document.getElementById(id).value='');
   document.querySelectorAll('.track-btn').forEach(b=>b.classList.remove('active','err-track'));
   if(chart){chart.destroy();chart=null;}show('screen-start');
 }
