@@ -46,6 +46,8 @@
     .start-form input{width:100%;padding:12px 16px;border:1px solid var(--border);border-radius:var(--r);background:rgba(255,255,255,.07);color:var(--white);font-family:'Red Hat Text',sans-serif;font-size:.95rem;outline:none;transition:border-color .2s;}
     .start-form input::placeholder{color:rgba(241,241,241,.3);}
     .start-form input:focus{border-color:var(--lb);}
+    .start-row{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px;}
+    @media(max-width:380px){.start-row{grid-template-columns:1fr;}}
     .hint{font-size:.7rem;font-weight:300;color:var(--muted);margin-top:12px;letter-spacing:.02em;}
     #screen-question{justify-content:flex-start;padding:0;}
     .q-hdr{width:100%;background:rgba(20,0,55,.96);backdrop-filter:blur(8px);padding:14px 20px 10px;position:sticky;top:0;z-index:10;border-bottom:1px solid var(--border);}
@@ -165,7 +167,13 @@
   <img src="assets/riasoc/CORBULO_LOGO_RGB_DIAPOSITIEF-transparant.png" alt="Corbulo Tech &amp; Design College" style="width:200px;max-width:80%;margin-bottom:24px;display:block;margin-left:auto;margin-right:auto;">
   <h1>MBO Opleidingen<br><em>Verkenner</em></h1>
   <p class="start-sub">Ontdek welke beroepen en mbo-opleidingen bij jou passen. Je ziet steeds een plaatje met twee situaties. Kies wat jij het leukst vindt.</p>
-  <div class="start-form"><input type="text" id="inp-name-start" placeholder="Je voornaam (mag, hoeft niet)" autocomplete="given-name"></div>
+  <div class="start-form">
+    <div class="start-row">
+      <input type="text" id="inp-name-start" placeholder="Voornaam" aria-label="Voornaam" autocomplete="given-name">
+      <input type="text" id="inp-lastname-start" placeholder="Achternaam" aria-label="Achternaam" autocomplete="family-name">
+    </div>
+    <input type="text" id="inp-class-start" placeholder="Klas, bijvoorbeeld 3B" aria-label="Klas" autocomplete="off" maxlength="12">
+  </div>
   <button class="btn btn-primary" onclick="startQuiz()">Start de verkenner →</button>
   <p class="hint">30 vragen · ongeveer 5 minuten · er is geen goed of fout</p>
 </div>
@@ -1116,6 +1124,8 @@ function toast(m){const t=document.getElementById('toast');t.textContent=m;t.cla
 
 function startQuiz(){
   S.name=document.getElementById('inp-name-start').value.trim();
+  S.lastName=document.getElementById('inp-lastname-start').value.trim();
+  S.klas=document.getElementById('inp-class-start').value.trim();
   S.cur=0;S.scores={R:0,I:0,A:0,S:0,O:0,C:0};S.answers=[];
   renderQ();show('screen-question');
 }
@@ -1156,7 +1166,13 @@ function pick(c){
   b.style.transform='scale(0.93)';setTimeout(()=>b.style.transform='',140);
   S.cur++;
   if(S.cur<QS.length){renderQ();}
-  else{show('screen-email');if(S.name)document.getElementById('inp-name').value=S.name;}
+  else{
+    show('screen-email');
+    // Wat op het startscherm is ingevuld staat hier al klaar en kan nog worden aangepast.
+    if(S.name)document.getElementById('inp-name').value=S.name;
+    if(S.lastName)document.getElementById('inp-lastname').value=S.lastName;
+    if(S.klas)document.getElementById('inp-class').value=S.klas;
+  }
 }
 
 function goBack(){
@@ -1633,7 +1649,7 @@ async function dlPDF(){
 
 function restart(){
   S={cur:0,scores:{R:0,I:0,A:0,S:0,O:0,C:0},answers:[],name:'',lastName:'',klas:'',email:'',track:'',allowedLevels:[2,3,4],sid:Date.now().toString(36)+Math.random().toString(36).slice(2,5)};
-  ['inp-name-start','inp-name','inp-lastname','inp-class','inp-email'].forEach(id=>document.getElementById(id).value='');
+  ['inp-name-start','inp-lastname-start','inp-class-start','inp-name','inp-lastname','inp-class','inp-email'].forEach(id=>document.getElementById(id).value='');
   document.querySelectorAll('.track-btn').forEach(b=>b.classList.remove('active','err-track'));
   if(chart){chart.destroy();chart=null;}show('screen-start');
 }
