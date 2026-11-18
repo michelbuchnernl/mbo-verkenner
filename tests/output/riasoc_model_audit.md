@@ -19,7 +19,7 @@ Gesimuleerd met 600 leerlingen per groep (vaste seed 20261118). Opnieuw draaien:
 | Ontbrekende plaatjes | 0 |
 | Elke letter even vaak | R 10x, I 10x, A 10x, S 10x, O 10x, C 10x |
 | Links / rechts per letter | R 5/5, I 5/5, A 5/5, S 5/5, O 5/5, C 5/5 |
-| Type vergelijking | 14 buren, 10 om-en-om, 6 tegenover |
+| Type vergelijking | 12 buren, 12 om-en-om, 6 tegenover |
 | Niveaufilter-testcases | geslaagd |
 
 Hoe vaak staat elk tweetal tegenover elkaar:
@@ -28,10 +28,10 @@ Hoe vaak staat elk tweetal tegenover elkaar:
 |---|---|---|---|---|---|---|
 | **R** | - | 2 | 2 | 2 | 2 | 2 |
 | **I** | 2 | - | 2 | 2 | 2 | 2 |
-| **A** | 2 | 2 | - | 3 | 1 | 2 |
-| **S** | 2 | 2 | 3 | - | 2 | 1 |
-| **O** | 2 | 2 | 1 | 2 | - | 3 |
-| **C** | 2 | 2 | 2 | 1 | 3 | - |
+| **A** | 2 | 2 | - | 2 | 2 | 2 |
+| **S** | 2 | 2 | 2 | - | 2 | 2 |
+| **O** | 2 | 2 | 2 | 2 | - | 2 |
+| **C** | 2 | 2 | 2 | 2 | 2 | - |
 
 | # | Plaatje (oud nr.) | Links (A) | Rechts (B) | Type |
 |---|---|---|---|---|
@@ -55,15 +55,15 @@ Hoe vaak staat elk tweetal tegenover elkaar:
 | 18 | 18 | R - Wand bouwen | A - Kamer inrichten | skip-one |
 | 19 | 51 | S - Goed luisteren | O - Groep overtuigen | adjacent |
 | 20 | 59 | C - Gegevens invoeren | I - Betekenis zoeken | skip-one |
-| 21 | 33 | A - Buurtmuur schilderen | S - Buurtgesprek houden | adjacent |
-| 22 | 21 | R - Pomp maken | O - Tuinproject regelen | skip-one |
-| 23 | 45 | I - Goed antwoord zoeken | A - Eigen kunstwerk maken | adjacent |
-| 24 | 57 | C - Codes checken | R - Apparatuur plaatsen | adjacent |
-| 25 | 34 (omgewisseld) | S - Ruzie oplossen | A - Toneelscène spelen | adjacent |
-| 26 | 8 (omgewisseld) | O - Website-idee verkopen | I - Website onderzoeken | opposite |
-| 27 | 13 | A - Kostuum bedenken | C - Kostuums bijhouden | opposite |
-| 28 | 42 | R - Leren door doen | I - Leren door vergelijken | adjacent |
-| 29 | 55 | O - Energiek leiden | C - Zorgvuldig controleren | adjacent |
+| 21 | 64 (samengesteld uit 22 en 15) | O - Stand presenteren | A - Stand inrichten | skip-one |
+| 22 | 57 | C - Codes checken | R - Apparatuur plaatsen | adjacent |
+| 23 | 33 | A - Buurtmuur schilderen | S - Buurtgesprek houden | adjacent |
+| 24 | 42 | R - Leren door doen | I - Leren door vergelijken | adjacent |
+| 25 | 63 (nieuw) | S - Deelnemer aanmoedigen | C - Scores bijhouden | skip-one |
+| 26 | 45 | I - Goed antwoord zoeken | A - Eigen kunstwerk maken | adjacent |
+| 27 | 21 | R - Pomp maken | O - Tuinproject regelen | skip-one |
+| 28 | 13 | A - Kostuum bedenken | C - Kostuums bijhouden | opposite |
+| 29 | 8 (omgewisseld) | O - Website-idee verkopen | I - Website onderzoeken | opposite |
 | 30 | 1 (omgewisseld) | S - Fiets uitleggen | R - Fiets maken | opposite |
 
 ## 2. 600 willekeurige klikkers
@@ -72,34 +72,34 @@ Wie zonder voorkeur klikt, hoort bij elke letter evenveel kans te hebben. Zo is 
 
 | Meting | Uitkomst | Ideaal |
 |---|---|---|
-| Letter op plek 1 | R 18.0% · I 16.7% · A 18.8% · S 16.2% · O 15.3% · C 15.0% | elk 16,7% |
-| Toets gelijke verdeling plek 1 | chi² = 4.1 | onder 11.07 |
-| Top-3 combinaties (20 mogelijk) | 20 komen voor; minst 22x, meest 40x | elk 30x |
-| Toets gelijke verdeling top-3 | chi² = 18.1 | onder 30.14 |
-| Verschillende codes (120 mogelijk) | 119 | - |
-| Samenhang tussen letters | -0.33 tot -0.07 | alle rond -0,20 |
-| Gemiddelde score per letter | R 50% · I 51% · A 50% · S 50% · O 50% · C 49% | elk 50% |
-| Gelijke stand op de grens plek 3/4 | 47% | - |
-| ... daarvan na tie-break nog gelijk | 7% | - |
-| Vlak profiel (verschil hoogste-laagste max. 20 punten) | 10% | - |
+| Letter op plek 1 | R 17.3% · I 19.8% · A 17.2% · S 15.5% · O 16.0% · C 14.2% | elk 16,7% |
+| Toets gelijke verdeling plek 1 | chi² = 6.8 | onder 11.07 |
+| Top-3 combinaties (20 mogelijk) | 20 komen voor; minst 21x, meest 39x | elk 30x |
+| Toets gelijke verdeling top-3 | chi² = 22.4 | onder 30.14 |
+| Verschillende codes (120 mogelijk) | 120 | - |
+| Samenhang tussen letters | -0.26 tot -0.14 | alle rond -0,20 |
+| Gemiddelde score per letter | R 50% · I 51% · A 50% · S 50% · O 50% · C 50% | elk 50% |
+| Gelijke stand op de grens plek 3/4 | 51% | - |
+| ... daarvan na tie-break nog gelijk | 9% | - |
+| Vlak profiel (verschil hoogste-laagste max. 20 punten) | 12% | - |
 
-Herhaald met vijf andere seeds (11, 23, 37, 59, 71): chi² plek 1 = 6.7, 7.6, 4.5, 7.9, 8.9; chi² top-3 = 16.1, 22.3, 16.3, 15.7, 18.5.
+Herhaald met vijf andere seeds (11, 23, 37, 59, 71): chi² plek 1 = 5.3, 3.7, 3.0, 15.6, 4.6; chi² top-3 = 13.1, 30.6, 20.4, 22.9, 14.4.
 
-Fijnmeting met 60.000 willekeurige klikkers (alleen de telling): plek 1 = R 16.91% · I 16.71% · A 16.51% · S 16.31% · O 16.73% · C 16.83%.
+Fijnmeting met 60.000 willekeurige klikkers (alleen de telling): plek 1 = R 17.00% · I 16.74% · A 16.36% · S 16.65% · O 16.52% · C 16.73%.
 
 ### Opleidingen bij deze groep
 
 | Meting | Uitkomst |
 |---|---|
-| Verschillende opleidingen getoond | 316 van 400 |
-| Verschillende zestallen | 583 op 600 leerlingen |
+| Verschillende opleidingen getoond | 314 van 400 |
+| Verschillende zestallen | 578 op 600 leerlingen |
 | Meest getoonde opleiding | 25798 Podium- en evenemententechnicus (12% van de leerlingen) |
 | Aandeel van de 10 meest getoonde | 17% |
 | Sectoren per leerling (van 6) | 3.7 |
-| Scholen per leerling (van 6) | 4.2 |
-| Gemiddelde profielmatch | 64% |
-| Hoofdletter opleiding zit in top 3 van leerling | 94% |
-| Hoofdletter opleiding zit in top 2 van leerling | 81% |
+| Scholen per leerling (van 6) | 4.1 |
+| Gemiddelde profielmatch | 62% |
+| Hoofdletter opleiding zit in top 3 van leerling | 92% |
+| Hoofdletter opleiding zit in top 2 van leerling | 79% |
 | Hoofdletter opleiding hoort bij de 2 laagste letters | 2% |
 
 Verdeling over sectoren (aandeel van alle getoonde opleidingen):
@@ -108,16 +108,16 @@ Verdeling over sectoren (aandeel van alle getoonde opleidingen):
 |---|---|---|
 | Techniek & maken | 18% | 40% |
 | Uiterlijke verzorging | 12% | 6% |
-| Creatief & media | 12% | 7% |
-| Horeca & toerisme | 11% | 7% |
+| Creatief & media | 11% | 7% |
+| Horeca & toerisme | 10% | 7% |
+| Commercieel & ondernemend | 10% | 9% |
 | Overig | 9% | 4% |
-| Commercieel & ondernemend | 8% | 9% |
 | ICT & data | 6% | 5% |
-| Voeding, natuur & dier | 6% | 3% |
-| Veiligheid & defensie | 4% | 4% |
-| Laboratorium & onderzoek | 4% | 2% |
+| Voeding, natuur & dier | 5% | 3% |
 | Zorg & welzijn | 4% | 7% |
-| Administratie & juridisch | 2% | 4% |
+| Laboratorium & onderzoek | 4% | 2% |
+| Veiligheid & defensie | 4% | 4% |
+| Administratie & juridisch | 3% | 4% |
 | Logistiek & transport | 2% | 3% |
 | Onderwijs & sport | 2% | 2% |
 
@@ -126,17 +126,17 @@ Vaakst getoond:
 | Opleiding | Bij % van de leerlingen |
 |---|---|
 | 25798 Podium- en evenemententechnicus | 12% |
-| 25686 Fashion Tailor | 12% |
-| 27005 Specialist Restauratie & Decoratie | 12% |
 | 25717 AV-Specialist | 12% |
-| 25614 Boulanger | 10% |
+| 27037 Standbouwer | 12% |
+| 27036 Specialist Decorbouwer | 11% |
+| 27005 Specialist Restauratie & Decoratie | 11% |
+| 25686 Fashion Tailor | 11% |
+| 25688 Fashion Product Coordinator | 9% |
+| 25685 Fashion Retailer | 9% |
 | 25689 Basismedewerker Fashion | 9% |
-| 27037 Standbouwer | 9% |
-| 27101 Allround interieurvakman (M/V) (woningstofferen) | 9% |
-| 25688 Fashion Product Coordinator | 8% |
-| 27036 Specialist Decorbouwer | 8% |
-| 25685 Fashion Retailer | 8% |
-| 25684 Assistant Fashion Tailor | 8% |
+| 25684 Assistant Fashion Tailor | 9% |
+| 25614 Boulanger | 9% |
+| 25882 Redactiemedewerker | 8% |
 
 ## 3. Kant-klikkers en vaste patronen
 
@@ -146,15 +146,15 @@ Elke letter staat 5x links en 5x rechts. Wie steeds dezelfde kant kiest krijgt d
 |---|---|---|---|---|---|---|---|---|
 | Altijd links (A) | 50% | 50% | 50% | 50% | 50% | 50% | SRO | zelfde kant |
 | Altijd rechts (B) | 50% | 50% | 50% | 50% | 50% | 50% | SRI | zelfde kant |
-| Om en om A/B | 60% | 50% | 60% | 50% | 50% | 30% | ARS | - |
-| Kiest altijd Realistisch, verder willekeurig | 100% | 60% | 40% | 40% | 30% | 30% | RIA | - |
-| Kiest altijd Intellectueel, verder willekeurig | 30% | 100% | 30% | 60% | 30% | 50% | ISC | - |
-| Kiest altijd Artistiek, verder willekeurig | 40% | 30% | 100% | 50% | 40% | 40% | ASO | - |
-| Kiest altijd Sociaal, verder willekeurig | 50% | 30% | 40% | 100% | 40% | 40% | SRC | - |
-| Kiest altijd Ondernemend, verder willekeurig | 10% | 30% | 50% | 60% | 100% | 50% | OSA | - |
-| Kiest altijd Conventioneel, verder willekeurig | 40% | 40% | 50% | 20% | 50% | 100% | COA | - |
+| Om en om A/B | 70% | 30% | 60% | 50% | 50% | 40% | RAO | - |
+| Kiest altijd Realistisch, verder willekeurig | 100% | 40% | 50% | 40% | 40% | 30% | RAI | - |
+| Kiest altijd Intellectueel, verder willekeurig | 30% | 100% | 30% | 70% | 30% | 40% | ISC | - |
+| Kiest altijd Artistiek, verder willekeurig | 60% | 20% | 100% | 50% | 30% | 40% | ARS | - |
+| Kiest altijd Sociaal, verder willekeurig | 30% | 30% | 70% | 100% | 40% | 30% | SAO | - |
+| Kiest altijd Ondernemend, verder willekeurig | 30% | 20% | 40% | 60% | 100% | 50% | OSC | - |
+| Kiest altijd Conventioneel, verder willekeurig | 40% | 50% | 30% | 30% | 50% | 100% | CIO | - |
 
-600 klikkers met een voorkeur voor links (70% links): plek 1 = R 19.7% · I 13.7% · A 14.8% · S 16.2% · O 16.5% · C 19.2%; chi² = 10.0 (grens 11.07).
+600 klikkers met een voorkeur voor links (70% links): plek 1 = R 15.2% · I 18.7% · A 15.8% · S 18.5% · O 16.2% · C 15.7%; chi² = 4.2 (grens 11.07).
 
 ## 4. 600 leerlingen met een echte voorkeur
 
@@ -162,25 +162,25 @@ Elke gesimuleerde leerling heeft verborgen voorkeuren voor de zes letters (met d
 
 | Meting | Uitkomst |
 |---|---|
-| Sterkste letter goed gevonden | 66% |
-| Overlap gevonden top 3 met echte top 3 | 2.47 van 3 |
-| Rangcorrelatie gemeten en echt profiel | 0.80 |
-| Gelijke stand op de grens plek 3/4 | 27% |
-| ... daarvan na tie-break nog gelijk | 3% |
-| Verschillende codes (120 mogelijk) | 117 |
-| Hoofdletter opleiding zit in echte top 3 van leerling | 90% |
+| Sterkste letter goed gevonden | 63% |
+| Overlap gevonden top 3 met echte top 3 | 2.53 van 3 |
+| Rangcorrelatie gemeten en echt profiel | 0.81 |
+| Gelijke stand op de grens plek 3/4 | 25% |
+| ... daarvan na tie-break nog gelijk | 4% |
+| Verschillende codes (120 mogelijk) | 115 |
+| Hoofdletter opleiding zit in echte top 3 van leerling | 91% |
 
 ### Opleidingen bij deze groep
 
 | Meting | Uitkomst |
 |---|---|
-| Verschillende opleidingen getoond | 318 van 400 |
-| Verschillende zestallen | 581 op 600 leerlingen |
-| Meest getoonde opleiding | 25717 AV-Specialist (12% van de leerlingen) |
-| Aandeel van de 10 meest getoonde | 16% |
-| Sectoren per leerling (van 6) | 3.7 |
+| Verschillende opleidingen getoond | 319 van 400 |
+| Verschillende zestallen | 583 op 600 leerlingen |
+| Meest getoonde opleiding | 25798 Podium- en evenemententechnicus (13% van de leerlingen) |
+| Aandeel van de 10 meest getoonde | 17% |
+| Sectoren per leerling (van 6) | 3.8 |
 | Scholen per leerling (van 6) | 4.1 |
-| Gemiddelde profielmatch | 67% |
+| Gemiddelde profielmatch | 66% |
 | Hoofdletter opleiding zit in top 3 van leerling | 95% |
 | Hoofdletter opleiding zit in top 2 van leerling | 82% |
 | Hoofdletter opleiding hoort bij de 2 laagste letters | 1% |
@@ -191,15 +191,15 @@ Alleen de telling van de vragen, zonder opleidingen. Gelijke stand is hier met h
 
 | Meting | Oud: 62 vragen, weging 3/1 | Nieuw: 30 vragen, 1 punt per keuze |
 |---|---|---|
-| Willekeurig: letter op plek 1 | R 18% I 26% A 16% S 13% O 14% C 13% | R 20% I 16% A 19% S 16% O 15% C 15% |
-| Willekeurig: chi² plek 1 (grens 11,07) | 41.5 | 7.2 |
-| Willekeurig: top-3 combinatie minst / meest | 7 / 68 | 19 / 39 |
-| Willekeurig: chi² top-3 (grens 30,14) | 215.7 | 21.1 |
-| Samenhang tussen letters | -0.46 tot 0.50 | -0.34 tot -0.07 |
+| Willekeurig: letter op plek 1 | R 18% I 26% A 16% S 13% O 14% C 13% | R 17% I 18% A 18% S 16% O 17% C 14% |
+| Willekeurig: chi² plek 1 (grens 11,07) | 41.5 | 3.8 |
+| Willekeurig: top-3 combinatie minst / meest | 7 / 68 | 20 / 38 |
+| Willekeurig: chi² top-3 (grens 30,14) | 215.7 | 13.6 |
+| Samenhang tussen letters | -0.46 tot 0.50 | -0.28 tot -0.15 |
 | Altijd links: score per letter | R 76 I 80 A 69 S 26 O 25 C 52 | R 50 I 50 A 50 S 50 O 50 C 50 |
-| Echte voorkeur: sterkste letter goed | 73% | 64% |
-| Echte voorkeur: overlap top 3 | 2.58 van 3 | 2.48 van 3 |
-| Echte voorkeur: rangcorrelatie | 0.84 | 0.81 |
+| Echte voorkeur: sterkste letter goed | 73% | 66% |
+| Echte voorkeur: overlap top 3 | 2.58 van 3 | 2.52 van 3 |
+| Echte voorkeur: rangcorrelatie | 0.84 | 0.82 |
 
 ## 6. Profielcorrectie opleidingen
 

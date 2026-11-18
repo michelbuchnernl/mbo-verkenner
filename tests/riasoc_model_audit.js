@@ -351,7 +351,7 @@ function main() {
     ]), '',
     'Hoe vaak staat elk tweetal tegenover elkaar:', '',
     mdTable(['', ...D], D.map(a => [`**${a}**`, ...D.map(b => a === b ? '-' : (design.pairs[[a, b].sort((x, y) => D.indexOf(x) - D.indexOf(y)).join('-')] || 0))])), '',
-    mdTable(['#', 'Plaatje (oud nr.)', 'Links (A)', 'Rechts (B)', 'Type'], QS.map(q => [q.n, `${q.src}${q.swapped ? ' (omgewisseld)' : ''}`, `${q.a} - ${q.lA}`, `${q.b} - ${q.lB}`, q.pairType])), '');
+    mdTable(['#', 'Plaatje (oud nr.)', 'Links (A)', 'Rechts (B)', 'Type'], QS.map(q => [q.n, `${q.src}${q.swapped ? ' (omgewisseld)' : ''}${q.note ? ` (${q.note})` : ''}`, `${q.a} - ${q.lA}`, `${q.b} - ${q.lB}`, q.pairType])), '');
 
   add(`## 2. ${N} willekeurige klikkers`, '',
     'Wie zonder voorkeur klikt, hoort bij elke letter evenveel kans te hebben. Zo is te zien of de vragenset zelf een richting op duwt.', '',

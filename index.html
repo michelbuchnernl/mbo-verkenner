@@ -287,16 +287,16 @@
 const DB_URL = '';
 
 // ============================================================
-// 30 vragen, gekozen uit de 62 bestaande plaatjes (assets/riasoc).
+// 30 vragen: 28 van de 62 oorspronkelijke plaatjes, 1 nieuw plaatje (63) en
+// 1 plaatje dat is samengesteld uit twee bestaande helften (64).
 //
 // Ontwerp (zie docs/RIASOC_30_vragen_ontwerp.md):
-// - elke RIASOC-letter komt precies 10x voor: 5x links (A) en 5x rechts (B);
-// - elk lettertweetal komt 2x voor, behalve A-O en S-C (1x, er is maar een
-//   bruikbaar plaatje) en A-S en O-C (3x) om dat te compenseren;
-// - vraag 1-15 en vraag 16-30 zijn elk een complete ronde, zodat geen letter
-//   in twee opeenvolgende vragen voorkomt;
+// - elk van de 15 lettertweetallen komt precies 2x voor;
+// - elke RIASOC-letter komt dus 10x voor: 5x links (A) en 5x rechts (B);
+// - vraag 1-15 en vraag 16-30 zijn elk een complete ronde, en geen letter
+//   komt in twee opeenvolgende vragen voor;
 // - een keuze telt als 1 punt voor de gekozen letter, zonder bijpunten.
-// `src` is het nummer van het plaatje in de oorspronkelijke scenebank van 62.
+// `src` is het nummer van het plaatje in de scenebank (1-62 oorspronkelijk).
 const IMG_BASE = 'assets/riasoc/';
 const QS=[
   {n:1, src:5, a:'R',b:'S',lA:"Speeltoestel maken",lB:"Op kinderen letten",t:"Speeltoestel maken of op kinderen letten",img:"05-speeltoestel-repareren-of-op-kinderen-letten.png"},
@@ -319,15 +319,15 @@ const QS=[
   {n:18,src:18,a:'R',b:'A',lA:"Wand bouwen",lB:"Kamer inrichten",t:"Wand bouwen of kamer mooi inrichten",img:"18-wand-bouwen-of-kamer-stylen.png"},
   {n:19,src:51,a:'S',b:'O',lA:"Goed luisteren",lB:"Groep overtuigen",t:"Goed luisteren of groep overtuigen",img:"51-goed-luisteren-of-snel-overtuigen.png"},
   {n:20,src:59,a:'C',b:'I',lA:"Gegevens invoeren",lB:"Betekenis zoeken",t:"Gegevens invoeren of betekenis zoeken",img:"59-data-structureren-of-betekenis-zoeken.png"},
-  {n:21,src:33,a:'A',b:'S',lA:"Buurtmuur schilderen",lB:"Buurtgesprek houden",t:"Buurtmuur schilderen of buurtgesprek houden",img:"33-buurtmuur-of-buurtkring.png"},
-  {n:22,src:21,a:'R',b:'O',lA:"Pomp maken",lB:"Tuinproject regelen",t:"Pomp maken of tuinproject regelen",img:"21-pomp-repareren-of-tuinproject-coordineren.png"},
-  {n:23,src:45,a:'I',b:'A',lA:"Goed antwoord zoeken",lB:"Eigen kunstwerk maken",t:"Goed antwoord zoeken of eigen kunstwerk maken",img:"45-juiste-antwoord-of-originele-interpretatie.png"},
-  {n:24,src:57,a:'C',b:'R',lA:"Codes checken",lB:"Apparatuur plaatsen",t:"Codes checken of apparatuur plaatsen",img:"57-codes-controleren-of-apparatuur-installeren.png"},
-  {n:25,src:34,a:'S',b:'A',lA:"Ruzie oplossen",lB:"Toneelscène spelen",t:"Ruzie oplossen of toneelscène spelen",img:"34-conflict-oplossen-of-scene-maken.png",swapped:true},
-  {n:26,src:8, a:'O',b:'I',lA:"Website-idee verkopen",lB:"Website onderzoeken",t:"Website-idee verkopen of website onderzoeken",img:"08-website-pitchen-of-website-bestuderen.png",swapped:true},
-  {n:27,src:13,a:'A',b:'C',lA:"Kostuum bedenken",lB:"Kostuums bijhouden",t:"Kostuum bedenken of kostuums bijhouden",img:"13-kostuum-verzinnen-of-kostuums-beheren.png"},
-  {n:28,src:42,a:'R',b:'I',lA:"Leren door doen",lB:"Leren door vergelijken",t:"Leren door doen of leren door vergelijken",img:"42-leren-door-doen-of-leren-door-vergelijken.png"},
-  {n:29,src:55,a:'O',b:'C',lA:"Energiek leiden",lB:"Zorgvuldig controleren",t:"Energiek leiden of zorgvuldig controleren",img:"55-met-energie-leiden-of-met-zorg-controleren.png"},
+  {n:21,src:64,a:'O',b:'A',lA:"Stand presenteren",lB:"Stand inrichten",t:"Stand presenteren of stand inrichten",img:"64-stand-presenteren-of-stand-inrichten.png",note:"samengesteld uit 22 en 15"},
+  {n:22,src:57,a:'C',b:'R',lA:"Codes checken",lB:"Apparatuur plaatsen",t:"Codes checken of apparatuur plaatsen",img:"57-codes-controleren-of-apparatuur-installeren.png"},
+  {n:23,src:33,a:'A',b:'S',lA:"Buurtmuur schilderen",lB:"Buurtgesprek houden",t:"Buurtmuur schilderen of buurtgesprek houden",img:"33-buurtmuur-of-buurtkring.png"},
+  {n:24,src:42,a:'R',b:'I',lA:"Leren door doen",lB:"Leren door vergelijken",t:"Leren door doen of leren door vergelijken",img:"42-leren-door-doen-of-leren-door-vergelijken.png"},
+  {n:25,src:63,a:'S',b:'C',lA:"Deelnemer aanmoedigen",lB:"Scores bijhouden",t:"Deelnemer aanmoedigen of scores bijhouden",img:"63-deelnemer-aanmoedigen-of-scores-bijhouden.png",note:"nieuw"},
+  {n:26,src:45,a:'I',b:'A',lA:"Goed antwoord zoeken",lB:"Eigen kunstwerk maken",t:"Goed antwoord zoeken of eigen kunstwerk maken",img:"45-juiste-antwoord-of-originele-interpretatie.png"},
+  {n:27,src:21,a:'R',b:'O',lA:"Pomp maken",lB:"Tuinproject regelen",t:"Pomp maken of tuinproject regelen",img:"21-pomp-repareren-of-tuinproject-coordineren.png"},
+  {n:28,src:13,a:'A',b:'C',lA:"Kostuum bedenken",lB:"Kostuums bijhouden",t:"Kostuum bedenken of kostuums bijhouden",img:"13-kostuum-verzinnen-of-kostuums-beheren.png"},
+  {n:29,src:8, a:'O',b:'I',lA:"Website-idee verkopen",lB:"Website onderzoeken",t:"Website-idee verkopen of website onderzoeken",img:"08-website-pitchen-of-website-bestuderen.png",swapped:true},
   {n:30,src:1, a:'S',b:'R',lA:"Fiets uitleggen",lB:"Fiets maken",t:"Fiets uitleggen of fiets maken",img:"01-fiets-uitleggen-of-fiets-repareren.png",swapped:true}
 ];
 // Een keuze is 1 punt voor de letter van de gekozen kant.
@@ -457,6 +457,9 @@ function validateDesign(){
   const missing=[];
   D.forEach((x,i)=>D.slice(i+1).forEach(y=>{if(!pairs[x+'-'+y]) missing.push(x+'-'+y);}));
   if(missing.length) problems.push('tweetal ontbreekt: '+missing.join(', '));
+  const perPair=QS.length/15;
+  const uneven=Object.entries(pairs).filter(([,c])=>c!==perPair).map(([k,c])=>k+' '+c+'x');
+  if(uneven.length) problems.push('tweetal niet '+perPair+'x: '+uneven.join(', '));
   if(new Set(QS.map(q=>q.src)).size!==QS.length) problems.push('een plaatje wordt dubbel gebruikt');
   if(sharedNeighbours) problems.push(sharedNeighbours+'x dezelfde letter in twee opeenvolgende vragen');
   return {questions:QS.length,total,left,right,pairs,types,problems,ok:problems.length===0};

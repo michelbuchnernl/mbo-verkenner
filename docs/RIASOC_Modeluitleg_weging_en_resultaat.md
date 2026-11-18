@@ -21,11 +21,12 @@ Sinds november 2026 heeft de verkenner 30 vragen in plaats van 62. Waarom, en we
 | Pad | Inhoud |
 |---|---|
 | `index.html` | De hele verkenner: vragen, telling, opleidingen en uitslag. |
-| `assets/riasoc/` | De 62 plaatjes uit de scènebank, 7 omgewisselde varianten en de logo's. |
+| `assets/riasoc/` | De 62 plaatjes uit de scènebank, 6 omgewisselde varianten, een nieuw plaatje (63), een samengesteld plaatje (64) en de logo's. |
 | `docs/RIASOC_30_vragen_ontwerp.md` | Keuze van de 30 plaatjes en onderbouwing. |
 | `docs/RIASOC_Beeldaudit_62_plaatjes.md` | Beeldaudit van alle 62 plaatjes (mei 2026). |
 | `tests/riasoc_model_audit.js` | Simulatie en controle van het model. |
 | `tools/swap_sides.py` | Wisselt de linker- en rechterscène van een plaatje om. |
+| `tools/combine_sides.py` | Maakt één plaatje uit twee scènes van bestaande plaatjes. |
 
 De scènebank, de beeldprompts en het masterdocument met opleidingen staan in de RIASOC-map van de Obsidian-vault.
 
@@ -44,17 +45,15 @@ Elke vraag toont twee situaties. De leerling kiest wat meer aanspreekt. Daarmee 
 
 ## 2. Waarom 30 vragen?
 
-Zes letters geven 15 mogelijke tweetallen. Met 30 vragen staat elk tweetal (bijna) 2 keer tegenover elkaar en komt elke letter precies 10 keer voor. Dat is een toernooi waarin elke letter evenveel wedstrijden speelt.
+Zes letters geven 15 mogelijke tweetallen. Met 30 vragen staat elk tweetal precies 2 keer tegenover elkaar en komt elke letter precies 10 keer voor. Dat is een toernooi waarin elke letter evenveel wedstrijden speelt.
 
 De letters staan in een zeshoek: R - I - A - S - O - C - terug naar R. Buren lijken op elkaar, letters tegenover elkaar verschillen het meest.
 
 | Type | Betekenis | Voorbeeld | Aantal vragen |
 |---|---|---|---|
-| adjacent | buren | I-A, S-O | 14 |
-| skip-one | één ertussen | R-A, I-S | 10 |
+| adjacent | buren | I-A, S-O | 12 |
+| skip-one | één ertussen | R-A, I-S | 12 |
 | opposite | tegenover elkaar | R-S, I-O, A-C | 6 |
-
-Twee afwijkingen van het volmaakte schema, omdat de plaatjes er niet zijn: A-O en S-C komen 1 keer voor, A-S en O-C 3 keer.
 
 Verder geldt:
 
@@ -211,10 +210,10 @@ Uitvoer in `tests/output/`:
 | Controle | Uitkomst |
 |---|---|
 | Ontwerp en plaatjes | 0 fouten |
-| Willekeurig: letter op plek 1 | tussen 15,0% en 18,8% bij 600; tussen 16,3% en 16,9% bij 60.000 |
+| Willekeurig: letter op plek 1 | tussen 14,2% en 19,8% bij 600; tussen 16,4% en 17,0% bij 60.000 |
 | Altijd links of rechts | alle letters 50%, met melding |
-| Echte voorkeur: sterkste letter goed | 66% |
-| Echte voorkeur: overlap top 3 | 2,47 van 3 |
-| Verschillende opleidingen in beeld | 316 van 400 |
+| Echte voorkeur: sterkste letter goed | 63% |
+| Echte voorkeur: overlap top 3 | 2,53 van 3 |
+| Verschillende opleidingen in beeld | 314 van 400 |
 | Meest getoonde opleiding | bij 12% van de leerlingen |
-| Hoofdletter opleiding in top 3 van leerling | 94% |
+| Hoofdletter opleiding in top 3 van leerling | 92% |

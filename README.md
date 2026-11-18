@@ -7,8 +7,8 @@ De app is een zelfstandige HTML/JS-tool waarmee leerlingen 30 visuele A/B-keuzes
 ## In deze versie
 
 - 1 HTML-document: `index.html`, zonder build-stap
-- 30 vragen, gekozen uit de 62 plaatjes in `assets/riasoc/`
-- elke RIASOC-letter komt 10 keer voor: 5 keer links en 5 keer rechts
+- 30 vragen: 28 uit de oorspronkelijke 62 plaatjes, 1 nieuw en 1 samengesteld plaatje
+- elk tweetal letters staat 2 keer tegenover elkaar; elke letter komt 10 keer voor, 5 keer links en 5 keer rechts
 - 1 punt per keuze voor de gekozen letter, zonder bijpunten
 - gelijke stand wordt beslist door het onderlinge duel en gemeld aan de leerling
 - melding bij een vlak profiel of als iemand steeds dezelfde kant kiest
@@ -31,7 +31,7 @@ Open `index.html` in een browser. Er is geen build-stap en geen server nodig.
 mbo-verkenner/
 ├── index.html
 ├── assets/
-│   └── riasoc/                  62 plaatjes, 7 omgewisselde varianten, logo's
+│   └── riasoc/                  alle plaatjes en de logo's
 ├── docs/
 │   ├── RIASOC_30_vragen_ontwerp.md
 │   ├── RIASOC_Modeluitleg_weging_en_resultaat.md
@@ -43,7 +43,8 @@ mbo-verkenner/
 │   ├── fixtures/vragen_62_oud.json
 │   └── output/
 ├── tools/
-│   └── swap_sides.py            wisselt linker- en rechterscène van een plaatje
+│   ├── swap_sides.py            wisselt linker- en rechterscène van een plaatje
+│   └── combine_sides.py         maakt één plaatje uit twee bestaande scènes
 └── README.md
 ```
 
@@ -70,11 +71,11 @@ node tests/riasoc_model_audit.js
 
 De audit draait op `index.html` zelf, schrijft een rapport naar `tests/output/riasoc_model_audit.md` en eindigt met een fout als de vragenset scheef is. Laatste uitkomst (2026-11-18):
 
-- ontwerp: 30 vragen, 0 fouten, elke letter 10 keer en 5/5 links/rechts
-- 600 willekeurige klikkers: elke letter 15-19% kans op plek 1; bij 60.000 klikkers 16,3-16,9%
+- ontwerp: 30 vragen, 0 fouten, elk tweetal 2 keer, elke letter 10 keer en 5/5 links/rechts
+- 600 willekeurige klikkers: elke letter 14-20% kans op plek 1; bij 60.000 klikkers 16,4-17,0%
 - altijd links of rechts: vlak profiel met melding
-- 600 leerlingen met een echte voorkeur: sterkste letter in 66% goed, overlap top 3 gemiddeld 2,47 van 3
-- opleidingen: 316 van de 400 komen in beeld, de meest getoonde bij 12% van de leerlingen
+- 600 leerlingen met een echte voorkeur: sterkste letter in 63% goed, overlap top 3 gemiddeld 2,53 van 3
+- opleidingen: 314 van de 400 komen in beeld, de meest getoonde bij 12% van de leerlingen
 
 ## Doel
 
