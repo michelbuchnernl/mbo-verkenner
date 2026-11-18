@@ -37,15 +37,15 @@ Hoe vaak staat elk tweetal tegenover elkaar:
 |---|---|---|---|---|
 | 1 | 5 | R - Speeltoestel maken | S - Op kinderen letten | opposite |
 | 2 | 28 | I - Oorzaak zoeken | C - Stappen checken | skip-one |
-| 3 | 49 | A - Campagne ontwerpen | O - Mensen meekrijgen | skip-one |
+| 3 | 49 | A - Actieposter maken | O - Mensen meekrijgen | skip-one |
 | 4 | 56 | C - Voorraad ordenen | R - Opstelling bouwen | adjacent |
 | 5 | 32 | A - Fotoserie maken | S - Leerling helpen | adjacent |
 | 6 | 6 | I - Robot onderzoeken | O - Team leiden | opposite |
 | 7 | 11 (omgewisseld) | C - Voorbeeld volgen | A - Eigen poster maken | opposite |
 | 8 | 50 | S - Eén persoon helpen | O - Groep leiden | adjacent |
 | 9 | 40 | R - Motor openmaken | I - Schema bekijken | adjacent |
-| 10 | 61 | C - Hulpvraag verwerken | S - Persoon helpen | skip-one |
-| 11 | 44 | I - Wind uitleggen | A - Wind verbeelden | adjacent |
+| 10 | 61 | C - Hulpvraag invoeren | S - Persoon helpen | skip-one |
+| 11 | 44 | I - Wind uitleggen | A - Kunst over wind maken | adjacent |
 | 12 | 20 (omgewisseld) | O - Opbouw leiden | R - Geluid aansluiten | skip-one |
 | 13 | 24 (omgewisseld) | S - Met bewoner praten | I - Water onderzoeken | skip-one |
 | 14 | 36 | O - Kraam leiden | C - Kraam bijhouden | adjacent |
@@ -54,10 +54,10 @@ Hoe vaak staat elk tweetal tegenover elkaar:
 | 17 | 37 | O - Sponsor overtuigen | C - Formulieren invullen | adjacent |
 | 18 | 18 | R - Wand bouwen | A - Kamer inrichten | skip-one |
 | 19 | 51 | S - Goed luisteren | O - Groep overtuigen | adjacent |
-| 20 | 59 | C - Gegevens invoeren | I - Betekenis zoeken | skip-one |
+| 20 | 59 | C - Gegevens invoeren | I - Zoeken wat opvalt | skip-one |
 | 21 | 64 (samengesteld uit 22 en 15) | O - Stand presenteren | A - Stand inrichten | skip-one |
-| 22 | 57 | C - Codes checken | R - Apparatuur plaatsen | adjacent |
-| 23 | 33 | A - Buurtmuur schilderen | S - Buurtgesprek houden | adjacent |
+| 22 | 57 | C - Lijst controleren | R - Apparaat aansluiten | adjacent |
+| 23 | 33 | A - Buurtmuur schilderen | S - Met de buurt praten | adjacent |
 | 24 | 42 | R - Leren door doen | I - Leren door vergelijken | adjacent |
 | 25 | 63 (nieuw) | S - Deelnemer aanmoedigen | C - Scores bijhouden | skip-one |
 | 26 | 45 | I - Goed antwoord zoeken | A - Eigen kunstwerk maken | adjacent |

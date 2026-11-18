@@ -17,6 +17,7 @@ De app is een zelfstandige HTML/JS-tool waarmee leerlingen 30 visuele A/B-keuzes
 - invulvelden voor voornaam, achternaam en klas; die staan op de uitslag en in de PDF
 - 12 brede beroepideeën en 6 concrete MBO-opleidingen, hooguit 2 per sector en per school
 - profielcorrectie van opleidingen kijkt alleen naar de opleidingsnaam
+- alle teksten voor leerlingen op taalniveau 2F: korte zinnen en gewone woorden
 - terugknop tijdens de vragen
 - PDF-export met klikbare opleidingslinks
 - model-audit met 600 gesimuleerde leerlingen per groep in `tests/riasoc_model_audit.js`

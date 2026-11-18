@@ -164,10 +164,10 @@
 <div id="screen-start" class="screen active">
   <img src="assets/riasoc/CORBULO_LOGO_RGB_DIAPOSITIEF-transparant.png" alt="Corbulo Tech &amp; Design College" style="width:200px;max-width:80%;margin-bottom:24px;display:block;margin-left:auto;margin-right:auto;">
   <h1>MBO Opleidingen<br><em>Verkenner</em></h1>
-  <p class="start-sub">Ontdek welke beroepen en MBO-opleidingen bij jou kunnen passen. Kies tijdens de vragen telkens de situatie die jou het meest aanspreekt in het plaatje.</p>
-  <div class="start-form"><input type="text" id="inp-name-start" placeholder="Jouw voornaam (optioneel)" autocomplete="given-name"></div>
+  <p class="start-sub">Ontdek welke beroepen en mbo-opleidingen bij jou passen. Je ziet steeds een plaatje met twee situaties. Kies wat jij het leukst vindt.</p>
+  <div class="start-form"><input type="text" id="inp-name-start" placeholder="Je voornaam (mag, hoeft niet)" autocomplete="given-name"></div>
   <button class="btn btn-primary" onclick="startQuiz()">Start de verkenner →</button>
-  <p class="hint">30 vragen · ca. 5 minuten · er zijn geen goede of foute antwoorden</p>
+  <p class="hint">30 vragen · ongeveer 5 minuten · er is geen goed of fout</p>
 </div>
 
 <div id="screen-question" class="screen">
@@ -198,15 +198,15 @@
 <div id="screen-email" class="screen">
   <div class="email-card fade">
     <span class="em">🎯</span>
-    <h2>Jouw profiel is klaar!</h2>
-    <p>Vul je gegevens in om de resultaten te bekijken en op te slaan als PDF.</p>
+    <h2>Je uitslag is klaar!</h2>
+    <p>Vul je gegevens in. Daarna zie je je uitslag. Je kunt die ook opslaan als PDF.</p>
     <div class="form-row">
       <div class="form-g"><label for="inp-name">Voornaam</label><input type="text" id="inp-name" placeholder="Voornaam" autocomplete="given-name"></div>
       <div class="form-g"><label for="inp-lastname">Achternaam</label><input type="text" id="inp-lastname" placeholder="Achternaam" autocomplete="family-name"></div>
     </div>
     <div class="form-g"><label for="inp-class">Klas</label><input type="text" id="inp-class" placeholder="Bijvoorbeeld 3B" autocomplete="off" maxlength="12"></div>
     <div class="form-g" style="margin-bottom:6px;">
-      <span class="track-label">Huidige opleiding *</span>
+      <span class="track-label">Welke leerweg doe je nu? *</span>
       <div class="track-grid" id="track-grid">
         <button class="track-btn" data-track="Basis" data-levels="2,3" onclick="selectTrack(this)">Basis<br><span style="font-size:.6rem;font-weight:300;opacity:.7">MBO 2 &amp; 3</span></button>
         <button class="track-btn" data-track="Kader" data-levels="3,4" onclick="selectTrack(this)">Kader<br><span style="font-size:.6rem;font-weight:300;opacity:.7">MBO 3 &amp; 4</span></button>
@@ -216,9 +216,9 @@
         <button class="track-btn" data-track="Anders" data-levels="2,3,4" onclick="selectTrack(this)">Anders<br><span style="font-size:.6rem;font-weight:300;opacity:.7">MBO 2, 3 &amp; 4</span></button>
       </div>
     </div>
-    <div class="form-g"><label for="inp-email">E-mailadres (optioneel)</label><input type="email" id="inp-email" placeholder="naam@email.nl" autocomplete="email"></div>
-    <button class="btn btn-primary" onclick="toResults()">Bekijk mijn profiel →</button>
-    <p class="privacy">📧 E-mailadres is optioneel · Geen spam.</p>
+    <div class="form-g"><label for="inp-email">E-mailadres (mag, hoeft niet)</label><input type="email" id="inp-email" placeholder="naam@email.nl" autocomplete="email"></div>
+    <button class="btn btn-primary" onclick="toResults()">Bekijk mijn uitslag →</button>
+    <p class="privacy">📧 Je e-mailadres invullen hoeft niet.</p>
   </div>
 </div>
 
@@ -236,44 +236,44 @@
         <div class="chart-wrap"><canvas id="radarChart"></canvas></div>
       </div>
       <div class="card fade">
-        <div class="card-lbl">Scores per dimensie</div>
+        <div class="card-lbl">Jouw score per type</div>
         <div id="score-bars"></div>
       </div>
       <div class="profile-card fade">
-        <div style="font-size:.6rem;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:var(--lb);margin-bottom:10px;">Wat dit betekent</div>
+        <div style="font-size:.6rem;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:var(--lb);margin-bottom:10px;">Wat betekent dit?</div>
         <p id="profile-text"></p>
       </div>
       <div class="career-section fade">
         <div class="sug-header">
-          <h3>12 beroepideeën om over te praten</h3>
-          <span class="sug-count">Breed verkennen voordat je kiest</span>
+          <h3>12 beroepen om over te praten</h3>
+          <span class="sug-count">Kijk eerst rond, kies later</span>
         </div>
         <div class="career-grid" id="career-grid"></div>
       </div>
       <div class="fade">
         <div class="sug-header">
-          <h3>Passende MBO-opleidingen</h3>
+          <h3>Mbo-opleidingen die bij je passen</h3>
           <span class="sug-count" id="sug-count">NH · ZH · Utrecht</span>
         </div>
         <div id="sug-list"></div>
       </div>
       <div class="explain-card fade">
         <div class="card-lbl">Hoe lees je je uitslag?</div>
-        <h3>RIASOC is een startpunt voor gesprek</h3>
-        <p>De verkenner is gebaseerd op de RIASOC-theorie: zes interessegebieden die helpen om te ontdekken welk soort werk of opleiding bij iemand kan passen. Je kiest steeds tussen twee situaties. Op basis van die keuzes berekent de verkenner hoe sterk elk type naar voren komt.</p>
-        <p>De meeste mensen zijn geen enkel type helemaal. Je uitslag is meestal een mix van twee of drie richtingen. Gebruik die mix om woorden te geven aan wat je leuk vindt, waar je energie van krijgt en welke opleidingen je verder wilt onderzoeken.</p>
+        <h3>Je uitslag is het begin van een gesprek</h3>
+        <p>De verkenner werkt met zes types. Samen heten ze RIASOC. Elk type staat voor een soort werk. Jij koos steeds tussen twee situaties. Zo ziet de verkenner welke types het best bij jou passen.</p>
+        <p>Bijna niemand is maar één type. Meestal passen er twee of drie bij je. Gebruik je uitslag om te vertellen wat je leuk vindt. Kies daarna welke opleidingen je wilt bekijken.</p>
         <h4>De zes types</h4>
         <div class="explain-types">
-          <div class="explain-type"><strong>R · Realistisch</strong><span>Doen en maken. Praktisch werken, bouwen, repareren en tastbare resultaten zien.</span></div>
-          <div class="explain-type"><strong>I · Intellectueel</strong><span>Denken en analyseren. Begrijpen hoe dingen werken, onderzoeken en vragen stellen.</span></div>
-          <div class="explain-type"><strong>A · Artistiek</strong><span>Creeren en verbeelden. Eigen ideeen uitwerken, ontwerpen en op een persoonlijke manier maken.</span></div>
-          <div class="explain-type"><strong>S · Sociaal</strong><span>Helpen en ondersteunen. Contact met mensen, luisteren, begeleiden en zorgen.</span></div>
-          <div class="explain-type"><strong>O · Ondernemend</strong><span>Leiden en overtuigen. Initiatief nemen, organiseren en mensen in beweging krijgen.</span></div>
-          <div class="explain-type"><strong>C · Conventioneel</strong><span>Ordenen en structureren. Nauwkeurig werken, controleren en zorgen dat alles klopt.</span></div>
+          <div class="explain-type"><strong>R · Realistisch</strong><span>Doen en maken. Je werkt met je handen. Je bouwt en repareert.</span></div>
+          <div class="explain-type"><strong>I · Intellectueel</strong><span>Denken en uitzoeken. Je wilt weten hoe iets werkt. Je onderzoekt en stelt vragen.</span></div>
+          <div class="explain-type"><strong>A · Artistiek</strong><span>Bedenken en ontwerpen. Je hebt eigen ideeën. Je maakt dingen op je eigen manier.</span></div>
+          <div class="explain-type"><strong>S · Sociaal</strong><span>Helpen en zorgen. Je werkt met mensen. Je luistert en helpt.</span></div>
+          <div class="explain-type"><strong>O · Ondernemend</strong><span>Leiden en overtuigen. Je neemt de leiding. Je regelt dingen en haalt anderen over.</span></div>
+          <div class="explain-type"><strong>C · Conventioneel</strong><span>Ordenen en controleren. Je werkt precies. Je zorgt dat alles klopt.</span></div>
         </div>
         <div class="explain-note">
-          <div><h3>Slechts een indicatie</h3><p>De uitkomst is geen definitief advies. Schoolresultaten, ervaring, motivatie en persoonlijke omstandigheden tellen ook mee. Gebruik je uitslag als gespreksstarter en onderzoek daarna verder.</p></div>
-          <div><h3>Bespreek dit met je decaan</h3><p>Neem je uitslag mee naar je mentor of decaan. Die kent jou, je schoolroute en de opleidingen. Samen kun je kijken welke open dagen, meeloopdagen of stages logisch zijn.</p></div>
+          <div><h3>Dit is geen eindadvies</h3><p>De uitslag geeft een richting. Je cijfers, je ervaring en wat je zelf wilt tellen ook mee. Zoek daarna verder. Ga naar open dagen en praat met mensen die het werk doen.</p></div>
+          <div><h3>Praat met je mentor of decaan</h3><p>Neem je uitslag mee. Je mentor of decaan kent jou en de opleidingen. Samen kies je welke open dagen of meeloopdagen je gaat doen.</p></div>
         </div>
       </div>
       <div class="corbulo-strip">
@@ -282,7 +282,7 @@
       </div>
     </div>
     <div class="actions" id="action-btns">
-      <button class="btn btn-pdf" onclick="dlPDF()" id="btn-pdf">📥 Download als PDF</button>
+      <button class="btn btn-pdf" onclick="dlPDF()" id="btn-pdf">📥 Opslaan als PDF</button>
       <button class="btn btn-ghost" onclick="restart()">Opnieuw beginnen</button>
     </div>
   </div>
@@ -310,15 +310,15 @@ const IMG_BASE = 'assets/riasoc/';
 const QS=[
   {n:1, src:5, a:'R',b:'S',lA:"Speeltoestel maken",lB:"Op kinderen letten",t:"Speeltoestel maken of op kinderen letten",img:"05-speeltoestel-repareren-of-op-kinderen-letten.png"},
   {n:2, src:28,a:'I',b:'C',lA:"Oorzaak zoeken",lB:"Stappen checken",t:"Oorzaak zoeken of stappen checken",img:"28-oorzaak-zoeken-of-stappen-controleren.png"},
-  {n:3, src:49,a:'A',b:'O',lA:"Campagne ontwerpen",lB:"Mensen meekrijgen",t:"Campagne ontwerpen of mensen meekrijgen",img:"49-campagne-ontwerpen-of-gesprek-leiden.png"},
+  {n:3, src:49,a:'A',b:'O',lA:"Actieposter maken",lB:"Mensen meekrijgen",t:"Actieposter maken of mensen meekrijgen",img:"49-campagne-ontwerpen-of-gesprek-leiden.png"},
   {n:4, src:56,a:'C',b:'R',lA:"Voorraad ordenen",lB:"Opstelling bouwen",t:"Voorraad ordenen of opstelling bouwen",img:"56-voorraad-ordenen-of-opstelling-bouwen.png"},
   {n:5, src:32,a:'A',b:'S',lA:"Fotoserie maken",lB:"Leerling helpen",t:"Fotoserie maken of leerling helpen",img:"32-schoolfotoreeks-of-leerling-ondersteunen.png"},
   {n:6, src:6, a:'I',b:'O',lA:"Robot onderzoeken",lB:"Team leiden",t:"Robot onderzoeken of team leiden",img:"06-robot-analyseren-of-team-aansturen.png"},
   {n:7, src:11,a:'C',b:'A',lA:"Voorbeeld volgen",lB:"Eigen poster maken",t:"Voorbeeld volgen of eigen poster maken",img:"11-template-volgen-of-vrije-poster-maken.png",swapped:true},
   {n:8, src:50,a:'S',b:'O',lA:"Eén persoon helpen",lB:"Groep leiden",t:"Eén persoon helpen of groep leiden",img:"50-een-coachen-of-velen-leiden.png"},
   {n:9, src:40,a:'R',b:'I',lA:"Motor openmaken",lB:"Schema bekijken",t:"Motor openmaken of schema bekijken",img:"40-motor-openmaken-of-schema-bestuderen.png"},
-  {n:10,src:61,a:'C',b:'S',lA:"Hulpvraag verwerken",lB:"Persoon helpen",t:"Hulpvraag verwerken of persoon helpen",img:"61-verzoek-verwerken-of-persoon-helpen.png"},
-  {n:11,src:44,a:'I',b:'A',lA:"Wind uitleggen",lB:"Wind verbeelden",t:"Wind uitleggen of wind in beeld brengen",img:"44-wind-uitleggen-of-wind-verbeelden.png"},
+  {n:10,src:61,a:'C',b:'S',lA:"Hulpvraag invoeren",lB:"Persoon helpen",t:"Hulpvraag invoeren of persoon helpen",img:"61-verzoek-verwerken-of-persoon-helpen.png"},
+  {n:11,src:44,a:'I',b:'A',lA:"Wind uitleggen",lB:"Kunst over wind maken",t:"Wind uitleggen of kunst over wind maken",img:"44-wind-uitleggen-of-wind-verbeelden.png"},
   {n:12,src:20,a:'O',b:'R',lA:"Opbouw leiden",lB:"Geluid aansluiten",t:"Opbouw leiden of geluid aansluiten",img:"20-opbouw-leiden-of-geluid-aansluiten.png",swapped:true},
   {n:13,src:24,a:'S',b:'I',lA:"Met bewoner praten",lB:"Water onderzoeken",t:"Met bewoner praten of water onderzoeken",img:"24-bewoner-te-woord-staan-of-water-onderzoeken.png",swapped:true},
   {n:14,src:36,a:'O',b:'C',lA:"Kraam leiden",lB:"Kraam bijhouden",t:"Kraam leiden of kraam bijhouden",img:"36-kraam-leiden-of-kraam-beheren.png"},
@@ -327,10 +327,10 @@ const QS=[
   {n:17,src:37,a:'O',b:'C',lA:"Sponsor overtuigen",lB:"Formulieren invullen",t:"Sponsor overtuigen of formulieren invullen",img:"37-sponsor-winnen-of-formulieren-afronden.png"},
   {n:18,src:18,a:'R',b:'A',lA:"Wand bouwen",lB:"Kamer inrichten",t:"Wand bouwen of kamer mooi inrichten",img:"18-wand-bouwen-of-kamer-stylen.png"},
   {n:19,src:51,a:'S',b:'O',lA:"Goed luisteren",lB:"Groep overtuigen",t:"Goed luisteren of groep overtuigen",img:"51-goed-luisteren-of-snel-overtuigen.png"},
-  {n:20,src:59,a:'C',b:'I',lA:"Gegevens invoeren",lB:"Betekenis zoeken",t:"Gegevens invoeren of betekenis zoeken",img:"59-data-structureren-of-betekenis-zoeken.png"},
+  {n:20,src:59,a:'C',b:'I',lA:"Gegevens invoeren",lB:"Zoeken wat opvalt",t:"Gegevens invoeren of zoeken wat opvalt",img:"59-data-structureren-of-betekenis-zoeken.png"},
   {n:21,src:64,a:'O',b:'A',lA:"Stand presenteren",lB:"Stand inrichten",t:"Stand presenteren of stand inrichten",img:"64-stand-presenteren-of-stand-inrichten.png",note:"samengesteld uit 22 en 15"},
-  {n:22,src:57,a:'C',b:'R',lA:"Codes checken",lB:"Apparatuur plaatsen",t:"Codes checken of apparatuur plaatsen",img:"57-codes-controleren-of-apparatuur-installeren.png"},
-  {n:23,src:33,a:'A',b:'S',lA:"Buurtmuur schilderen",lB:"Buurtgesprek houden",t:"Buurtmuur schilderen of buurtgesprek houden",img:"33-buurtmuur-of-buurtkring.png"},
+  {n:22,src:57,a:'C',b:'R',lA:"Lijst controleren",lB:"Apparaat aansluiten",t:"Lijst controleren of apparaat aansluiten",img:"57-codes-controleren-of-apparatuur-installeren.png"},
+  {n:23,src:33,a:'A',b:'S',lA:"Buurtmuur schilderen",lB:"Met de buurt praten",t:"Buurtmuur schilderen of met de buurt praten",img:"33-buurtmuur-of-buurtkring.png"},
   {n:24,src:42,a:'R',b:'I',lA:"Leren door doen",lB:"Leren door vergelijken",t:"Leren door doen of leren door vergelijken",img:"42-leren-door-doen-of-leren-door-vergelijken.png"},
   {n:25,src:63,a:'S',b:'C',lA:"Deelnemer aanmoedigen",lB:"Scores bijhouden",t:"Deelnemer aanmoedigen of scores bijhouden",img:"63-deelnemer-aanmoedigen-of-scores-bijhouden.png",note:"nieuw"},
   {n:26,src:45,a:'I',b:'A',lA:"Goed antwoord zoeken",lB:"Eigen kunstwerk maken",t:"Goed antwoord zoeken of eigen kunstwerk maken",img:"45-juiste-antwoord-of-originele-interpretatie.png"},
@@ -346,65 +346,67 @@ const QS_BY_N=Object.fromEntries(QS.map(q=>[q.n,q]));
 
 const D=['R','I','A','S','O','C'];
 const META={
-  R:{naam:'Realistisch',  kort:'Doen & Maken',            k:'#4fc3f7'},
-  I:{naam:'Intellectueel',kort:'Denken & Analyseren',     k:'#73d2ff'},
-  A:{naam:'Artistiek',    kort:'Creëren & Verbeelden',    k:'#b39ddb'},
-  S:{naam:'Sociaal',      kort:'Helpen & Ondersteunen',   k:'#80cbc4'},
-  O:{naam:'Ondernemend',  kort:'Leiden & Overtuigen',     k:'#ffb74d'},
-  C:{naam:'Conventioneel',kort:'Ordenen & Structureren',  k:'#a5d6a7'},
+  R:{naam:'Realistisch',  kort:'Doen & Maken',          k:'#4fc3f7'},
+  I:{naam:'Intellectueel',kort:'Denken & Uitzoeken',    k:'#73d2ff'},
+  A:{naam:'Artistiek',    kort:'Bedenken & Ontwerpen',  k:'#b39ddb'},
+  S:{naam:'Sociaal',      kort:'Helpen & Zorgen',       k:'#80cbc4'},
+  O:{naam:'Ondernemend',  kort:'Leiden & Overtuigen',   k:'#ffb74d'},
+  C:{naam:'Conventioneel',kort:'Ordenen & Controleren', k:'#a5d6a7'},
 };
+// Alle teksten voor leerlingen zijn geschreven op taalniveau 2F: korte zinnen,
+// gewone woorden, één boodschap per zin.
 const PROFIEL={
-  R:"Je kiest graag voor praktisch bezig zijn. Bouwen, repareren, werken met je handen — dat geeft jou energie. Je houdt van duidelijke resultaten die je kunt zien en aanraken.",
-  I:"Je houdt van nadenken, analyseren en begrijpen hoe dingen werken. Puzzels, data en vragen zoeken: dat trekt jou aan. Je gaat graag de diepte in.",
-  A:"Je denkt creatief en wil dingen op jouw eigen manier maken. Expressie, ontwerp en originaliteit spreken jou aan. Je ziet mogelijkheden waar anderen patronen zien.",
-  S:"Mensen helpen geeft jou energie. Je bent een goede luisteraar en vindt het fijn om iemand verder te helpen. Contact en zorg zijn voor jou belangrijk.",
-  O:"Je neemt graag initiatief en wil anderen in beweging krijgen. Organiseren, overtuigen en kansen pakken: dat past bij jou. Je houdt van impact maken.",
-  C:"Structuur en precisie zijn jouw kracht. Checklists, procedures en ordening geven jou houvast. Jij zorgt dat de details kloppen en dingen soepel lopen.",
+  R:"Je bent graag praktisch bezig. Bouwen, repareren en werken met je handen vind je leuk. Je wilt zien wat je hebt gemaakt.",
+  I:"Je denkt graag na. Je wilt weten hoe dingen werken. Je zoekt dingen uit en stelt veel vragen.",
+  A:"Je bent creatief. Je maakt dingen graag op je eigen manier. Ontwerpen en nieuwe ideeën bedenken vind je leuk.",
+  S:"Je helpt graag mensen. Je kunt goed luisteren. Contact met anderen is voor jou belangrijk.",
+  O:"Je neemt graag de leiding. Je regelt dingen en haalt anderen over. Je pakt een kans als je die ziet.",
+  C:"Je werkt graag netjes en precies. Duidelijke regels en stappen vind je fijn. Jij zorgt dat alles klopt.",
 };
 const PROFIEL_DUIDING={
-  R:"In opleidingen betekent dit vaak dat je graag leert door te doen: oefenen, maken, monteren, koken, bouwen, installeren of repareren. Let bij open dagen op werkplaatsen, praktijklokalen en opdrachten waarbij je resultaat direct zichtbaar wordt.",
-  I:"In opleidingen betekent dit vaak dat je nieuwsgierig bent naar oorzaken, systemen en oplossingen. Let bij open dagen op vakken waarin je onderzoekt, vergelijkt, test, programmeert, meet of analyseert.",
-  A:"In opleidingen betekent dit vaak dat je ruimte zoekt om iets eigen te maken: een ontwerp, beeld, verhaal, sfeer, product of ervaring. Let bij open dagen op portfolio's, creatieve opdrachten en hoeveel vrijheid je krijgt in projecten.",
-  S:"In opleidingen betekent dit vaak dat contact met mensen belangrijk is. Je wilt merken dat jouw werk iemand verder helpt. Let bij open dagen op stages, begeleiding, klantcontact, samenwerken en de doelgroep waarmee je werkt.",
-  O:"In opleidingen betekent dit vaak dat je energie krijgt van initiatief, organiseren en verantwoordelijkheid. Let bij open dagen op projecten, ondernemerschap, leidinggeven, presenteren en situaties waarin je anderen meekrijgt.",
-  C:"In opleidingen betekent dit vaak dat structuur, duidelijkheid en betrouwbaarheid bij jou passen. Let bij open dagen op plannen, dossiers, administratie, logistiek, veiligheid, kwaliteit en werken volgens afspraken."
+  R:"Zoek een opleiding waar je veel doet en maakt. Kijk op open dagen naar de werkplaatsen en praktijklokalen.",
+  I:"Zoek een opleiding waar je dingen onderzoekt, test of programmeert. Vraag op open dagen welke vakken daarover gaan.",
+  A:"Zoek een opleiding waar je eigen ontwerpen mag maken. Vraag op open dagen hoeveel vrijheid je krijgt bij opdrachten.",
+  S:"Zoek een opleiding waar je veel met mensen werkt. Vraag op open dagen naar de stages en met wie je gaat werken.",
+  O:"Zoek een opleiding met projecten waarin jij dingen regelt. Vraag op open dagen naar leidinggeven, verkopen en een eigen bedrijf.",
+  C:"Zoek een opleiding met duidelijke taken en regels. Denk aan administratie, planning, logistiek of controle."
 };
 const CAREER_IDEAS={
   R:[
-    "Technisch maker of monteur",
-    "Bouw-, infra- of installatiemedewerker",
-    "Ambachtelijk maker, kok of meubelmaker",
-    "Voertuig-, fiets- of machine-specialist"
+    "Monteur of technisch maker",
+    "Werken in de bouw of installatie",
+    "Kok, bakker of meubelmaker",
+    "Werken aan auto's, fietsen of machines"
   ],
   I:[
-    "ICT'er, softwaredeveloper of supportmedewerker",
-    "Laborant, analist of onderzoeker",
-    "Technisch tekenaar of engineering-assistent",
-    "Probleemoplosser in techniek, data of systemen"
+    "ICT'er of softwaremaker",
+    "Laborant of onderzoeker",
+    "Technisch tekenaar",
+    "Storingen zoeken in techniek of computers"
   ],
   A:[
-    "Mediavormgever, fotograaf of mediamaker",
-    "Interieur-, styling- of ruimtelijk ontwerper",
-    "Podium-, event- of decorprofessional",
-    "Creatieve software- of experience-maker"
+    "Mediavormgever of fotograaf",
+    "Interieur of styling ontwerpen",
+    "Werken bij podium, decor of evenementen",
+    "Games, apps of websites ontwerpen"
   ],
   S:[
-    "Zorgmedewerker, helpende of verpleegkundige",
-    "Pedagogisch medewerker of onderwijsassistent",
+    "Werken in de zorg of verpleging",
+    "Werken met kinderen of in het onderwijs",
     "Begeleider, sociaal werker of sportcoach",
-    "Gastheer/gastvrouw, hospitality- of klantcontactmedewerker"
+    "Gastheer of gastvrouw in horeca of hotel"
   ],
   O:[
-    "Teamleider, supervisor of projectleider",
-    "Retailmanager, verkoper of accountmedewerker",
-    "Event-, hospitality- of marketingorganisator",
-    "Ondernemer of coördinator in een dienstverlenende omgeving"
+    "Teamleider of projectleider",
+    "Verkoper of winkelmanager",
+    "Evenementen of reclame regelen",
+    "Een eigen bedrijf beginnen"
   ],
   C:[
-    "Administratief of juridisch medewerker",
-    "Logistiek planner, voorraad- of procesmedewerker",
-    "ICT-beheerder, servicedesk of support technician",
-    "Kwaliteits-, veiligheids- of controlemedewerker"
+    "Administratie of juridisch werk",
+    "Planner in de logistiek of het magazijn",
+    "ICT-beheerder of helpdesk",
+    "Controleur van kwaliteit of veiligheid"
   ]
 };
 
@@ -1081,22 +1083,22 @@ function tieNotice(meta){
   if(meta.boundary&&meta.boundary.tied){
     const b=meta.boundary;
     const why={
-      duel:'Voor de code gaf het onderlinge duel de doorslag: bij de plaatjes waar je tussen deze richtingen koos.',
-      sterkte:'Voor de code gaf de doorslag tegen welke andere richtingen je deze keuzes maakte.',
-      gelijk:'Ze staan precies gelijk; welke van de twee in de code staat is hier toeval.'
+      duel:'Je koos vaker het type dat in de code staat.',
+      sterkte:'In de code staat het type dat vaker won van je andere sterke types.',
+      gelijk:'Ze staan precies gelijk. Welk type in de code staat is toeval.'
     }[b.decidedBy]||'';
-    parts.push(namesOf(b.outside)+' scoort even hoog als '+namesOf(b.inside)+' ('+b.score+'%). '+why+' Bekijk '+namesOf(b.outside)+' dus ook.');
+    parts.push(namesOf(b.outside)+(b.outside.length>1?' scoren':' scoort')+' even hoog als '+namesOf(b.inside)+' ('+b.score+'%). '+why+' Kijk dus ook naar '+namesOf(b.outside)+'.');
   }
   (meta.insideTies||[]).forEach(g=>{
     const dims=g.dims.filter(d=>meta.selected.includes(d));
-    parts.push(namesOf(dims)+' scoren even hoog ('+g.score+'%). Hun volgorde in de code zegt dus weinig.');
+    parts.push(namesOf(dims)+' scoren even hoog ('+g.score+'%). De volgorde in de code zegt dus weinig.');
   });
   return '<br><br><strong>Let op:</strong> '+parts.join(' ');
 }
 function qualityNotice(n,answers){
   const q=profileQuality(n,answers);
-  if(q.oneSided) return '<br><br><strong>Let op:</strong> je koos bijna steeds dezelfde kant van het plaatje. Daardoor zegt deze uitslag weinig. Doe de verkenner nog eens en kijk bij elk plaatje wat je het leukst lijkt.';
-  if(q.flat) return '<br><br><strong>Let op:</strong> je scores liggen heel dicht bij elkaar. Er komt nog geen duidelijke richting uit; zie de opleidingen hieronder als een brede greep om over te praten.';
+  if(q.oneSided) return '<br><br><strong>Let op:</strong> je koos bijna steeds dezelfde kant van het plaatje. Daardoor zegt deze uitslag weinig. Doe de verkenner nog een keer. Kijk bij elk plaatje wat jij het leukst vindt.';
+  if(q.flat) return '<br><br><strong>Let op:</strong> je scores liggen dicht bij elkaar. Er is nog geen duidelijke richting. Zie de opleidingen hieronder als ideeën om over te praten.';
   return '';
 }
 
@@ -1134,7 +1136,7 @@ function renderQ(){
   ['btn-a','btn-b'].forEach(id=>{const b=document.getElementById(id);b.disabled=true;setTimeout(()=>b.disabled=false,280);});
 }
 function showPhPH(wrap,alt){
-  wrap.innerHTML=`<div class="img-ph"><div class="img-ph-i"><svg width="38" height="38" viewBox="0 0 24 24" fill="none" stroke="#73d2ff" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="m21 15-5-5L5 21"/></svg><span>Afbeelding binnenkort beschikbaar</span></div></div>`;
+  wrap.innerHTML=`<div class="img-ph"><div class="img-ph-i"><svg width="38" height="38" viewBox="0 0 24 24" fill="none" stroke="#73d2ff" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="m21 15-5-5L5 21"/></svg><span>Het plaatje komt er nog aan</span></div></div>`;
 }
 
 function pick(c){
@@ -1173,12 +1175,12 @@ function toResults(){
   const emailEl=document.getElementById('inp-email');
   if(!S.track){
     document.querySelectorAll('.track-btn').forEach(b=>b.classList.add('err-track'));
-    toast('⚠️ Kies eerst je huidige opleiding');
+    toast('⚠️ Kies eerst je leerweg');
     return;
   }
   if(email && !email.includes('@')){
     emailEl.classList.add('err');
-    toast('⚠️ Vul een geldig e-mailadres in');
+    toast('⚠️ Dit e-mailadres klopt niet');
     return;
   }
   emailEl.classList.remove('err');
@@ -1215,11 +1217,11 @@ function buildBars(n){
 
 function buildProfile(n,code,meta){
   const dims=code.split('');
-  const top3=dims.map(d=>META[d].naam).join(', ');
+  const top3=namesOf(dims);
   const d0=dims[0],d1=dims[1],d2=dims[2];
-  const mix=`Samen laat deze combinatie zien waar je waarschijnlijk energie van krijgt. Je eerste type zegt iets over je sterkste voorkeur, maar de tweede en derde kleur geven nuance: ze laten zien in welke omgeving of rol die voorkeur goed tot zijn recht kan komen. Gebruik dit dus niet als hokje, maar als taal om over jezelf te praten.`;
-  const action=`Kijk bij opleidingen vooral naar de praktijk: welke opdrachten doe je, met wie werk je samen, hoeveel vrijheid of structuur is er, en welke stages horen erbij? Bespreek met je mentor of decaan welke voorbeelden je herkent en welke juist niet. Dat gesprek is minstens zo belangrijk als de score zelf.`;
-  document.getElementById('profile-text').innerHTML=`Je keuzes wijzen het sterkst naar <strong>${top3}</strong>. ${PROFIEL[d0]} ${PROFIEL_DUIDING[d0]}${d1?' '+PROFIEL[d1]+' '+PROFIEL_DUIDING[d1]:''}${d2?' Je derde richting, '+META[d2].naam.toLowerCase()+', vult dit profiel aan en kan helpen om opleidingen beter te vergelijken.':''} ${mix} ${action}${qualityNotice(n,S.answers)||tieNotice(meta)}`;
+  const mix=`Samen laten deze types zien wat jij leuk vindt. Het eerste type is het sterkst. De andere horen er ook bij. Je zit hier niet aan vast. Het helpt je om over jezelf te praten.`;
+  const action=`Kijk bij een opleiding goed naar de praktijk. Welke opdrachten doe je? Met wie werk je samen? Welke stages zijn er? Praat hierover met je mentor of decaan. Vertel wat je herkent en wat niet. Dat gesprek is net zo belangrijk als de score.`;
+  document.getElementById('profile-text').innerHTML=`Jouw sterkste types zijn <strong>${top3}</strong>. ${PROFIEL[d0]} ${PROFIEL_DUIDING[d0]}${d1?' '+PROFIEL[d1]+' '+PROFIEL_DUIDING[d1]:''}${d2?' Je derde type is '+META[d2].naam.toLowerCase()+'. Kijk ook naar opleidingen waar dat in zit.':''} ${mix} ${action}${qualityNotice(n,S.answers)||tieNotice(meta)}`;
 }
 
 function topDims(code){return code.split('').filter(d=>D.includes(d)).slice(0,3);}
@@ -1240,11 +1242,11 @@ function makeMotivation(mbo,norm){
   const lead=mbo.dim&&overlap.includes(mbo.dim)?mbo.dim:null;
   const primary=lead||overlap[0]||progTop[0]||stuTop[0];
   const secondary=[...overlap,...progTop].find(d=>d!==primary);
-  const WHY={R:'je energie krijgt van praktisch werken en aanpakken',I:'analytisch denken en uitzoeken bij jou passen',A:'je creatief bent en eigen ideeën wil uitwerken',S:'mensen helpen jou energie geeft',O:'je graag initiatief neemt en anderen in beweging brengt',C:'structuur en nauwkeurig werken jou liggen'};
-  const WHAT={R:'veel praktisch vakwerk en technisch handelen',I:'analyseren, onderzoeken en doorgronden',A:'creatieve ruimte en eigen ontwerp',S:'werken met en voor mensen',O:'organiseren, overtuigen en kansen benutten',C:'precisie, procedures en gestructureerd werken'};
+  const WHY={R:'je graag praktisch bezig bent',I:'je graag dingen uitzoekt',A:'je creatief bent en eigen ideeën hebt',S:'je graag mensen helpt',O:'je graag de leiding neemt',C:'je graag netjes en precies werkt'};
+  const WHAT={R:'werk je veel met je handen',I:'zoek je veel dingen uit',A:'maak je eigen ontwerpen',S:'werk je veel met mensen',O:'neem je vaak de leiding',C:'werk je precies en volgens vaste stappen'};
   const pct=norm[primary];
-  let t=`Past bij jou: ${WHY[primary]} (${pct}%). Deze opleiding vraagt ${WHAT[primary]}`;
-  if(secondary&&secondary!==primary)t+=` én ${WHAT[secondary]}`;
+  let t=`Past bij jou, want ${WHY[primary]} (${pct}%). In deze opleiding ${WHAT[primary]}`;
+  if(secondary&&secondary!==primary)t+=`. Ook ${WHAT[secondary]}`;
   return t+'.';
 }
 
@@ -1476,7 +1478,7 @@ function matchPct(m){
 function buildSuggestions(n,code){
   const selected=selectSuggestions(n,code,6);
   const tl={Basis:'VMBO Basis',Kader:'VMBO Kader',GL:'VMBO GL',TL:'VMBO TL',Havo:'Havo',Anders:'Overig'};
-  document.getElementById('sug-count').textContent='6 concrete opties voor '+(tl[S.track]||S.track)+' · ZH · NH · Utrecht';
+  document.getElementById('sug-count').textContent='6 opleidingen voor '+(tl[S.track]||S.track)+' · ZH · NH · Utrecht';
   document.getElementById('sug-list').innerHTML=selected.map((m,i)=>{
     const provider=selectedProvider(m);
     const pct=matchPct(m);
@@ -1488,7 +1490,7 @@ function buildSuggestions(n,code){
       +'<div class="sug-mot">'+makeMotivation(m,n)+'</div>'
       +bHtml+urlBtn
       +'<div class="sug-tags">'
-      +'<span class="tag tag-g" style="background:rgba(115,210,255,.15)">Vanuit '+META[m.dim].naam+'</span>'
+      +'<span class="tag tag-g" style="background:rgba(115,210,255,.15)">Type: '+META[m.dim].naam+'</span>'
       +(provider.level?'<span class="tag tag-n">Niveau '+provider.level+'</span>':'')
       +(provider.learning?'<span class="tag tag-s">'+provider.learning+'</span>':'')
       +'<span class="tag tag-g" style="background:rgba(115,210,255,.15)">'+pct+'% match</span>'
@@ -1498,7 +1500,7 @@ function buildSuggestions(n,code){
 
 function saveDB(n,code,meta){
   if(!DB_URL)return;
-  fetch(DB_URL,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({sessionId:S.sid,naam:S.name,email:S.email,track:S.track,timestamp:new Date().toISOString(),R:n.R,I:n.I,A:n.A,S:n.S,O:n.O,C:n.C,topCode:code,tieInfo:JSON.stringify(meta||{}),achternaam:S.lastName||'',klas:S.klas||'',answers:JSON.stringify(S.answers)})}).then(()=>toast('✅ Profiel opgeslagen')).catch(()=>{});
+  fetch(DB_URL,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({sessionId:S.sid,naam:S.name,email:S.email,track:S.track,timestamp:new Date().toISOString(),R:n.R,I:n.I,A:n.A,S:n.S,O:n.O,C:n.C,topCode:code,tieInfo:JSON.stringify(meta||{}),achternaam:S.lastName||'',klas:S.klas||'',answers:JSON.stringify(S.answers)})}).then(()=>toast('✅ Uitslag opgeslagen')).catch(()=>{});
 }
 
 // De radar voor de PDF wordt apart getekend op een vaste maat. De radar op het
@@ -1526,9 +1528,9 @@ function buildPDFPages(n,code,meta){
   const sortedD=D.slice().sort((a,b)=>n[b]-n[a]);
   const barsHTML=sortedD.map(dx=>`<div style="display:grid;grid-template-columns:112px 1fr 38px;align-items:center;gap:8px;margin-bottom:10px;"><div style="font-size:10.5px;font-weight:700;color:#140037;">${META[dx].naam}<div style="font-size:8.5px;font-weight:400;color:#666;margin-top:1px;">${META[dx].kort}</div></div><div style="height:7px;background:#dde8ff;border-radius:4px;overflow:hidden;"><div style="width:${n[dx]}%;height:100%;background:${META[dx].k};border-radius:4px;"></div></div><div style="font-size:10px;font-weight:700;color:#1464c8;text-align:right;">${n[dx]}%</div></div>`).join('');
   const dims=topDims(code);
-  const top3=dims.map(dx=>META[dx].naam).join(', ');
+  const top3=namesOf(dims);
   const d0=dims[0],d1=dims[1],d2=dims[2];
-  const profileHTML=`Je keuzes wijzen het sterkst naar <strong style="color:#1464c8;">${top3}</strong>. ${PROFIEL[d0]} ${PROFIEL_DUIDING[d0]}${d1?' '+PROFIEL[d1]+' '+PROFIEL_DUIDING[d1]:''}${d2?' Je derde richting, '+META[d2].naam.toLowerCase()+', vult dit profiel aan en kan helpen om opleidingen beter te vergelijken.':''} Gebruik dit niet als hokje, maar als taal voor een gesprek met je mentor of decaan.${qualityNotice(n,S.answers)||tieNotice(meta)}`;
+  const profileHTML=`Jouw sterkste types zijn <strong style="color:#1464c8;">${top3}</strong>. ${PROFIEL[d0]} ${PROFIEL_DUIDING[d0]}${d1?' '+PROFIEL[d1]+' '+PROFIEL_DUIDING[d1]:''}${d2?' Je derde type is '+META[d2].naam.toLowerCase()+'. Kijk ook naar opleidingen waar dat in zit.':''} Je zit hier niet aan vast. Praat over deze uitslag met je mentor of decaan.${qualityNotice(n,S.answers)||tieNotice(meta)}`;
   const suggestions=selectSuggestions(n,code,6);
   const sugCard=(m,i)=>{
     const beroepen=(m.b||[]).slice(0,2).map(b=>`<span style="font-size:8px;font-weight:600;padding:2px 6px;border-radius:3px;background:#dde8ff;color:#1464c8;border:1px solid #c0d0f0;white-space:nowrap;">${b}</span>`).join(' ');
@@ -1541,21 +1543,21 @@ ${beroepen?`<div style="display:flex;flex-wrap:wrap;gap:4px;margin-bottom:5px;">
   };
   const pageWrap=(content)=>`<div style="width:680px;height:962px;overflow:hidden;background:#ffffff;padding:32px 36px;font-family:'Red Hat Text',sans-serif;color:#1a1a2e;font-size:13px;line-height:1.6;">${content}</div>`;
   const header=`<div style="text-align:center;margin-bottom:22px;"><div style="font-size:7.5px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:#1464c8;margin-bottom:7px;">Corbulo Tech &amp; Design College — MBO Opleidingen Verkenner</div><div style="font-size:24px;font-weight:700;color:#140037;margin-bottom:5px;">${S.name}'s Kompas</div><div style="font-size:10.5px;color:#666;margin-bottom:11px;">${studentLine(d,trackLabel)}</div><div style="display:inline-block;background:#1464c8;color:#fff;font-size:17px;font-weight:700;letter-spacing:.2em;padding:7px 26px;border-radius:5px;">${code}</div></div><div style="height:1px;background:#dde8ff;margin-bottom:20px;"></div>`;
-  const chartScores=`<div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px;"><div style="background:#1464c8;border-radius:9px;padding:18px;"><div style="font-size:7.5px;font-weight:700;letter-spacing:.15em;text-transform:uppercase;color:rgba(255,255,255,.6);text-align:center;margin-bottom:10px;">RIASOC Kompas</div><img src="${chartImg}" style="width:100%;height:auto;display:block;" alt="RIASOC kompas"></div><div style="background:#f0f4ff;border-radius:9px;padding:18px;"><div style="font-size:7.5px;font-weight:700;letter-spacing:.15em;text-transform:uppercase;color:#1464c8;margin-bottom:12px;">Scores per dimensie</div>${barsHTML}</div></div>`;
-  const profile=`<div style="background:#eef3ff;border-radius:9px;padding:16px 18px;margin-bottom:16px;border-left:3px solid #1464c8;"><div style="font-size:7.5px;font-weight:700;letter-spacing:.15em;text-transform:uppercase;color:#1464c8;margin-bottom:7px;">Wat dit betekent</div><p style="font-size:11.5px;line-height:1.75;color:#1a1a2e;margin:0;">${profileHTML}</p></div>`;
-  const sugHeader=`<div style="display:flex;align-items:baseline;gap:10px;margin-bottom:10px;"><div style="font-size:14px;font-weight:700;color:#140037;">6 concrete MBO-opleidingen</div><div style="font-size:9.5px;color:#666;">Voor ${trackLabel} · NH · ZH · Utrecht</div></div>`;
+  const chartScores=`<div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px;"><div style="background:#1464c8;border-radius:9px;padding:18px;"><div style="font-size:7.5px;font-weight:700;letter-spacing:.15em;text-transform:uppercase;color:rgba(255,255,255,.6);text-align:center;margin-bottom:10px;">RIASOC Kompas</div><img src="${chartImg}" style="width:100%;height:auto;display:block;" alt="RIASOC kompas"></div><div style="background:#f0f4ff;border-radius:9px;padding:18px;"><div style="font-size:7.5px;font-weight:700;letter-spacing:.15em;text-transform:uppercase;color:#1464c8;margin-bottom:12px;">Jouw score per type</div>${barsHTML}</div></div>`;
+  const profile=`<div style="background:#eef3ff;border-radius:9px;padding:16px 18px;margin-bottom:16px;border-left:3px solid #1464c8;"><div style="font-size:7.5px;font-weight:700;letter-spacing:.15em;text-transform:uppercase;color:#1464c8;margin-bottom:7px;">Wat betekent dit?</div><p style="font-size:11.5px;line-height:1.75;color:#1a1a2e;margin:0;">${profileHTML}</p></div>`;
+  const sugHeader=`<div style="display:flex;align-items:baseline;gap:10px;margin-bottom:10px;"><div style="font-size:14px;font-weight:700;color:#140037;">6 mbo-opleidingen die bij je passen</div><div style="font-size:9.5px;color:#666;">Voor ${trackLabel} · NH · ZH · Utrecht</div></div>`;
   const footer=`<div style="margin-top:20px;padding-top:14px;border-top:1px solid #dde8ff;text-align:center;"><img src="assets/riasoc/CORBULO_LOGO_RGB_V1-transparant.png" alt="Corbulo Tech &amp; Design College" style="width:76px;height:auto;object-fit:contain;display:block;margin:0 auto 6px;"><div style="font-size:7.5px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#777;">Corbulo Tech &amp; Design College · Makers van de Toekomst</div></div>`;
   const careerPdfCard=(dx)=>`<div style="background:#e8f0ff;border-radius:9px;padding:15px 17px;border:1px solid #dde8ff;border-left:3px solid ${META[dx].k};"><div style="display:flex;align-items:center;gap:10px;margin-bottom:10px;"><span style="display:inline-grid;place-items:center;width:30px;height:30px;border-radius:50%;background:${META[dx].k};color:#140037;font-weight:800;">${dx}</span><div><div style="font-size:13px;font-weight:800;color:#140037;">${META[dx].naam}</div><div style="font-size:8.5px;font-weight:800;color:#1464c8;text-transform:uppercase;letter-spacing:.08em;">${META[dx].kort}</div></div></div><ul style="margin:0;padding-left:18px;color:#333;font-size:11px;line-height:1.65;">${(CAREER_IDEAS[dx]||[]).map(x=>`<li>${x}</li>`).join('')}</ul></div>`;
-  const careerPage=`<div style="font-size:7.5px;font-weight:800;letter-spacing:.18em;text-transform:uppercase;color:#1464c8;margin-bottom:8px;">Breed verkennen</div><div style="font-size:19px;font-weight:800;color:#140037;margin-bottom:8px;">12 beroepideeën om over te praten</div><p style="font-size:11.5px;line-height:1.65;color:#333;margin:0 0 16px;">Deze voorbeelden zijn bewust breed. Ze zijn bedoeld om woorden te geven aan richtingen die je kunt onderzoeken, niet om meteen één beroep vast te zetten.</p><div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;">${dims.map(careerPdfCard).join('')}</div>${footer}`;
+  const careerPage=`<div style="font-size:7.5px;font-weight:800;letter-spacing:.18em;text-transform:uppercase;color:#1464c8;margin-bottom:8px;">Eerst rondkijken</div><div style="font-size:19px;font-weight:800;color:#140037;margin-bottom:8px;">12 beroepen om over te praten</div><p style="font-size:11.5px;line-height:1.65;color:#333;margin:0 0 16px;">Dit zijn voorbeelden. Je hoeft nu nog geen beroep te kiezen. Kijk welke richtingen je leuk lijken. Zoek daar daarna meer over op.</p><div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;">${dims.map(careerPdfCard).join('')}</div>${footer}`;
   const compactSugCard=(m)=>{const provider=selectedProvider(m);const domain=provider.url?provider.url.replace(/https?:\/\/(?:www\.)?/,"").split("/")[0]:'';return `<div style="background:#e8f0ff;border-radius:8px;padding:12px 14px;border:1px solid #dde8ff;border-left:3px solid ${META[m.dim].k};"><div style="font-size:12px;font-weight:800;color:#140037;line-height:1.25;margin-bottom:4px;">${m.o}</div><div style="font-size:9.5px;color:#555;line-height:1.35;margin-bottom:5px;">${provider.school}${provider.location?' · '+provider.location:''}</div><div style="font-size:9px;color:#2a5aa0;font-style:italic;line-height:1.35;margin-bottom:6px;">${makeMotivation(m,n)}</div>${domain?`<a href="${provider.url}" style="font-size:8.5px;color:#1464c8;font-weight:700;text-decoration:none;">${domain}</a>`:''}<div style="display:flex;gap:4px;flex-wrap:wrap;margin-top:6px;"><span style="font-size:8px;font-weight:700;padding:2px 6px;border-radius:3px;background:#dde8ff;color:#1464c8;">${META[m.dim].naam}</span><span style="font-size:8px;font-weight:700;padding:2px 6px;border-radius:3px;background:#eef0f4;color:#444;">Niveau ${provider.level||m.n}</span><span style="font-size:8px;font-weight:500;padding:2px 6px;border-radius:3px;background:#f0f0f0;color:#666;">CREBO ${m.c}</span></div></div>`;};
-  const sugPage=`${sugHeader}<p style="font-size:11px;line-height:1.55;color:#333;margin:0 0 12px;">Deze zes opleidingen lijken het meest op de vorm van jouw hele profiel, verdeeld over verschillende sectoren en scholen. Gebruik de links om open dagen, toelating en inhoud verder te bekijken.</p><div style="display:grid;grid-template-columns:1fr 1fr;gap:9px;">${suggestions.map(compactSugCard).join('')}</div>${footer}`;
+  const sugPage=`${sugHeader}<p style="font-size:11px;line-height:1.55;color:#333;margin:0 0 12px;">Deze zes opleidingen passen het best bij jouw uitslag. Ze zijn van verschillende scholen en richtingen. Klik op de link voor open dagen en meer informatie.</p><div style="display:grid;grid-template-columns:1fr 1fr;gap:9px;">${suggestions.map(compactSugCard).join('')}</div>${footer}`;
   const typeCard=(dx,text)=>`<div style="background:#f0f4ff;border-radius:8px;padding:13px 15px;border:1px solid #dde8ff;border-left:3px solid ${META[dx].k};"><div style="display:flex;align-items:center;gap:9px;margin-bottom:6px;"><span style="display:inline-grid;place-items:center;width:28px;height:28px;border-radius:50%;background:${META[dx].k};color:#140037;font-size:13px;font-weight:800;">${dx}</span><div><div style="font-size:12.5px;font-weight:800;color:#140037;">${META[dx].naam}</div><div style="font-size:8.5px;font-weight:800;color:#1464c8;text-transform:uppercase;letter-spacing:.08em;">${META[dx].kort}</div></div></div><div style="font-size:10.5px;line-height:1.55;color:#333;">${text}</div></div>`;
   const comboCard=(label,title,example)=>`<div style="display:grid;grid-template-columns:48px 1fr;gap:10px;align-items:center;background:#eef3ff;border-radius:8px;padding:10px 12px;border:1px solid #dde8ff;"><div style="font-size:10px;font-weight:800;color:#1464c8;background:#dde8ff;border-radius:5px;text-align:center;padding:5px 0;">${label}</div><div style="font-size:10.5px;line-height:1.45;color:#333;"><strong style="color:#140037;">${title}</strong> - ${example}</div></div>`;
-  const explanationHeader=`<div style="text-align:center;margin-bottom:22px;"><div style="font-size:7.5px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:#1464c8;margin-bottom:7px;">Corbulo Tech &amp; Design College — MBO Opleidingen Verkenner</div><div style="font-size:24px;font-weight:700;color:#140037;margin-bottom:5px;">Wat betekent jouw uitslag?</div><div style="font-size:10.5px;color:#666;">Een toelichting op de zes types en hoe je ze kunt lezen</div></div><div style="height:2px;background:#1464c8;margin-bottom:24px;"></div>`;
-  const howItWorks=`<div style="font-size:7.5px;font-weight:800;letter-spacing:.18em;text-transform:uppercase;color:#1464c8;margin-bottom:8px;">Over de verkenner</div><div style="font-size:15px;font-weight:800;color:#140037;margin-bottom:10px;">Hoe werkt de verkenner?</div><div style="background:#eef3ff;border-radius:9px;padding:16px 18px;margin-bottom:20px;"><p style="font-size:11.5px;line-height:1.75;margin:0;color:#1a1a2e;">De verkenner is gebaseerd op de <strong>RIASOC-theorie</strong>: een bekende methode om te ontdekken welk type werk bij iemand past. Tijdens de verkenner kies je steeds tussen twee situaties. Op basis van jouw keuzes berekent de verkenner hoe sterk jij bij elk van de zes types hoort. Hoe hoger de score, hoe meer dat type bij jou past. De meeste mensen zijn een mix van meerdere types; dat is heel normaal.</p></div>`;
-  const typeGrid=`<div style="font-size:7.5px;font-weight:800;letter-spacing:.18em;text-transform:uppercase;color:#1464c8;margin-bottom:8px;">De zes types</div><div style="font-size:15px;font-weight:800;color:#140037;margin-bottom:10px;">Wat betekent elk type?</div><div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:20px;">${typeCard('R','Werkt graag met de handen. Houdt van bouwen, repareren en sleutelen. Wil tastbare resultaten zien.')}${typeCard('I','Wil begrijpen hoe dingen werken. Stelt vragen, zoekt uit en gaat graag de diepte in.')}${typeCard('A','Denkt in beelden en ideeen. Houdt van creatieve vrijheid en wil dingen maken op eigen manier.')}${typeCard('S','Haalt energie uit contact met mensen. Luistert goed en helpt graag. Vindt zorg en begeleiding belangrijk.')}${typeCard('O','Neemt graag het voortouw. Organiseert, overtuigt en zet mensen in beweging. Houdt van impact maken.')}${typeCard('C','Houdt van orde en duidelijkheid. Werkt nauwkeurig en zorgt dat alles klopt. Details vallen op.')}</div>`;
-  const mixGrid=`<div style="font-size:7.5px;font-weight:800;letter-spacing:.18em;text-transform:uppercase;color:#1464c8;margin-bottom:8px;">Jouw unieke mix</div><div style="font-size:15px;font-weight:800;color:#140037;margin-bottom:10px;">Hoe mengen de types zich?</div><p style="font-size:11.5px;line-height:1.65;margin:0 0 12px;color:#333;">De meeste mensen zijn een combinatie van twee of drie types. Hieronder zie je een paar voorbeeldcombinaties:</p><div style="display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-bottom:20px;">${comboCard('R + I','Technisch denker','technicus, laborant, instrumentmaker')}${comboCard('A + I','Creatief onderzoeker','UX-designer, mediavormgever, AI developer')}${comboCard('S + O','Mensen-leider','zorgcoordinator, eventorganisator, teamleider')}${comboCard('R + A','Vakman met stijl','interieurbouwer, decorbouwer, meubelmaker')}${comboCard('I + C','Nauwkeurige analyticus','apothekersassistent, ICT support, medisch analist')}${comboCard('O + A','Creatieve ondernemer','mediamanager, marketeer, podiumtechnicus')}</div>`;
-  const indication=`<div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:8px;"><div style="background:#fff7df;border-radius:9px;padding:16px 18px;border-left:3px solid #ffb74d;"><div style="font-size:14px;font-weight:800;color:#c65300;margin-bottom:8px;">Slechts een indicatie</div><p style="font-size:11.5px;line-height:1.75;margin:0;color:#333;">De uitkomst is een <strong>startpunt</strong>, geen definitief advies. Jij bent veel meer dan een paar letters. Schoolresultaten, ervaringen, motivatie en je persoonlijke situatie spelen ook mee. Gebruik de uitslag als gespreksonderwerp en ga daarna op onderzoek: bezoek open dagen, doe stages en praat met mensen in het vak.</p></div><div style="background:#e8f0ff;border-radius:9px;padding:16px 18px;border-left:3px solid #1464c8;"><div style="font-size:14px;font-weight:800;color:#1464c8;margin-bottom:8px;">Plan een gesprek met je decaan</div><p style="font-size:11.5px;line-height:1.75;margin:0;color:#333;">De decaan van jouw school kent jou en de opleidingen. Neem deze uitslag mee naar het gesprek. Dat is een goed startpunt om over je toekomst te praten. Vraag aan je mentor wanneer je een afspraak kunt maken.</p></div></div>`;
+  const explanationHeader=`<div style="text-align:center;margin-bottom:22px;"><div style="font-size:7.5px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:#1464c8;margin-bottom:7px;">Corbulo Tech &amp; Design College — MBO Opleidingen Verkenner</div><div style="font-size:24px;font-weight:700;color:#140037;margin-bottom:5px;">Wat betekent jouw uitslag?</div><div style="font-size:10.5px;color:#666;">Uitleg over de zes types</div></div><div style="height:2px;background:#1464c8;margin-bottom:24px;"></div>`;
+  const howItWorks=`<div style="font-size:7.5px;font-weight:800;letter-spacing:.18em;text-transform:uppercase;color:#1464c8;margin-bottom:8px;">Over de verkenner</div><div style="font-size:15px;font-weight:800;color:#140037;margin-bottom:10px;">Hoe werkt de verkenner?</div><div style="background:#eef3ff;border-radius:9px;padding:16px 18px;margin-bottom:20px;"><p style="font-size:11.5px;line-height:1.75;margin:0;color:#1a1a2e;">De verkenner werkt met <strong>RIASOC</strong>. Dat zijn zes types werk. Jij koos steeds tussen twee situaties. Zo ziet de verkenner welke types bij jou passen. Hoe hoger je score, hoe beter het type past. De meeste mensen passen bij meer dan één type. Dat is heel normaal.</p></div>`;
+  const typeGrid=`<div style="font-size:7.5px;font-weight:800;letter-spacing:.18em;text-transform:uppercase;color:#1464c8;margin-bottom:8px;">De zes types</div><div style="font-size:15px;font-weight:800;color:#140037;margin-bottom:10px;">Wat betekent elk type?</div><div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:20px;">${typeCard('R','Je werkt graag met je handen. Je bouwt, repareert en sleutelt. Je wilt zien wat je hebt gemaakt.')}${typeCard('I','Je wilt weten hoe dingen werken. Je stelt vragen en zoekt dingen uit.')}${typeCard('A','Je hebt veel eigen ideeën. Je ontwerpt graag. Je maakt dingen op je eigen manier.')}${typeCard('S','Je werkt graag met mensen. Je luistert goed en helpt graag. Zorgen voor anderen vind je belangrijk.')}${typeCard('O','Je neemt graag de leiding. Je regelt dingen en haalt anderen over. Je wilt iets bereiken.')}${typeCard('C','Je houdt van orde en duidelijke regels. Je werkt precies. Je zorgt dat alles klopt.')}</div>`;
+  const mixGrid=`<div style="font-size:7.5px;font-weight:800;letter-spacing:.18em;text-transform:uppercase;color:#1464c8;margin-bottom:8px;">Jouw mix</div><div style="font-size:15px;font-weight:800;color:#140037;margin-bottom:10px;">Welke types passen samen?</div><p style="font-size:11.5px;line-height:1.65;margin:0 0 12px;color:#333;">De meeste mensen passen bij twee of drie types. Hier zie je een paar voorbeelden:</p><div style="display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-bottom:20px;">${comboCard('R + I','Technisch denker','technicus, laborant, instrumentmaker')}${comboCard('A + I','Creatieve denker','mediavormgever, app-ontwerper, softwaremaker')}${comboCard('S + O','Leider van mensen','teamleider, organisator van evenementen')}${comboCard('R + A','Maker met stijl','interieurbouwer, decorbouwer, meubelmaker')}${comboCard('I + C','Precieze uitzoeker','apothekersassistent, ICT-helpdesk, laborant')}${comboCard('O + A','Creatieve ondernemer','mediamanager, marketingmedewerker, eigen creatief bedrijf')}</div>`;
+  const indication=`<div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:8px;"><div style="background:#fff7df;border-radius:9px;padding:16px 18px;border-left:3px solid #ffb74d;"><div style="font-size:14px;font-weight:800;color:#c65300;margin-bottom:8px;">Dit is geen eindadvies</div><p style="font-size:11.5px;line-height:1.75;margin:0;color:#333;">De uitslag is een <strong>begin</strong>. Jij bent meer dan drie letters. Je cijfers, je ervaring en wat je zelf wilt tellen ook mee. Zoek daarna verder. Ga naar open dagen, loop stage en praat met mensen die het werk doen.</p></div><div style="background:#e8f0ff;border-radius:9px;padding:16px 18px;border-left:3px solid #1464c8;"><div style="font-size:14px;font-weight:800;color:#1464c8;margin-bottom:8px;">Maak een afspraak met je decaan</div><p style="font-size:11.5px;line-height:1.75;margin:0;color:#333;">De decaan kent jou en de opleidingen. Neem deze uitslag mee. Dan kun je samen over je toekomst praten. Vraag je mentor hoe je een afspraak maakt.</p></div></div>`;
   return [
     pageWrap(header+chartScores+profile+footer),
     pageWrap(careerPage),
@@ -1613,7 +1615,7 @@ async function dlPDF(){
     actions.style.display='';
     pdf.save(`RIASOC_${[S.name,S.lastName,S.klas].filter(Boolean).join('_').replace(/[^\p{L}\p{N}]+/gu,'_')||'profiel'}_${new Date().toISOString().slice(0,10)}.pdf`);
     toast('📥 PDF opgeslagen!');
-  }catch(e){document.getElementById('action-btns').style.display='';toast('⚠️ PDF maken mislukt');console.error(e);}
+  }catch(e){document.getElementById('action-btns').style.display='';toast('⚠️ PDF maken is niet gelukt');console.error(e);}
   btn.innerHTML=orig;btn.disabled=false;
 }
 
