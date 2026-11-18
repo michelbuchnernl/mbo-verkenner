@@ -80,15 +80,15 @@ Gekozen op vier punten: het beeld vertelt duidelijk het bedoelde verhaal (beelda
 |---|---|---|---|---|
 | 1 | 5 | R Speeltoestel maken | S Op kinderen letten | Heel leesbaar; zorg voor kinderen als sociale kant |
 | 2 | 28 | I Oorzaak zoeken | C Stappen checken | Speuren tegenover afvinken |
-| 3 | 49 | A Campagne ontwerpen | O Mensen meekrijgen | Enige bruikbare A-O (zie §3) |
+| 3 | 49 | A Actieposter maken | O Mensen meekrijgen | Enige bruikbare A-O (zie §3) |
 | 4 | 56 | C Voorraad ordenen | R Opstelling bouwen | Logistiek; C staat hier links |
 | 5 | 32 | A Fotoserie maken | S Leerling helpen | Media tegenover troosten |
 | 6 | 6 | I Robot onderzoeken | O Team leiden | Scherp contrast, techniekcontext |
 | 7 | 11* | C Voorbeeld volgen | A Eigen poster maken | "Volgens voorbeeld werken" komt nergens anders voor |
 | 8 | 50 | S Eén persoon helpen | O Groep leiden | Bijles tegenover richting geven |
 | 9 | 40 | R Motor openmaken | I Schema bekijken | Doen tegenover begrijpen, zelfde onderwerp |
-| 10 | 61 | C Hulpvraag verwerken | S Persoon helpen | Enige S-C |
-| 11 | 44 | I Wind uitleggen | A Wind verbeelden | Zelfde onderwerp, uitleg tegenover verbeelding |
+| 10 | 61 | C Hulpvraag invoeren | S Persoon helpen | Enige S-C |
+| 11 | 44 | I Wind uitleggen | A Kunst over wind maken | Zelfde onderwerp, uitleg tegenover verbeelding |
 | 12 | 20* | O Opbouw leiden | R Geluid aansluiten | Evenemententechniek |
 | 13 | 24* | S Met bewoner praten | I Water onderzoeken | Luisteren tegenover laboratorium |
 | 14 | 36 | O Kraam leiden | C Kraam bijhouden | Verkoop/retail |
@@ -97,10 +97,10 @@ Gekozen op vier punten: het beeld vertelt duidelijk het bedoelde verhaal (beelda
 | 17 | 37 | O Sponsor overtuigen | C Formulieren invullen | Pitch tegenover administratie |
 | 18 | 18 | R Wand bouwen | A Kamer inrichten | Bouw tegenover interieur |
 | 19 | 51 | S Goed luisteren | O Groep overtuigen | Luisteren tegenover overtuigen |
-| 20 | 59 | C Gegevens invoeren | I Betekenis zoeken | Beide achter de computer, dus even aantrekkelijk |
+| 20 | 59 | C Gegevens invoeren | I Zoeken wat opvalt | Beide achter de computer, dus even aantrekkelijk |
 | 21 | 64 | O Stand presenteren | A Stand inrichten | Tweede A-O; samengesteld uit 22 en 15 |
-| 22 | 57 | C Codes checken | R Apparatuur plaatsen | Servicedesk tegenover installeren op locatie |
-| 23 | 33 | A Buurtmuur schilderen | S Buurtgesprek houden | Buurt/welzijn |
+| 22 | 57 | C Lijst controleren | R Apparaat aansluiten | Servicedesk tegenover installeren op locatie |
+| 23 | 33 | A Buurtmuur schilderen | S Met de buurt praten | Buurt/welzijn |
 | 24 | 42 | R Leren door doen | I Leren door vergelijken | Maken tegenover testen |
 | 25 | 63 | S Deelnemer aanmoedigen | C Scores bijhouden | Tweede S-C; nieuw plaatje, sport |
 | 26 | 45 | I Goed antwoord zoeken | A Eigen kunstwerk maken | Zuiverste onderzoeksbeeld |
@@ -127,7 +127,7 @@ De 34 niet-gekozen plaatjes blijven in `assets/riasoc/` staan als reserve.
 
 ### Aangepaste labels
 
-Alleen waar het label onduidelijk was of het beeld niet dekte: "Mensen meekrijgen" (49), "Voorraad ordenen" (56, was "Voorraad leggen"), "Hulpvraag verwerken" (61), "Gegevens invoeren" (59, was "Gegevens zetten"), "Groep overtuigen" (51, was "Snel overtuigen"), "Eigen kunstwerk maken" (45, was "Eigen uitleg maken"), "Website onderzoeken" (8), "Buurtmuur schilderen" (33).
+Alle teksten voor leerlingen zijn geschreven op taalniveau 2F. Bij de plaatjes zijn deze labels aangepast omdat het oude label onduidelijk was, een moeilijk woord had of het beeld niet dekte: "Actieposter maken" en "Mensen meekrijgen" (49), "Voorraad ordenen" (56), "Hulpvraag invoeren" (61), "Gegevens invoeren" en "Zoeken wat opvalt" (59), "Groep overtuigen" (51), "Kunst over wind maken" (44), "Eigen kunstwerk maken" (45), "Lijst controleren" en "Apparaat aansluiten" (57), "Website onderzoeken" (8), "Buurtmuur schilderen" en "Met de buurt praten" (33).
 
 ## 5. Telling en gelijke stand
 
